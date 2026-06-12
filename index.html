@@ -93,13 +93,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .detail-memo{font-size:13px;color:#555;line-height:1.7;margin-top:8px}
 .detail-close{width:100%;height:42px;border:0.5px solid #d0cdc6;border-radius:8px;background:none;font-size:14px;color:#1a1a1a;cursor:pointer;margin-top:16px;font-family:inherit;transition:background .15s}
 .detail-close:hover{background:#f5f4f0}
-.sort-select{height:34px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 24px 0 10px;font-size:12px;background:#f5f4f0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 6px center;color:#1a1a1a;outline:none;cursor:pointer;appearance:none;font-family:inherit}
-.filter-bar{display:flex;gap:6px;padding:10px 0 2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;align-items:center}
-.filter-bar::-webkit-scrollbar{display:none}
-.filter-chip{flex-shrink:0;height:28px;padding:0 12px;border:0.5px solid #d0cdc6;border-radius:14px;background:none;font-size:12px;color:#666;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
-.filter-chip.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-.platform-filter{flex-shrink:0;height:28px;border:0.5px solid #d0cdc6;border-radius:14px;padding:0 22px 0 10px;font-size:12px;background:#f5f4f0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 6px center;color:#666;outline:none;cursor:pointer;appearance:none;font-family:inherit}
-.platform-filter.filtered{border-color:#1a1a1a;color:#1a1a1a}
 </style>
 </head>
 <body>
@@ -111,11 +104,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
         <button class="icon-btn" id="searchToggle" aria-label="검색">
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </button>
-        <select class="sort-select" id="sortSelect">
-          <option value="default">등록순</option>
-          <option value="title">제목순</option>
-          <option value="author">저자순</option>
-        </select>
         <button class="register-btn" id="openForm">+ 도서 등록</button>
       </div>
     </div>
@@ -124,23 +112,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
       <button class="icon-btn" id="searchClose" aria-label="닫기">
         <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
-    </div>
-    <div class="filter-bar" id="filterBar">
-      <button class="filter-chip active" data-status="전체">전체</button>
-      <button class="filter-chip" data-status="시작 전">시작 전</button>
-      <button class="filter-chip" data-status="진행 중">진행 중</button>
-      <button class="filter-chip" data-status="완료">완료</button>
-      <button class="filter-chip" data-status="중단">중단</button>
-      <select class="platform-filter" id="platformFilter">
-        <option value="전체">플랫폼 전체</option>
-        <option value="시리즈">시리즈</option>
-        <option value="카카오페이지">카카오페이지</option>
-        <option value="리디북스">리디북스</option>
-        <option value="알라딘">알라딘</option>
-        <option value="교보문고">교보문고</option>
-        <option value="밀리의서재">밀리의서재</option>
-        <option value="직접구매">직접구매</option>
-      </select>
     </div>
   </div>
   <div class="content">
@@ -213,19 +184,6 @@ const COVER_MAP = {
 };
 
 let books = [], filteredBooks = [], currentPage = 1;
-let activeStatus = '전체', activePlatform = '전체', activeSort = 'default', searchQuery = '';
-
-function applyFilterSort(){
-  let list = books.slice();
-  if(activeStatus !== '전체') list = list.filter(b => b.status === activeStatus);
-  if(activePlatform !== '전체') list = list.filter(b => b.platform === activePlatform);
-  if(searchQuery) list = list.filter(b => b.title.toLowerCase().includes(searchQuery) || b.author.toLowerCase().includes(searchQuery));
-  if(activeSort === 'title') list.sort((a,b) => a.title.localeCompare(b.title,'ko'));
-  else if(activeSort === 'author') list.sort((a,b) => a.author.localeCompare(b.author,'ko'));
-  filteredBooks = list;
-  currentPage = 1;
-  renderGrid(filteredBooks, currentPage);
-}
 let cardCount = 0, cards = [], nextBookId = 1;
 
 function badgeClass(s){ return({'완료':'badge-done','진행 중':'badge-wip','시작 전':'badge-not','중단':'badge-stop'})[s]||'badge-not'; }
@@ -239,10 +197,10 @@ function mkCoverImg(title, w, h){
 // Notion에서 책 데이터 파싱
 function parseBook(page, idx){
   const props = page.properties;
-  const title = props['이름']?.title?.[0]?.plain_text || props['제목']?.title?.[0]?.plain_text || '제목 없음';
+  const title = props['제목']?.title?.[0]?.plain_text || props['이름']?.title?.[0]?.plain_text || '제목 없음';
   const author = props['저자']?.rich_text?.[0]?.plain_text || '';
   const platform = props['플랫폼']?.select?.name || '';
-  const status = props['완독 여부']?.select?.name || '시작 전';
+  const status = props['완독 여부']?.status?.name || props['완독 여부']?.select?.name || '시작 전';
   const genres = (props['장르']?.multi_select || []).map(g => g.name);
   const memo = props['메모']?.rich_text?.[0]?.plain_text || '';
   return { id: idx, title, author, platform, status, genres, memo };
@@ -261,7 +219,8 @@ async function loadBooks(){
   }
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('bookGrid').style.display = 'grid';
-  applyFilterSort();
+  filteredBooks = books.slice();
+  renderGrid(filteredBooks, currentPage);
 }
 
 function renderGrid(list, page){
@@ -426,7 +385,7 @@ document.getElementById('submitBtn').addEventListener('click', async function(){
       ok++;
     } catch(e){ showToast(`"${d.title}" 실패: ${e.message}`); }
   }
-  applyFilterSort();
+  filteredBooks = books.slice(); currentPage = 1; renderGrid(filteredBooks, currentPage);
   document.getElementById('formOverlay').classList.remove('open');
   cardCount=0; cards=[]; document.getElementById('cardsContainer').innerHTML=''; addCard();
   this.disabled=false; this.textContent='Notion에 등록하기';
@@ -444,23 +403,11 @@ document.getElementById('searchToggle').addEventListener('click', ()=>{
 document.getElementById('searchClose').addEventListener('click', ()=>{
   document.getElementById('searchBar').classList.remove('open');
   document.getElementById('searchInput').value='';
-  searchQuery=''; applyFilterSort();
+  filteredBooks=books.slice(); currentPage=1; renderGrid(filteredBooks,currentPage);
 });
 document.getElementById('searchInput').addEventListener('input', function(){
-  searchQuery=this.value.trim().toLowerCase(); applyFilterSort();
-});
-document.getElementById('filterBar').querySelectorAll('.filter-chip').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    activeStatus=btn.dataset.status; applyFilterSort();
-  });
-});
-document.getElementById('sortSelect').addEventListener('change',function(){ activeSort=this.value; applyFilterSort(); });
-document.getElementById('platformFilter').addEventListener('change',function(){
-  activePlatform=this.value;
-  this.classList.toggle('filtered',this.value!=='전체');
-  applyFilterSort();
+  filteredBooks=books.filter(b=>{ const q=this.value.trim().toLowerCase(); return !q||b.title.toLowerCase().includes(q)||b.author.toLowerCase().includes(q); });
+  currentPage=1; renderGrid(filteredBooks,currentPage);
 });
 
 loadBooks();
