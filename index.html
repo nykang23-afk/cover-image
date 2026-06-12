@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>네이나's 도서 리스트</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:#f5f4f0;min-height:100vh;color:#1a1a1a}
+.app{max-width:480px;margin:0 auto;background:#f5f4f0;min-height:100vh;display:flex;flex-direction:column}
+.header{background:#fff;border-bottom:0.5px solid #e0ddd6;padding:14px 16px;position:sticky;top:0;z-index:100}
+.header-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.header-title{font-size:17px;font-weight:600;color:#1a1a1a;flex:1}
+.header-actions{display:flex;gap:6px;align-items:center}
+.icon-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#666;font-size:18px;transition:background .15s}
+.icon-btn:hover{background:#f5f4f0}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.register-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;height:34px;font-size:13px;font-weight:500;cursor:pointer;color:#1a1a1a;white-space:nowrap;transition:background .15s}
+.register-btn:hover{background:#f5f4f0}
+.search-bar{margin-top:10px;display:none;align-items:center;gap:8px}
+.search-bar.open{display:flex}
+.search-bar input{flex:1;height:36px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:14px;background:#f5f4f0;color:#1a1a1a;outline:none}
+.search-bar input:focus{border-color:#999}
+.content{flex:1;padding:12px 12px 20px}
+.empty{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
+.loading{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
+.book-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.book-card{background:#fff;border:0.5px solid #e8e5de;border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.book-card:hover{border-color:#999}
+.book-cover-wrap{position:relative;width:100%;aspect-ratio:3/4;background:#eee;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px}
+.book-cover-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.book-status-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.55);padding:3px 4px;text-align:center;z-index:2}
+.book-status-text{font-size:10px;color:#fff;white-space:nowrap}
+.book-info{padding:6px 7px 8px}
+.book-title{font-size:12px;font-weight:500;color:#1a1a1a;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pagination{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 0 20px}
+.page-btn{width:32px;height:32px;border:0.5px solid #d0cdc6;border-radius:8px;background:none;font-size:13px;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.page-btn:hover{background:#f5f4f0}
+.page-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a;font-weight:500}
+.page-btn:disabled{opacity:.35;cursor:default}
+.page-info{font-size:12px;color:#aaa;margin:0 2px}
+.page-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.overlay.open{display:flex}
+.sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;padding:0 0 40px}
+.sheet-handle{width:36px;height:4px;background:#ddd;border-radius:2px;margin:12px auto 0}
+.sheet-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0}
+.sheet-title{font-size:16px;font-weight:600;color:#1a1a1a}
+.sheet-body{padding:14px 16px 24px}
+.form-section{margin-bottom:13px}
+.form-label{font-size:12px;color:#666;margin-bottom:5px;display:block}
+.form-required{color:#e24b4a;margin-left:2px}
+.form-input{width:100%;height:40px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:14px;background:#f5f4f0;color:#1a1a1a;outline:none;transition:border-color .15s;font-family:inherit}
+.form-input:focus{border-color:#999}
+.form-select{width:100%;height:40px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:14px;background:#f5f4f0;color:#1a1a1a;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;font-family:inherit}
+.dup-warn{font-size:12px;color:#d85a30;margin-top:4px;display:none}
+.dup-warn.show{display:block}
+.genre-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:4px}
+.genre-item{display:flex;align-items:center;gap:5px}
+.genre-item input[type=checkbox]{width:15px;height:15px;accent-color:#555;cursor:pointer;flex-shrink:0}
+.genre-item label{font-size:13px;color:#333;cursor:pointer;line-height:1.3}
+.card-sep{height:0.5px;background:#e8e5de;margin:14px 0}
+.add-card-btn{width:100%;height:38px;border:0.5px dashed #d0cdc6;border-radius:8px;background:none;font-size:13px;color:#888;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:12px;font-family:inherit;transition:background .15s}
+.add-card-btn:hover{background:#f5f4f0}
+.submit-btn{width:100%;height:44px;background:#1a1a1a;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.submit-btn:hover{opacity:.85}
+.submit-btn:disabled{opacity:.4;cursor:default}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.card-num{font-size:12px;color:#888}
+.remove-card-btn{background:none;border:none;font-size:14px;color:#bbb;cursor:pointer;padding:4px;line-height:1}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.detail-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:flex-end;justify-content:center}
+.detail-overlay.open{display:flex}
+.detail-sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;padding:0 0 40px}
+.detail-handle{width:36px;height:4px;background:#ddd;border-radius:2px;margin:12px auto 0}
+.detail-body{padding:16px}
+.detail-top{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}
+.detail-cover{width:80px;height:107px;border-radius:6px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden}
+.detail-cover img{width:100%;height:100%;object-fit:cover}
+.detail-meta{flex:1;padding-top:2px}
+.detail-title{font-size:17px;font-weight:600;color:#1a1a1a;margin-bottom:4px;line-height:1.4}
+.detail-author{font-size:13px;color:#888;margin-bottom:10px}
+.badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500}
+.badge-done{background:#eaf3de;color:#3b6d11}
+.badge-wip{background:#faeeda;color:#854f0b}
+.badge-not{background:#f1efe8;color:#5f5e5a}
+.badge-stop{background:#fcebeb;color:#a32d2d}
+.detail-divider{height:0.5px;background:#e8e5de;margin:12px 0}
+.detail-row{font-size:13px;color:#888;margin-bottom:6px;display:flex;gap:8px}
+.detail-row-label{min-width:48px;flex-shrink:0}
+.detail-row-val{color:#1a1a1a}
+.detail-memo{font-size:13px;color:#555;line-height:1.7;margin-top:8px}
+.detail-close{width:100%;height:42px;border:0.5px solid #d0cdc6;border-radius:8px;background:none;font-size:14px;color:#1a1a1a;cursor:pointer;margin-top:16px;font-family:inherit;transition:background .15s}
+.detail-close:hover{background:#f5f4f0}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="header-top">
+      <span class="header-title">네이나's 도서 리스트</span>
+      <div class="header-actions">
+        <button class="icon-btn" id="searchToggle" aria-label="검색">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button class="register-btn" id="openForm">+ 도서 등록</button>
+      </div>
+    </div>
+    <div class="search-bar" id="searchBar">
+      <input type="text" id="searchInput" placeholder="도서명 또는 저자 검색" />
+      <button class="icon-btn" id="searchClose" aria-label="닫기">
+        <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="loading" id="loadingState">도서 목록을 불러오는 중...</div>
+    <div class="book-grid" id="bookGrid" style="display:none"></div>
+    <div class="empty" id="emptyState" style="display:none">검색 결과가 없습니다</div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</div>
+
+<div class="overlay" id="formOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <span class="sheet-title">도서 등록</span>
+      <button class="icon-btn" id="closeForm" aria-label="닫기">
+        <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body">
+      <div id="cardsContainer"></div>
+      <button class="add-card-btn" id="addCardBtn">+ 도서 추가</button>
+      <button class="submit-btn" id="submitBtn">Notion에 등록하기</button>
+    </div>
+  </div>
+</div>
+
+<div class="detail-overlay" id="detailOverlay">
+  <div class="detail-sheet">
+    <div class="detail-handle"></div>
+    <div class="detail-body" id="detailBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PAGE_SIZE = 6;
+const PLATFORMS = ['시리즈','카카오페이지','리디북스','알라딘','교보문고','밀리의서재','직접구매'];
+const STATUS_LIST = [{value:'시작 전',label:'시작 전'},{value:'진행 중',label:'진행 중'},{value:'완료',label:'완료'},{value:'중단',label:'중단'}];
+const GENRES = ['소설','에세이','자기계발','판타지','SF','역사','경제경영','로맨스','환생/빙의'];
+
+const BASE = 'https://raw.githubusercontent.com/nykang23-afk/cover-image/main/';
+function enc(s){ return encodeURIComponent(s); }
+const COVER_MAP = {
+  '교랑의경':           BASE+enc('교랑의경.png'),
+  '구숙, 만복을 빌어요': BASE+enc('구숙, 만복을 빌어요.png'),
+  '귀녀환생':           BASE+enc('귀녀,환생.png'),
+  '등화소':             BASE+enc('등화소.png'),
+  '모우천성':           BASE+enc('모우천성.png'),
+  '복수번화':           BASE+enc('복수번화.png'),
+  '봉수황':             BASE+enc('봉수황.png'),
+  '수보교냥':           BASE+enc('수보교냥.png'),
+  '여장성':             BASE+enc('여장성.png'),
+  '잠성':               BASE+enc('잠성.png'),
+  '잠중록':             BASE+enc('잠중록.png'),
+  '적가천금':           BASE+enc('적가천금.png'),
+  '적모':               BASE+enc('적모.png'),
+};
+
+let books = [], filteredBooks = [], currentPage = 1;
+let cardCount = 0, cards = [], nextBookId = 1;
+
+function badgeClass(s){ return({'완료':'badge-done','진행 중':'badge-wip','시작 전':'badge-not','중단':'badge-stop'})[s]||'badge-not'; }
+
+function mkCoverImg(title, w, h){
+  const url = COVER_MAP[title];
+  if(!url) return '<span style="font-size:28px">📖</span>';
+  return `<img src="${url}" alt="${title}" style="width:${w};height:${h};object-fit:cover" onerror="this.outerHTML='<span style=\\'font-size:28px\\'>📖</span>'">`;
+}
+
+// Notion에서 책 데이터 파싱
+function parseBook(page, idx){
+  const props = page.properties;
+  const title = props['이름']?.title?.[0]?.plain_text || props['제목']?.title?.[0]?.plain_text || '제목 없음';
+  const author = props['저자']?.rich_text?.[0]?.plain_text || '';
+  const platform = props['플랫폼']?.select?.name || '';
+  const status = props['완독 여부']?.select?.name || '시작 전';
+  const genres = (props['장르']?.multi_select || []).map(g => g.name);
+  const memo = props['메모']?.rich_text?.[0]?.plain_text || '';
+  return { id: idx, title, author, platform, status, genres, memo };
+}
+
+async function loadBooks(){
+  try {
+    const res = await fetch('/api/notion');
+    const data = await res.json();
+    if(data.results){
+      books = data.results.map((p, i) => parseBook(p, i+1));
+      nextBookId = books.length + 1;
+    }
+  } catch(e) {
+    console.error(e);
+  }
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('bookGrid').style.display = 'grid';
+  filteredBooks = books.slice();
+  renderGrid(filteredBooks, currentPage);
+}
+
+function renderGrid(list, page){
+  const grid = document.getElementById('bookGrid');
+  const empty = document.getElementById('emptyState');
+  const pg = document.getElementById('pagination');
+  if(!list.length){ grid.innerHTML=''; empty.style.display='block'; pg.innerHTML=''; return; }
+  empty.style.display = 'none';
+  const start = (page-1)*PAGE_SIZE;
+  const pageItems = list.slice(start, start+PAGE_SIZE);
+  grid.innerHTML = pageItems.map(b => `
+    <div class="book-card" data-id="${b.id}">
+      <div class="book-cover-wrap">
+        ${mkCoverImg(b.title,'100%','100%')}
+        <div class="book-status-bar"><span class="book-status-text">${b.status}</span></div>
+      </div>
+      <div class="book-info"><div class="book-title">${b.title}</div></div>
+    </div>`).join('');
+  grid.querySelectorAll('.book-card').forEach(el => {
+    el.addEventListener('click', () => { const bk=books.find(b=>b.id===+el.dataset.id); if(bk)openDetail(bk); });
+  });
+  renderPagination(list, page);
+}
+
+function renderPagination(list, page){
+  const pg = document.getElementById('pagination');
+  const total = Math.max(1, Math.ceil(list.length/PAGE_SIZE));
+  if(total<=1){ pg.innerHTML=''; return; }
+  const MAX=5;
+  let s=Math.max(1,page-Math.floor(MAX/2));
+  let e=Math.min(total,s+MAX-1);
+  if(e-s<MAX-1) s=Math.max(1,e-MAX+1);
+  let html=`<button class="page-btn" id="pg-prev" ${page===1?'disabled':''}><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>`;
+  if(s>1){ html+=`<button class="page-btn" data-pg="1">1</button>`; if(s>2) html+=`<span class="page-info">…</span>`; }
+  for(let i=s;i<=e;i++) html+=`<button class="page-btn${i===page?' active':''}" data-pg="${i}">${i}</button>`;
+  if(e<total){ if(e<total-1) html+=`<span class="page-info">…</span>`; html+=`<button class="page-btn" data-pg="${total}">${total}</button>`; }
+  html+=`<button class="page-btn" id="pg-next" ${page===total?'disabled':''}><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>`;
+  pg.innerHTML = html;
+  pg.querySelectorAll('.page-btn[data-pg]').forEach(btn => {
+    btn.addEventListener('click', () => { currentPage=+btn.dataset.pg; renderGrid(filteredBooks,currentPage); });
+  });
+  const prev=pg.querySelector('#pg-prev'), next=pg.querySelector('#pg-next');
+  if(prev) prev.addEventListener('click',()=>{ if(currentPage>1){currentPage--;renderGrid(filteredBooks,currentPage);} });
+  if(next) next.addEventListener('click',()=>{ if(currentPage<total){currentPage++;renderGrid(filteredBooks,currentPage);} });
+}
+
+function openDetail(b){
+  const ov = document.getElementById('detailOverlay');
+  const db = document.getElementById('detailBody');
+  db.innerHTML = `
+    <div class="detail-top">
+      <div class="detail-cover">${mkCoverImg(b.title,'80px','107px')}</div>
+      <div class="detail-meta">
+        <div class="detail-title">${b.title}</div>
+        <div class="detail-author">${b.author||'저자 미상'}</div>
+        <span class="badge ${badgeClass(b.status)}">${b.status}</span>
+      </div>
+    </div>
+    <div class="detail-divider"></div>
+    <div class="detail-row"><span class="detail-row-label">플랫폼</span><span class="detail-row-val">${b.platform||'-'}</span></div>
+    <div class="detail-row"><span class="detail-row-label">장르</span><span class="detail-row-val">${b.genres&&b.genres.length?b.genres.join(', '):'-'}</span></div>
+    ${b.memo?`<div class="detail-memo">${b.memo}</div>`:''}
+    <button class="detail-close" id="dCloseBtn">닫기</button>`;
+  ov.classList.add('open');
+  db.querySelector('#dCloseBtn').addEventListener('click', ()=>ov.classList.remove('open'));
+}
+document.getElementById('detailOverlay').addEventListener('click', function(e){ if(e.target===this||e.target.closest('.detail-sheet')===null) this.classList.remove('open'); });
+
+function makeCardHTML(idx){
+  return `<div class="form-card" id="card-${idx}">
+    <div class="card-header">
+      <span class="card-num">도서 ${idx+1}</span>
+      ${idx>0?`<button class="remove-card-btn" data-idx="${idx}">✕</button>`:''}
+    </div>
+    <div class="form-section">
+      <label class="form-label">도서명<span class="form-required">*</span></label>
+      <input class="form-input title-input" placeholder="제목 입력" />
+      <div class="dup-warn" id="dup-${idx}">⚠ 이미 등록된 도서입니다</div>
+    </div>
+    <div class="form-section">
+      <label class="form-label">저자<span class="form-required">*</span></label>
+      <input class="form-input author-input" placeholder="저자 직접 입력" />
+    </div>
+    <div class="form-section">
+      <label class="form-label">플랫폼</label>
+      <select class="form-select platform-select">${PLATFORMS.map(p=>`<option value="${p}">${p}</option>`).join('')}</select>
+    </div>
+    <div class="form-section">
+      <label class="form-label">완독 여부</label>
+      <select class="form-select status-select">${STATUS_LIST.map(s=>`<option value="${s.value}">${s.label}</option>`).join('')}</select>
+    </div>
+    <div class="form-section">
+      <label class="form-label">장르</label>
+      <div class="genre-grid">${GENRES.map(g=>`<label class="genre-item"><input type="checkbox" class="genre-cb" value="${g}"><label>${g}</label></label>`).join('')}</div>
+    </div>
+    <div class="form-section">
+      <label class="form-label">메모</label>
+      <input class="form-input memo-input" placeholder="메모 입력" />
+    </div>
+  </div>`;
+}
+
+function addCard(){
+  const idx = cardCount++;
+  cards.push({idx});
+  const container = document.getElementById('cardsContainer');
+  if(cards.length>1){ const sep=document.createElement('div'); sep.className='card-sep'; sep.id=`sep-${idx}`; container.appendChild(sep); }
+  const div = document.createElement('div');
+  div.innerHTML = makeCardHTML(idx);
+  const card = div.firstElementChild;
+  container.appendChild(card);
+  card.querySelector('.title-input').addEventListener('input', function(){ checkDup(idx, this.value.trim()); });
+  const rb = card.querySelector('.remove-card-btn');
+  if(rb) rb.addEventListener('click', ()=>{ document.getElementById(`card-${idx}`)?.remove(); document.getElementById(`sep-${idx}`)?.remove(); cards=cards.filter(c=>c.idx!==idx); });
+}
+
+function checkDup(idx, val){
+  const warn = document.getElementById(`dup-${idx}`);
+  if(!warn) return;
+  const lower = val.toLowerCase();
+  const dup = val && (
+    books.some(b=>b.title.toLowerCase()===lower) ||
+    cards.filter(c=>c.idx!==idx).some(c=>{ const el=document.querySelector(`#card-${c.idx} .title-input`); return el&&el.value.trim().toLowerCase()===lower; })
+  );
+  warn.classList.toggle('show', !!dup);
+}
+
+function getCardData(idx){
+  const c = document.getElementById(`card-${idx}`);
+  return {
+    title: c.querySelector('.title-input').value.trim(),
+    author: c.querySelector('.author-input').value.trim(),
+    platform: c.querySelector('.platform-select').value,
+    status: c.querySelector('.status-select').value,
+    memo: c.querySelector('.memo-input').value.trim(),
+    genres: [...c.querySelectorAll('.genre-cb:checked')].map(cb=>cb.value),
+  };
+}
+
+function showToast(msg, dur=2800){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), dur);
+}
+
+document.getElementById('submitBtn').addEventListener('click', async function(){
+  if(!cards.length){ showToast('등록할 도서가 없습니다'); return; }
+  const allData = cards.map(c=>getCardData(c.idx));
+  if(allData.find(d=>!d.title||!d.author)){ showToast('도서명과 저자는 필수입니다'); return; }
+  this.disabled = true; this.textContent = '등록 중...';
+  let ok = 0;
+  for(const d of allData){
+    try{
+      const res = await fetch('/api/notion', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(d),
+      });
+      if(!res.ok) throw new Error('등록 실패');
+      books.unshift({id:nextBookId++, ...d});
+      ok++;
+    } catch(e){ showToast(`"${d.title}" 실패: ${e.message}`); }
+  }
+  filteredBooks = books.slice(); currentPage = 1; renderGrid(filteredBooks, currentPage);
+  document.getElementById('formOverlay').classList.remove('open');
+  cardCount=0; cards=[]; document.getElementById('cardsContainer').innerHTML=''; addCard();
+  this.disabled=false; this.textContent='Notion에 등록하기';
+  showToast(`✓ ${ok}권 Notion 등록 완료`);
+});
+
+document.getElementById('openForm').addEventListener('click', ()=>document.getElementById('formOverlay').classList.add('open'));
+document.getElementById('closeForm').addEventListener('click', ()=>document.getElementById('formOverlay').classList.remove('open'));
+document.getElementById('formOverlay').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
+document.getElementById('addCardBtn').addEventListener('click', addCard);
+document.getElementById('searchToggle').addEventListener('click', ()=>{
+  const bar=document.getElementById('searchBar'); bar.classList.toggle('open');
+  if(bar.classList.contains('open')) document.getElementById('searchInput').focus();
+});
+document.getElementById('searchClose').addEventListener('click', ()=>{
+  document.getElementById('searchBar').classList.remove('open');
+  document.getElementById('searchInput').value='';
+  filteredBooks=books.slice(); currentPage=1; renderGrid(filteredBooks,currentPage);
+});
+document.getElementById('searchInput').addEventListener('input', function(){
+  filteredBooks=books.filter(b=>{ const q=this.value.trim().toLowerCase(); return !q||b.title.toLowerCase().includes(q)||b.author.toLowerCase().includes(q); });
+  currentPage=1; renderGrid(filteredBooks,currentPage);
+});
+
+loadBooks();
+addCard();
+</script>
+</body>
+</html>
