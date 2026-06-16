@@ -236,7 +236,7 @@ function parseBook(page, idx){
 
 async function loadBooks(){
   try {
-    const res = await fetch('https://cover-image-d6fi0dg2z-rayna-s-projects1.vercel.app/api/notion');
+    const res = await fetch('/api/notion');
     const data = await res.json();
     if(data.results){
       books = data.results.map((p, i) => parseBook(p, i+1));
@@ -403,7 +403,7 @@ document.getElementById('submitBtn').addEventListener('click', async function(){
   let ok = 0;
   for(const d of allData){
     try{
-      const res = await fetch('https://cover-image-d6fi0dg2z-rayna-s-projects1.vercel.app/api/notion', {
+      const res = await fetch('/api/notion', {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify(d),
