@@ -23,7 +23,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .search-bar.open{display:flex}
 .search-bar input{flex:1;height:36px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:14px;background:#f5f4f0;color:#1a1a1a;outline:none}
 .search-bar input:focus{border-color:#999}
-.content{flex:1;padding:12px 12px 20px}
+.content{flex:1;padding:12px 12px 80px}
 .empty{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
 .loading{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
 .book-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:16px}
@@ -74,8 +74,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .card-num{font-size:12px;color:#888}
 .remove-card-btn{background:none;border:none;font-size:14px;color:#bbb;cursor:pointer;padding:4px;line-height:1}
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:0.5px solid #e0ddd6;display:flex;align-items:stretch;z-index:150;padding-bottom:env(safe-area-inset-bottom,0px)}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0 6px;cursor:pointer;gap:3px;border:none;background:none;color:#aaa;transition:color .15s;font-family:inherit}
+.tab-item.active{color:#1a1a1a}
+.tab-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab-item span{font-size:10px;font-weight:500}
+.tab-page{display:none;flex:1}
+.tab-page.active{display:flex;flex-direction:column}
+.coming-soon{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#bbb;font-size:14px;padding-bottom:60px}
+.coming-soon svg{width:36px;height:36px;stroke:#ddd;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .detail-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:flex-end;justify-content:center}
 .detail-overlay.open{display:flex}
 .detail-sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;overflow-x:hidden;padding:0 0 env(safe-area-inset-bottom,20px);-webkit-overflow-scrolling:touch}
@@ -103,6 +112,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 </head>
 <body>
 <div class="app">
+
+<!-- Tab: Home -->
+<div class="tab-page" id="tab-home">
+  <div class="coming-soon">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home — 준비 중</span>
+  </div>
+</div>
+
+<!-- Tab: Book -->
+<div class="tab-page active" id="tab-book">
   <div class="header">
     <div class="header-top">
       <span class="header-title">네이나's 도서 리스트</span>
@@ -149,7 +169,45 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
     <div class="empty" id="emptyState" style="display:none">검색 결과가 없습니다</div>
     <div class="pagination" id="pagination"></div>
   </div>
+</div><!-- /tab-book -->
+
+<!-- Tab: Drama -->
+<div class="tab-page" id="tab-drama">
+  <div class="coming-soon">
+    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
+    <span>Drama — 준비 중</span>
+  </div>
 </div>
+
+<!-- Tab: Dashboard -->
+<div class="tab-page" id="tab-dashboard">
+  <div class="coming-soon">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    <span>Dashboard — 준비 중</span>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- 탭바 -->
+<nav class="tabbar">
+  <button class="tab-item" id="tabBtn-home" onclick="switchTab('home')">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </button>
+  <button class="tab-item active" id="tabBtn-book" onclick="switchTab('book')">
+    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <span>Book</span>
+  </button>
+  <button class="tab-item" id="tabBtn-drama" onclick="switchTab('drama')">
+    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
+    <span>Drama</span>
+  </button>
+  <button class="tab-item" id="tabBtn-dashboard" onclick="switchTab('dashboard')">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    <span>Dashboard</span>
+  </button>
+</nav>
 
 <div class="overlay" id="formOverlay">
   <div class="sheet">
@@ -466,6 +524,13 @@ function applyFilters(){
 document.getElementById('filterStatus').addEventListener('change', applyFilters);
 document.getElementById('filterPlatform').addEventListener('change', applyFilters);
 document.getElementById('filterSort').addEventListener('change', applyFilters);
+
+function switchTab(name){
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.getElementById('tabBtn-'+name).classList.add('active');
+}
 
 loadBooks();
 addCard();
