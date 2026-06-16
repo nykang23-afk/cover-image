@@ -414,7 +414,7 @@ document.getElementById('submitBtn').addEventListener('click', async function(){
       }
       books.unshift({id:nextBookId++, ...d});
       ok++;
-    } catch(e){ showToast(`"${d.title}" 실패: ${e.message}`, 6000); }
+    } catch(e){ showToast(`등록 실패: ${e.message}`, 8000); }
   }
   filteredBooks = books.slice(); currentPage = 1; renderGrid(filteredBooks, currentPage);
   document.getElementById('formOverlay').classList.remove('open');
