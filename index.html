@@ -26,7 +26,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .content{flex:1;padding:12px 12px 80px}
 .empty{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
 .loading{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
-.book-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.book-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:16px}
 .book-card{background:#fff;border:0.5px solid #e8e5de;border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .15s}
 .book-card:hover{border-color:#999}
 .book-cover-wrap{position:relative;width:100%;aspect-ratio:3/4;background:#eee;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px}
@@ -45,9 +45,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .filter-bar{display:flex;gap:6px;padding:10px 0 4px}
 .filter-select{flex:1;height:34px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 10px;font-size:12px;background:#fff;color:#1a1a1a;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;font-family:inherit}
 .filter-select:focus{border-color:#999}
-.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:flex-end;justify-content:center;overscroll-behavior:none}
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:flex-end;justify-content:center;overscroll-behavior:none;padding-top:56px}
 .overlay.open{display:flex}
-.sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;height:90vh;max-height:90vh;overflow-y:auto;overflow-x:hidden;padding:0 0 env(safe-area-inset-bottom,20px);-webkit-overflow-scrolling:touch}
+.sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;height:100%;overflow-y:auto;overflow-x:hidden;padding:0 0 env(safe-area-inset-bottom,20px);-webkit-overflow-scrolling:touch}
 .sheet-handle{width:36px;height:4px;background:#ddd;border-radius:2px;margin:12px auto 0}
 .sheet-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0}
 .sheet-title{font-size:16px;font-weight:600;color:#1a1a1a}
