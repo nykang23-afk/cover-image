@@ -47,7 +47,7 @@ export default async function handler(req, res) {
             '제목': { title: [{ text: { content: title } }] },
             '저자': { rich_text: [{ text: { content: author || '' } }] },
             '플랫폼': { select: { name: platform } },
-            '완독 여부': { select: { name: status } },
+            '완독 여부': { status: { name: status } },
             '장르': { multi_select: (genres || []).map(g => ({ name: g })) },
             '메모': { rich_text: [{ text: { content: memo || '' } }] },
           },
