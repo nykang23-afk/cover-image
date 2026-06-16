@@ -345,10 +345,6 @@ function makeCardHTML(idx){
       <label class="form-label">장르</label>
       <div class="genre-grid">${GENRES.map(g=>`<label class="genre-item"><input type="checkbox" class="genre-cb" value="${g}"><label>${g}</label></label>`).join('')}</div>
     </div>
-    <div class="form-section">
-      <label class="form-label">메모</label>
-      <input class="form-input memo-input" placeholder="메모 입력" />
-    </div>
   </div>`;
 }
 
@@ -384,7 +380,6 @@ function getCardData(idx){
     author: c.querySelector('.author-input').value.trim(),
     platform: c.querySelector('.platform-select').value,
     status: c.querySelector('.status-select').value,
-    memo: c.querySelector('.memo-input').value.trim(),
     genres: [...c.querySelectorAll('.genre-cb:checked')].map(cb=>cb.value),
   };
 }
