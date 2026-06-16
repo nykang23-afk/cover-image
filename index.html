@@ -2,10 +2,12 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
 <title>네이나's 도서 리스트</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+html{touch-action:manipulation;-ms-touch-action:manipulation}
+body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:#f5f4f0;min-height:100vh;color:#1a1a1a}
 .app{max-width:480px;margin:0 auto;background:#f5f4f0;min-height:100vh;display:flex;flex-direction:column}
 .header{background:#fff;border-bottom:0.5px solid #e0ddd6;padding:14px 16px;position:sticky;top:0;z-index:100}
@@ -177,7 +179,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 const PAGE_SIZE = 6;
 const PLATFORMS = ['시리즈','카카오페이지','리디북스','알라딘','교보문고','밀리의서재','직접구매'];
 const STATUS_LIST = [{value:'시작 전',label:'시작 전'},{value:'진행 중',label:'진행 중'},{value:'완료',label:'완료'},{value:'중단',label:'중단'}];
-const GENRES = ['소설','에세이','자기계발','판타지','SF','역사','경제경영','로맨스','환생/빙의'];
+const GENRES = ['소설','에세이','자기계발','판타지','SF','역사','경제경영','로맨스','환생/빙의','농가물'];
 
 const BASE = 'https://raw.githubusercontent.com/nykang23-afk/cover-image/main/';
 function enc(s){ return encodeURIComponent(s); }
