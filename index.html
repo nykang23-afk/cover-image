@@ -189,6 +189,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .drama-detail-close{width:100%;height:42px;border:0.5px solid #d0cdc6;border-radius:8px;background:none;font-size:14px;color:#1a1a1a;cursor:pointer;margin-top:14px;font-family:inherit;transition:background .15s}
 .drama-detail-close:hover{background:#f5f4f0}
 .badge-watching{background:#e8f0fe;color:#1a56db}
+
+/* Dashboard */
+.dash-total-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.dash-stat-card{background:#fff;border-radius:14px;padding:18px 16px;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);display:flex;flex-direction:column;gap:4px}
+.dash-stat-num{font-size:28px;font-weight:700;color:#1a1a1a;line-height:1;font-variant-numeric:tabular-nums}
+.dash-stat-label{font-size:11px;color:#9a958a;font-weight:500}
+.dash-section{margin-bottom:24px}
+.dash-section-title{font-size:15px;font-weight:600;color:#1a1a1a;margin-bottom:14px}
+.dash-chart-row{background:#fff;border-radius:14px;padding:18px 16px;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);display:flex;align-items:center;gap:20px}
+.dash-pie-wrap{flex-shrink:0;width:120px;height:120px}
+.dash-pie-wrap svg{width:120px;height:120px}
+.dash-legend{flex:1;display:flex;flex-direction:column;gap:8px}
+.dash-legend-item{display:flex;align-items:center;gap:8px}
+.dash-legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.dash-legend-label{font-size:12px;color:#555;flex:1}
+.dash-legend-val{font-size:12px;font-weight:600;color:#1a1a1a;font-variant-numeric:tabular-nums}
+.dash-empty{font-size:13px;color:#aaa;text-align:center;padding:20px 0}
 .badge-watched{background:#eaf3de;color:#3b6d11}
 .badge-want{background:#f1efe8;color:#5f5e5a}
 .badge-drop{background:#fcebeb;color:#a32d2d}
@@ -351,9 +368,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 
 <!-- Tab: Dashboard -->
 <div class="tab-page" id="tab-dashboard">
-  <div class="coming-soon">
-    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-    <span>Dashboard — 준비 중</span>
+  <div class="header">
+    <div class="header-top">
+      <span class="header-title">대시보드</span>
+    </div>
+  </div>
+  <div class="content" style="overflow-y:auto">
+    <!-- 전체 통계 -->
+    <div class="dash-total-row">
+      <div class="dash-stat-card">
+        <div class="dash-stat-num" id="totalBookCount">—</div>
+        <div class="dash-stat-label">전체 등록 도서</div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dash-stat-num" id="totalDramaCount">—</div>
+        <div class="dash-stat-label">전체 등록 드라마</div>
+      </div>
+    </div>
+    <!-- 올해 도서 -->
+    <div class="dash-section">
+      <div class="dash-section-title">올해 도서 완독 현황</div>
+      <div class="dash-chart-row">
+        <div id="bookPieChart" class="dash-pie-wrap"></div>
+        <div id="bookLegend" class="dash-legend"></div>
+      </div>
+    </div>
+    <!-- 올해 드라마 -->
+    <div class="dash-section">
+      <div class="dash-section-title">올해 드라마 시청 현황</div>
+      <div class="dash-chart-row">
+        <div id="dramaPieChart" class="dash-pie-wrap"></div>
+        <div id="dramaLegend" class="dash-legend"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -581,7 +628,8 @@ function parseBook(page, idx){
   const status = props['완독 여부']?.status?.name || props['완독 여부']?.select?.name || '시작 전';
   const genres = (props['장르']?.multi_select || []).map(g => g.name);
   const memo = props['메모']?.rich_text?.[0]?.plain_text || '';
-  return { id: idx, notionId: page.id, title, author, platform, status, genres, memo };
+  const createdYear = new Date(page.created_time).getFullYear();
+  return { id: idx, notionId: page.id, title, author, platform, status, genres, memo, createdYear };
 }
 
 async function loadBooks(){
@@ -958,12 +1006,86 @@ async function deleteBook(btn) {
   }
 }
 
+// ─── Dashboard ───────────────────────────────────────
+const BOOK_STATUS_COLORS  = {'완료':'#4a8c2a','진행 중':'#c07a1a','시작 전':'#a0998e','중단':'#c43a3a'};
+const DRAMA_STATUS_COLORS = {'완료':'#4a8c2a','진행 중':'#1a56db','시작 전':'#a0998e','드롭':'#c43a3a'};
+const BOOK_STATUS_LABELS  = {'완료':'완독','진행 중':'읽는 중','시작 전':'시작 전','중단':'중단'};
+const DRAMA_STATUS_LABELS = {'완료':'시청 완료','진행 중':'시청 중','시작 전':'보고싶은','드롭':'드롭'};
+
+function buildPieSVG(segments) {
+  // segments: [{color, value}]
+  const total = segments.reduce((s,d)=>s+d.value,0);
+  if(!total) return '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="#e8e5de"/><circle cx="60" cy="60" r="28" fill="#fff"/></svg>';
+  const cx=60, cy=60, R=52, r=28;
+  let angle = -Math.PI/2, paths='';
+  segments.forEach(seg=>{
+    if(!seg.value) return;
+    const sweep = (seg.value/total)*Math.PI*2;
+    const x1=cx+R*Math.cos(angle), y1=cy+R*Math.sin(angle);
+    const x2=cx+R*Math.cos(angle+sweep), y2=cy+R*Math.sin(angle+sweep);
+    const xi1=cx+r*Math.cos(angle), yi1=cy+r*Math.sin(angle);
+    const xi2=cx+r*Math.cos(angle+sweep), yi2=cy+r*Math.sin(angle+sweep);
+    const large=sweep>Math.PI?1:0;
+    paths+=`<path d="M${xi1},${yi1} L${x1},${y1} A${R},${R},0,${large},1,${x2},${y2} L${xi2},${yi2} A${r},${r},0,${large},0,${xi1},${yi1} Z" fill="${seg.color}"/>`;
+    angle+=sweep;
+  });
+  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${paths}<circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff"/></svg>`;
+}
+
+function buildLegendHTML(segments, total) {
+  return segments.map(s=>`
+    <div class="dash-legend-item">
+      <div class="dash-legend-dot" style="background:${s.color}"></div>
+      <span class="dash-legend-label">${s.label}</span>
+      <span class="dash-legend-val">${s.value}<span style="font-size:10px;font-weight:400;color:#aaa;margin-left:2px">(${total?Math.round(s.value/total*100):0}%)</span></span>
+    </div>`).join('');
+}
+
+function renderDashboard(){
+  const thisYear = new Date().getFullYear();
+
+  // 전체 통계
+  document.getElementById('totalBookCount').textContent  = books.filter(b=>b.title!=='ADMIN').length + '권';
+  document.getElementById('totalDramaCount').textContent = dramas.length + '편';
+
+  // 올해 도서
+  const yearBooks = books.filter(b=>b.createdYear===thisYear && b.title!=='ADMIN');
+  const bookGroups = {};
+  yearBooks.forEach(b=>{ bookGroups[b.status]=(bookGroups[b.status]||0)+1; });
+  const bookOrder = ['완료','진행 중','시작 전','중단'];
+  const bookSegs = bookOrder.filter(s=>bookGroups[s]).map(s=>({label:BOOK_STATUS_LABELS[s],value:bookGroups[s],color:BOOK_STATUS_COLORS[s]}));
+  const bookTotal = yearBooks.length;
+  if(!bookTotal){
+    document.getElementById('bookPieChart').innerHTML='<div class="dash-empty">올해 등록된 도서가 없습니다</div>';
+    document.getElementById('bookLegend').innerHTML='';
+  } else {
+    document.getElementById('bookPieChart').innerHTML=buildPieSVG(bookSegs);
+    document.getElementById('bookLegend').innerHTML=buildLegendHTML(bookSegs,bookTotal)+`<div style="margin-top:4px;padding-top:8px;border-top:0.5px solid #e8e5de;font-size:11px;color:#aaa">총 ${bookTotal}권</div>`;
+  }
+
+  // 올해 드라마
+  const yearDramas = dramas.filter(d=>d.createdYear===thisYear);
+  const dramaGroups = {};
+  yearDramas.forEach(d=>{ dramaGroups[d.status]=(dramaGroups[d.status]||0)+1; });
+  const dramaOrder = ['완료','진행 중','시작 전','드롭'];
+  const dramaSegs = dramaOrder.filter(s=>dramaGroups[s]).map(s=>({label:DRAMA_STATUS_LABELS[s],value:dramaGroups[s],color:DRAMA_STATUS_COLORS[s]}));
+  const dramaTotal = yearDramas.length;
+  if(!dramaTotal){
+    document.getElementById('dramaPieChart').innerHTML='<div class="dash-empty">올해 등록된 드라마가 없습니다</div>';
+    document.getElementById('dramaLegend').innerHTML='';
+  } else {
+    document.getElementById('dramaPieChart').innerHTML=buildPieSVG(dramaSegs);
+    document.getElementById('dramaLegend').innerHTML=buildLegendHTML(dramaSegs,dramaTotal)+`<div style="margin-top:4px;padding-top:8px;border-top:0.5px solid #e8e5de;font-size:11px;color:#aaa">총 ${dramaTotal}편</div>`;
+  }
+}
+
 function switchTab(name){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   document.getElementById('tabBtn-'+name).classList.add('active');
   if(name==='drama' && !dramaLoaded) { dramaLoaded=true; renderDramaGrid(filteredDramas); }
+  if(name==='dashboard') renderDashboard();
 }
 
 // ─── Drama ───────────────────────────────────────────
@@ -994,6 +1116,7 @@ function parseDrama(page, idx){
     synopsis: p['줄거리']?.rich_text?.[0]?.plain_text || '',
     status: p['시청 여부']?.status?.name || '시작 전',
     genre: (p['장르']?.multi_select||[]).map(g=>g.name),
+    createdYear: new Date(page.created_time).getFullYear(),
   };
 }
 
@@ -1197,6 +1320,7 @@ function renderHomeLatestDrama(){
 Promise.all([loadBooks(), loadDramas()]).then(() => {
   renderHomeLatestBook();
   renderHomeLatestDrama();
+  renderDashboard();
 });
 addCard();
 </script>
