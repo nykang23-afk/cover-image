@@ -27,8 +27,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .empty{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
 .loading{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
 .book-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:16px}
-.book-card{background:#fff;border:0.5px solid #e8e5de;border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .15s}
-.book-card:hover{border-color:#999}
+.book-card{background:#fff;border:none;border-radius:12px;overflow:hidden;cursor:pointer;transition:box-shadow .15s;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18)}
+.book-card:hover{box-shadow:0 2px 8px rgba(26,26,26,.1),0 6px 16px -6px rgba(26,26,26,.22)}
 .book-cover-wrap{position:relative;width:100%;aspect-ratio:3/4;background:#eee;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px}
 .book-cover-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .book-status-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.55);padding:3px 4px;text-align:center;z-index:2}
@@ -76,7 +76,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .remove-card-btn{background:none;border:none;font-size:14px;color:#bbb;cursor:pointer;padding:4px;line-height:1}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
-.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:0.5px solid #e0ddd6;display:flex;align-items:stretch;z-index:150;padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:0.5px solid rgba(26,26,26,.06);display:flex;align-items:stretch;z-index:150;padding-bottom:env(safe-area-inset-bottom,0px)}
 .tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0 6px;cursor:pointer;gap:3px;border:none;background:none;color:#aaa;transition:color .15s;font-family:inherit}
 .tab-item.active{color:#1a1a1a}
 .tab-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -86,23 +86,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .coming-soon{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#bbb;font-size:14px;padding-bottom:60px}
 .coming-soon svg{width:36px;height:36px;stroke:#ddd;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .home-header{display:flex;justify-content:flex-end;padding:14px 16px 0}
-.home-banner{margin:12px 12px 0;border-radius:14px;overflow:hidden;aspect-ratio:16/7;background:linear-gradient(135deg,#2c1810 0%,#5c3420 40%,#8b4513 70%,#3d1f0d 100%);position:relative;display:flex;align-items:center;justify-content:center}
-.home-banner-placeholder{display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none}
-.home-banner-text{font-size:22px;font-weight:700;color:#e8c87a;letter-spacing:3px;text-shadow:0 1px 4px rgba(0,0,0,.4)}
-.home-banner-sub{font-size:13px;color:#c9a84c;letter-spacing:6px;opacity:.85}
-.home-section{padding:18px 12px 0}
-.home-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.home-section-title{font-size:14px;font-weight:600;color:#1a1a1a}
-.home-more-btn{background:none;border:none;font-size:12px;color:#aaa;cursor:pointer;padding:2px 0;font-family:inherit}
+.home-banner{margin:12px 12px 0;border-radius:20px;overflow:hidden;aspect-ratio:16/7;position:relative;background:linear-gradient(180deg,#ece7dc 0%,#ddd6c8 55%,#cfc7b6 100%);box-shadow:0 8px 24px -12px rgba(26,26,26,.28)}
+.home-section{padding:20px 12px 0}
+.home-section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.home-section-title{font-size:15px;font-weight:600;color:#1a1a1a}
+.home-more-btn{background:none;border:none;font-size:12px;color:#8a867d;cursor:pointer;padding:2px 0;font-family:inherit}
 .home-more-btn:hover{color:#555}
-.home-latest-card{display:flex;gap:12px;align-items:center;background:#fff;border:0.5px solid #e8e5de;border-radius:12px;padding:12px;cursor:pointer;transition:border-color .15s}
-.home-latest-card:hover{border-color:#999}
-.home-card-thumb{width:56px;height:75px;border-radius:6px;background:#eee;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:22px}
-.home-card-thumb.drama{width:75px;height:48px}
-.home-card-thumb img{width:100%;height:100%;object-fit:cover}
-.home-card-info{flex:1;min-width:0}
-.home-card-title{font-size:14px;font-weight:500;color:#1a1a1a;display:block;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.home-card-sub{font-size:12px;color:#aaa}
+.home-book-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.home-drama-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.home-mini-card{display:flex;flex-direction:column;gap:6px;cursor:pointer}
+.home-mini-cover{width:100%;aspect-ratio:3/4;border-radius:12px;background:linear-gradient(155deg,#efece5 0%,#e2ddd2 100%);box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:22px}
+.home-mini-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.home-mini-drama-cover{width:100%;aspect-ratio:16/10;border-radius:12px;background:linear-gradient(155deg,#efece5 0%,#e2ddd2 100%);box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:22px}
+.home-mini-drama-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.home-mini-title{font-size:12px;font-weight:500;color:#1a1a1a;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-mini-sub{font-size:11px;color:#9a958a}
 .admin-entry-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 14px;height:34px;font-size:13px;font-weight:500;cursor:pointer;color:#666;font-family:inherit;transition:background .15s}
 .admin-entry-btn:hover{background:#f5f4f0}
 .admin-mode-header{background:#1a1a1a;padding:14px 16px;display:flex;align-items:center;gap:8px}
@@ -160,8 +158,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 
 /* Drama */
 .drama-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px}
-.drama-card{background:#fff;border:0.5px solid #e8e5de;border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .15s}
-.drama-card:hover{border-color:#999}
+.drama-card{background:#fff;border:none;border-radius:12px;overflow:hidden;cursor:pointer;transition:box-shadow .15s;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18)}
+.drama-card:hover{box-shadow:0 2px 8px rgba(26,26,26,.1),0 6px 16px -6px rgba(26,26,26,.22)}
 .drama-thumb{position:relative;width:100%;aspect-ratio:16/9;background:#222;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden}
 .drama-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ott-badges{position:absolute;top:5px;left:5px;display:flex;gap:3px;flex-wrap:wrap;z-index:2}
@@ -204,33 +202,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
     <div class="home-header">
       <button class="admin-entry-btn" id="adminEntryBtn">🔐 관리자</button>
     </div>
-    <!-- 배너 영역 -->
+    <!-- 배너 영역 (수묵화 산 풍경) -->
     <div class="home-banner" id="homeBanner">
-      <div class="home-banner-placeholder">
-        <span class="home-banner-text">네이나's 취향</span>
-        <span class="home-banner-sub">書 · 劇</span>
-      </div>
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(115deg,rgba(26,26,26,.02) 0px,rgba(26,26,26,.02) 1px,transparent 1px,transparent 6px);mix-blend-mode:multiply;pointer-events:none"></div>
+      <div style="position:absolute;top:16%;right:14%;width:13%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(181,72,47,.33) 0%,rgba(181,72,47,.13) 45%,transparent 75%);filter:blur(1px)"></div>
+      <div style="position:absolute;left:-5%;right:-5%;bottom:40%;height:24%;background:rgba(245,242,235,.85);filter:blur(10px);opacity:.75"></div>
+      <div style="position:absolute;left:-8%;right:-8%;bottom:0;height:50%;background:#a6a094;clip-path:polygon(0% 100%,0% 62%,10% 54%,20% 60%,32% 48%,46% 58%,58% 44%,72% 56%,86% 46%,100% 58%,100% 100%);filter:blur(5px);opacity:.5"></div>
+      <div style="position:absolute;left:-5%;right:-5%;bottom:24%;height:16%;background:rgba(245,242,235,.85);filter:blur(8px);opacity:.6"></div>
+      <div style="position:absolute;left:-8%;right:-8%;bottom:0;height:38%;background:#726b5e;clip-path:polygon(0% 100%,0% 66%,10% 56%,22% 64%,36% 50%,50% 60%,64% 46%,78% 58%,90% 48%,100% 60%,100% 100%);filter:blur(2.5px);opacity:.68"></div>
+      <div style="position:absolute;left:-5%;right:-5%;bottom:8%;height:12%;background:rgba(245,242,235,.85);filter:blur(6px);opacity:.55"></div>
+      <div style="position:absolute;left:-8%;right:-8%;bottom:0;height:24%;background:#39352d;clip-path:polygon(0% 100%,0% 70%,12% 60%,26% 68%,42% 54%,58% 66%,74% 52%,88% 64%,100% 55%,100% 100%);filter:blur(.5px)"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:22%;background:linear-gradient(to top,rgba(0,0,0,.14),transparent)"></div>
+      <div style="position:absolute;left:16px;bottom:14px;font-size:11px;font-weight:500;color:rgba(255,255,255,.9);letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,.35)">水墨</div>
     </div>
-    <!-- 최신 콘텐츠 -->
+    <!-- 최근 도서 -->
     <div class="home-section">
       <div class="home-section-header">
-        <span class="home-section-title">최근 도서</span>
-        <button class="home-more-btn" onclick="switchTab('book')">더보기 ›</button>
+        <span class="home-section-title">최근 등록한 책</span>
+        <button class="home-more-btn" onclick="switchTab('book')">전체보기</button>
       </div>
-      <div id="homeLatestBook" class="home-latest-card" onclick="switchTab('book')">
-        <div class="home-card-thumb book-thumb-placeholder"></div>
-        <div class="home-card-info"><span class="home-card-title">불러오는 중...</span></div>
-      </div>
+      <div class="home-book-grid" id="homeLatestBook"></div>
     </div>
-    <div class="home-section">
+    <!-- 최근 드라마 -->
+    <div class="home-section" style="padding-bottom:20px">
       <div class="home-section-header">
-        <span class="home-section-title">최근 드라마</span>
-        <button class="home-more-btn" onclick="switchTab('drama')">더보기 ›</button>
+        <span class="home-section-title">최근 시청한 드라마</span>
+        <button class="home-more-btn" onclick="switchTab('drama')">전체보기</button>
       </div>
-      <div id="homeLatestDrama" class="home-latest-card" onclick="switchTab('drama')">
-        <div class="home-card-thumb drama-thumb-placeholder"></div>
-        <div class="home-card-info"><span class="home-card-title">불러오는 중...</span></div>
-      </div>
+      <div class="home-drama-grid" id="homeLatestDrama"></div>
     </div>
   </div>
   <!-- 관리자 모드 -->
@@ -1156,35 +1155,38 @@ document.getElementById('dramaSubmitBtn').addEventListener('click', async functi
 function renderHomeLatestBook(){
   const el = document.getElementById('homeLatestBook');
   if(!el) return;
-  const b = books[0];
-  if(!b){ el.innerHTML='<div class="home-card-info"><span class="home-card-title" style="color:#aaa">등록된 도서가 없습니다</span></div>'; return; }
-  const thumb = COVER_MAP[b.title]
-    ? `<img src="${COVER_MAP[b.title]}" alt="${b.title}" onerror="this.outerHTML='<span>📖</span>'">`
-    : '<span>📖</span>';
-  el.innerHTML = `
-    <div class="home-card-thumb">${thumb}</div>
-    <div class="home-card-info">
-      <span class="home-card-title">${b.title}</span>
-      <span class="home-card-sub">${b.author||''} ${b.status?'· '+b.status:''}</span>
+  const list = books.slice(0,3);
+  if(!list.length){ el.innerHTML='<div style="font-size:13px;color:#aaa;grid-column:1/-1">등록된 도서가 없습니다</div>'; return; }
+  el.innerHTML = list.map(b => {
+    const url = COVER_MAP[b.title];
+    const thumb = url ? `<img src="${url}" alt="${b.title}" onerror="this.outerHTML='<span>📖</span>'">` : '<span>📖</span>';
+    return `<div class="home-mini-card" onclick="switchTab('book')">
+      <div class="home-mini-cover">${thumb}</div>
+      <div class="home-mini-title">${b.title}</div>
+      <div class="home-mini-sub">${b.author||''}</div>
     </div>`;
+  }).join('');
 }
 
 function renderHomeLatestDrama(){
   const el = document.getElementById('homeLatestDrama');
   if(!el) return;
-  const d = dramas[0];
-  if(!d){ el.innerHTML='<div class="home-card-info"><span class="home-card-title" style="color:#aaa">등록된 드라마가 없습니다</span></div>'; return; }
-  const url = DRAMA_COVER_MAP[d.title] || d.thumbnail;
-  const thumb = url
-    ? `<img src="${url}" alt="${d.title}" onerror="this.outerHTML='<span>📺</span>'">`
-    : '<span>📺</span>';
-  const ottLabel = d.ott && d.ott.length ? d.ott[0] : '';
-  el.innerHTML = `
-    <div class="home-card-thumb drama">${thumb}</div>
-    <div class="home-card-info">
-      <span class="home-card-title">${d.title}</span>
-      <span class="home-card-sub">${ottLabel?ottLabel+' · ':''}${DRAMA_STATUS_LABEL[d.status]||d.status}</span>
+  const list = dramas.slice(0,2);
+  if(!list.length){ el.innerHTML='<div style="font-size:13px;color:#aaa;grid-column:1/-1">등록된 드라마가 없습니다</div>'; return; }
+  el.innerHTML = list.map(d => {
+    const url = DRAMA_COVER_MAP[d.title] || d.thumbnail;
+    const thumb = url ? `<img src="${url}" alt="${d.title}" onerror="this.outerHTML='<span>📺</span>'">` : '<span>📺</span>';
+    const ottColor = d.ott&&d.ott.length ? (OTT_COLORS[d.ott[0]]||'#888') : '';
+    const ottLabel = d.ott&&d.ott.length ? d.ott[0] : '';
+    return `<div class="home-mini-card" onclick="switchTab('drama')">
+      <div class="home-mini-drama-cover">
+        ${thumb}
+        ${ottLabel?`<div style="position:absolute;top:8px;left:8px;font-size:10px;font-weight:600;color:#fff;padding:3px 7px;border-radius:6px;background:${ottColor}">${ottLabel}</div>`:''}
+      </div>
+      <div class="home-mini-title">${d.title}</div>
+      <div class="home-mini-sub">${DRAMA_STATUS_LABEL[d.status]||d.status}</div>
     </div>`;
+  }).join('');
 }
 
 loadBooks().then(renderHomeLatestBook);
