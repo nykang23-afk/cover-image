@@ -88,6 +88,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .home-header{display:flex;justify-content:flex-end;padding:14px 16px 0}
 .admin-entry-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 14px;height:34px;font-size:13px;font-weight:500;cursor:pointer;color:#666;font-family:inherit;transition:background .15s}
 .admin-entry-btn:hover{background:#f5f4f0}
+.admin-mode-header{background:#1a1a1a;padding:14px 16px;display:flex;align-items:center;gap:8px}
+.admin-mode-badge{font-size:13px;font-weight:600;color:#fff}
+.admin-mode-bar{background:#1a1a1a;padding:6px 16px;display:flex;align-items:center;justify-content:center;display:none}
+.admin-mode-bar.show{display:flex}
+.admin-mode-bar span{font-size:11px;font-weight:500;color:#fff;letter-spacing:.3px}
 .admin-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:#f5f4f0;z-index:400;display:none;flex-direction:column}
 .admin-overlay.open{display:flex}
 .admin-nav{display:flex;align-items:center;padding:14px 16px;background:#fff;border-bottom:0.5px solid #e0ddd6}
@@ -142,17 +147,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 
 <!-- Tab: Home -->
 <div class="tab-page" id="tab-home">
-  <div class="home-header">
-    <button class="admin-entry-btn" id="adminEntryBtn">🔐 관리자</button>
+  <!-- 일반 모드 -->
+  <div id="homeNormal">
+    <div class="home-header">
+      <button class="admin-entry-btn" id="adminEntryBtn">🔐 관리자</button>
+    </div>
+    <div class="coming-soon">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home — 준비 중</span>
+    </div>
   </div>
-  <div class="coming-soon">
-    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    <span>Home — 준비 중</span>
+  <!-- 관리자 모드 -->
+  <div id="homeAdmin" style="display:none">
+    <div class="admin-mode-header">
+      <span class="admin-mode-badge">🔐 관리자 모드</span>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title">계정 설정</div>
+      <div class="admin-card">
+        <div class="admin-row" id="changePwRow">
+          <span class="admin-row-label">비밀번호 변경</span>
+          <span class="admin-row-icon">›</span>
+        </div>
+        <div class="admin-row" id="logoutAdminBtn" style="border-top:0.5px solid #f0ede6">
+          <span class="admin-row-label" style="color:#e24b4a">관리자 모드 종료</span>
+          <span class="admin-row-icon">›</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- Tab: Book -->
 <div class="tab-page active" id="tab-book">
+  <div class="admin-mode-bar" id="adminModeBar"><span>🔐 관리자 모드 활성 중</span></div>
   <div class="header">
     <div class="header-top">
       <span class="header-title">네이나's 도서 리스트</span>
@@ -237,23 +265,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
   </div>
 </div>
 
-<!-- 관리자 패널 오버레이 -->
-<div class="admin-overlay" id="adminPanelOverlay">
-  <div class="admin-nav">
-    <button class="admin-back-btn" id="adminPanelBack">← 나가기</button>
-    <span class="admin-nav-title">관리자 패널</span>
-    <span style="width:52px"></span>
-  </div>
-  <div class="admin-section">
-    <div class="admin-section-title">계정 설정</div>
-    <div class="admin-card">
-      <div class="admin-row" id="changePwRow">
-        <span class="admin-row-label">비밀번호 변경</span>
-        <span class="admin-row-icon">›</span>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- 비밀번호 변경 오버레이 -->
 <div class="admin-overlay" id="changePwOverlay">
@@ -639,10 +650,8 @@ document.getElementById('authSubmitBtn').addEventListener('click', async functio
     const data = await res.json();
     if (!res.ok) { errEl.textContent = data.error; return; }
     document.getElementById('adminAuthOverlay').classList.remove('open');
-    document.getElementById('adminPanelOverlay').classList.add('open');
     errEl.textContent = '';
-    isAdmin = true;
-    renderGrid(filteredBooks, currentPage);
+    enterAdminMode();
   } catch(e) {
     errEl.textContent = '인증 중 오류가 발생했습니다.';
   } finally {
@@ -654,12 +663,23 @@ document.getElementById('authPassword').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('authSubmitBtn').click();
 });
 
-// 관리자 패널
-document.getElementById('adminPanelBack').addEventListener('click', () => {
-  document.getElementById('adminPanelOverlay').classList.remove('open');
-  isAdmin = false;
+// 관리자 모드 진입/종료
+function enterAdminMode(){
+  isAdmin = true;
+  document.getElementById('homeNormal').style.display = 'none';
+  document.getElementById('homeAdmin').style.display = 'block';
+  document.getElementById('adminModeBar').classList.add('show');
   renderGrid(filteredBooks, currentPage);
-});
+}
+function exitAdminMode(){
+  isAdmin = false;
+  document.getElementById('homeNormal').style.display = 'block';
+  document.getElementById('homeAdmin').style.display = 'none';
+  document.getElementById('adminModeBar').classList.remove('show');
+  renderGrid(filteredBooks, currentPage);
+}
+document.getElementById('logoutAdminBtn').addEventListener('click', exitAdminMode);
+
 document.getElementById('changePwRow').addEventListener('click', () => {
   document.getElementById('cwCurrentPw').value = '';
   document.getElementById('cwNewPw').value = '';
