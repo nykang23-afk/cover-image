@@ -86,6 +86,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .coming-soon{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#bbb;font-size:14px;padding-bottom:60px}
 .coming-soon svg{width:36px;height:36px;stroke:#ddd;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .home-header{display:flex;justify-content:flex-end;padding:14px 16px 0}
+.home-banner{margin:12px 12px 0;border-radius:14px;overflow:hidden;aspect-ratio:16/7;background:linear-gradient(135deg,#2c1810 0%,#5c3420 40%,#8b4513 70%,#3d1f0d 100%);position:relative;display:flex;align-items:center;justify-content:center}
+.home-banner-placeholder{display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none}
+.home-banner-text{font-size:22px;font-weight:700;color:#e8c87a;letter-spacing:3px;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+.home-banner-sub{font-size:13px;color:#c9a84c;letter-spacing:6px;opacity:.85}
+.home-section{padding:18px 12px 0}
+.home-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.home-section-title{font-size:14px;font-weight:600;color:#1a1a1a}
+.home-more-btn{background:none;border:none;font-size:12px;color:#aaa;cursor:pointer;padding:2px 0;font-family:inherit}
+.home-more-btn:hover{color:#555}
+.home-latest-card{display:flex;gap:12px;align-items:center;background:#fff;border:0.5px solid #e8e5de;border-radius:12px;padding:12px;cursor:pointer;transition:border-color .15s}
+.home-latest-card:hover{border-color:#999}
+.home-card-thumb{width:56px;height:75px;border-radius:6px;background:#eee;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:22px}
+.home-card-thumb.drama{width:75px;height:48px}
+.home-card-thumb img{width:100%;height:100%;object-fit:cover}
+.home-card-info{flex:1;min-width:0}
+.home-card-title{font-size:14px;font-weight:500;color:#1a1a1a;display:block;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-card-sub{font-size:12px;color:#aaa}
 .admin-entry-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 14px;height:34px;font-size:13px;font-weight:500;cursor:pointer;color:#666;font-family:inherit;transition:background .15s}
 .admin-entry-btn:hover{background:#f5f4f0}
 .admin-mode-header{background:#1a1a1a;padding:14px 16px;display:flex;align-items:center;gap:8px}
@@ -187,9 +204,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
     <div class="home-header">
       <button class="admin-entry-btn" id="adminEntryBtn">🔐 관리자</button>
     </div>
-    <div class="coming-soon">
-      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Home — 준비 중</span>
+    <!-- 배너 영역 -->
+    <div class="home-banner" id="homeBanner">
+      <div class="home-banner-placeholder">
+        <span class="home-banner-text">네이나's 취향</span>
+        <span class="home-banner-sub">書 · 劇</span>
+      </div>
+    </div>
+    <!-- 최신 콘텐츠 -->
+    <div class="home-section">
+      <div class="home-section-header">
+        <span class="home-section-title">최근 도서</span>
+        <button class="home-more-btn" onclick="switchTab('book')">더보기 ›</button>
+      </div>
+      <div id="homeLatestBook" class="home-latest-card" onclick="switchTab('book')">
+        <div class="home-card-thumb book-thumb-placeholder"></div>
+        <div class="home-card-info"><span class="home-card-title">불러오는 중...</span></div>
+      </div>
+    </div>
+    <div class="home-section">
+      <div class="home-section-header">
+        <span class="home-section-title">최근 드라마</span>
+        <button class="home-more-btn" onclick="switchTab('drama')">더보기 ›</button>
+      </div>
+      <div id="homeLatestDrama" class="home-latest-card" onclick="switchTab('drama')">
+        <div class="home-card-thumb drama-thumb-placeholder"></div>
+        <div class="home-card-info"><span class="home-card-title">불러오는 중...</span></div>
+      </div>
     </div>
   </div>
   <!-- 관리자 모드 -->
@@ -975,6 +1016,7 @@ async function loadDramas(){
   document.getElementById('dramaGrid').style.display='grid';
   filteredDramas = dramas.slice();
   renderDramaGrid(filteredDramas);
+  renderHomeLatestDrama();
 }
 
 function renderDramaGrid(list){
@@ -1111,7 +1153,41 @@ document.getElementById('dramaSubmitBtn').addEventListener('click', async functi
   } finally { this.disabled=false; this.textContent='Notion에 등록하기'; }
 });
 
-loadBooks();
+function renderHomeLatestBook(){
+  const el = document.getElementById('homeLatestBook');
+  if(!el) return;
+  const b = books[0];
+  if(!b){ el.innerHTML='<div class="home-card-info"><span class="home-card-title" style="color:#aaa">등록된 도서가 없습니다</span></div>'; return; }
+  const thumb = COVER_MAP[b.title]
+    ? `<img src="${COVER_MAP[b.title]}" alt="${b.title}" onerror="this.outerHTML='<span>📖</span>'">`
+    : '<span>📖</span>';
+  el.innerHTML = `
+    <div class="home-card-thumb">${thumb}</div>
+    <div class="home-card-info">
+      <span class="home-card-title">${b.title}</span>
+      <span class="home-card-sub">${b.author||''} ${b.status?'· '+b.status:''}</span>
+    </div>`;
+}
+
+function renderHomeLatestDrama(){
+  const el = document.getElementById('homeLatestDrama');
+  if(!el) return;
+  const d = dramas[0];
+  if(!d){ el.innerHTML='<div class="home-card-info"><span class="home-card-title" style="color:#aaa">등록된 드라마가 없습니다</span></div>'; return; }
+  const url = DRAMA_COVER_MAP[d.title] || d.thumbnail;
+  const thumb = url
+    ? `<img src="${url}" alt="${d.title}" onerror="this.outerHTML='<span>📺</span>'">`
+    : '<span>📺</span>';
+  const ottLabel = d.ott && d.ott.length ? d.ott[0] : '';
+  el.innerHTML = `
+    <div class="home-card-thumb drama">${thumb}</div>
+    <div class="home-card-info">
+      <span class="home-card-title">${d.title}</span>
+      <span class="home-card-sub">${ottLabel?ottLabel+' · ':''}${DRAMA_STATUS_LABEL[d.status]||d.status}</span>
+    </div>`;
+}
+
+loadBooks().then(renderHomeLatestBook);
 addCard();
 </script>
 </body>
