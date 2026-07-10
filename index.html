@@ -414,10 +414,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
         <input class="form-input" id="dramaTitle" placeholder="드라마 제목" />
       </div>
       <div class="form-section">
-        <label class="form-label">썸네일 URL</label>
-        <input class="form-input" id="dramaThumbnail" placeholder="이미지 URL (선택)" type="url" />
-      </div>
-      <div class="form-section">
         <label class="form-label">OTT 플랫폼</label>
         <div class="genre-grid" id="ottCheckboxes">
           <label class="genre-item"><input type="checkbox" class="ott-cb" value="Netflix"><label>Netflix</label></label>
@@ -1056,7 +1052,7 @@ document.getElementById('dramaSubmitBtn').addEventListener('click', async functi
   const genre=[...document.querySelectorAll('.drama-genre-cb:checked')].map(c=>c.value);
   const body={
     title,
-    thumbnail:document.getElementById('dramaThumbnail').value.trim(),
+    thumbnail:'',
     cast:document.getElementById('dramaCast').value.trim(),
     synopsis:document.getElementById('dramaSynopsis').value.trim(),
     status:document.getElementById('dramaStatus').value,
