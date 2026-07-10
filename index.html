@@ -85,6 +85,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .tab-page.active{display:flex;flex-direction:column}
 .coming-soon{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#bbb;font-size:14px;padding-bottom:60px}
 .coming-soon svg{width:36px;height:36px;stroke:#ddd;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.home-header{display:flex;justify-content:flex-end;padding:14px 16px 0}
+.admin-entry-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 14px;height:34px;font-size:13px;font-weight:500;cursor:pointer;color:#666;font-family:inherit;transition:background .15s}
+.admin-entry-btn:hover{background:#f5f4f0}
+.admin-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:#f5f4f0;z-index:400;display:none;flex-direction:column}
+.admin-overlay.open{display:flex}
+.admin-nav{display:flex;align-items:center;padding:14px 16px;background:#fff;border-bottom:0.5px solid #e0ddd6}
+.admin-nav-title{flex:1;font-size:17px;font-weight:600;color:#1a1a1a;text-align:center}
+.admin-back-btn{background:none;border:none;font-size:14px;color:#666;cursor:pointer;padding:4px 8px;font-family:inherit}
+.admin-section{padding:20px 16px}
+.admin-section-title{font-size:12px;color:#888;font-weight:500;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.admin-card{background:#fff;border-radius:12px;border:0.5px solid #e8e5de;overflow:hidden;margin-bottom:16px}
+.admin-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;transition:background .15s}
+.admin-row:hover{background:#f5f4f0}
+.admin-row:not(:last-child){border-bottom:0.5px solid #f0ede6}
+.admin-row-label{font-size:14px;color:#1a1a1a}
+.admin-row-icon{color:#bbb;font-size:16px}
+.auth-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:16px}
+.auth-icon{font-size:40px;margin-bottom:4px}
+.auth-title{font-size:20px;font-weight:600;color:#1a1a1a;margin-bottom:4px}
+.auth-sub{font-size:13px;color:#aaa;margin-bottom:8px}
+.auth-input{width:100%;height:48px;border:0.5px solid #d0cdc6;border-radius:10px;padding:0 16px;font-size:16px;background:#fff;color:#1a1a1a;outline:none;transition:border-color .15s;font-family:inherit;max-width:320px}
+.auth-input:focus{border-color:#1a1a1a}
+.auth-btn{width:100%;max-width:320px;height:48px;background:#1a1a1a;border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.auth-btn:hover{opacity:.85}
+.auth-btn:disabled{opacity:.4;cursor:default}
+.auth-err{font-size:13px;color:#e24b4a;min-height:18px;text-align:center}
 .detail-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:flex-end;justify-content:center}
 .detail-overlay.open{display:flex}
 .detail-sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;overflow-x:hidden;padding:0 0 env(safe-area-inset-bottom,20px);-webkit-overflow-scrolling:touch}
@@ -115,6 +141,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 
 <!-- Tab: Home -->
 <div class="tab-page" id="tab-home">
+  <div class="home-header">
+    <button class="admin-entry-btn" id="adminEntryBtn">🔐 관리자</button>
+  </div>
   <div class="coming-soon">
     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     <span>Home — 준비 중</span>
@@ -188,6 +217,61 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 </div>
 
 </div><!-- /app -->
+
+<!-- 관리자 인증 오버레이 -->
+<div class="admin-overlay" id="adminAuthOverlay">
+  <div class="admin-nav">
+    <button class="admin-back-btn" id="adminAuthBack">← 뒤로</button>
+    <span class="admin-nav-title">관리자 인증</span>
+    <span style="width:52px"></span>
+  </div>
+  <div class="auth-wrap">
+    <div class="auth-icon">🔐</div>
+    <div class="auth-title">관리자 모드</div>
+    <div class="auth-sub">관리자 번호와 비밀번호를 입력하세요</div>
+    <input class="auth-input" id="authNumber" type="number" placeholder="관리자 번호" inputmode="numeric" />
+    <input class="auth-input" id="authPassword" type="password" placeholder="비밀번호" inputmode="numeric" />
+    <div class="auth-err" id="authErr"></div>
+    <button class="auth-btn" id="authSubmitBtn">인증하기</button>
+  </div>
+</div>
+
+<!-- 관리자 패널 오버레이 -->
+<div class="admin-overlay" id="adminPanelOverlay">
+  <div class="admin-nav">
+    <button class="admin-back-btn" id="adminPanelBack">← 나가기</button>
+    <span class="admin-nav-title">관리자 패널</span>
+    <span style="width:52px"></span>
+  </div>
+  <div class="admin-section">
+    <div class="admin-section-title">계정 설정</div>
+    <div class="admin-card">
+      <div class="admin-row" id="changePwRow">
+        <span class="admin-row-label">비밀번호 변경</span>
+        <span class="admin-row-icon">›</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 비밀번호 변경 오버레이 -->
+<div class="admin-overlay" id="changePwOverlay">
+  <div class="admin-nav">
+    <button class="admin-back-btn" id="changePwBack">← 뒤로</button>
+    <span class="admin-nav-title">비밀번호 변경</span>
+    <span style="width:52px"></span>
+  </div>
+  <div class="auth-wrap">
+    <div class="auth-icon">🔑</div>
+    <div class="auth-title">비밀번호 변경</div>
+    <div class="auth-sub">현재 비밀번호를 확인 후 새 비밀번호를 입력하세요</div>
+    <input class="auth-input" id="cwCurrentPw" type="password" placeholder="현재 비밀번호" inputmode="numeric" />
+    <input class="auth-input" id="cwNewPw" type="password" placeholder="새 비밀번호 (4자 이상)" inputmode="numeric" />
+    <input class="auth-input" id="cwNewPwConfirm" type="password" placeholder="새 비밀번호 확인" inputmode="numeric" />
+    <div class="auth-err" id="changePwErr"></div>
+    <button class="auth-btn" id="changePwBtn">변경하기</button>
+  </div>
+</div>
 
 <!-- 탭바 -->
 <nav class="tabbar">
@@ -524,6 +608,86 @@ function applyFilters(){
 document.getElementById('filterStatus').addEventListener('change', applyFilters);
 document.getElementById('filterPlatform').addEventListener('change', applyFilters);
 document.getElementById('filterSort').addEventListener('change', applyFilters);
+
+// 관리자 인증
+document.getElementById('adminEntryBtn').addEventListener('click', () => {
+  document.getElementById('authNumber').value = '';
+  document.getElementById('authPassword').value = '';
+  document.getElementById('authErr').textContent = '';
+  document.getElementById('adminAuthOverlay').classList.add('open');
+});
+document.getElementById('adminAuthBack').addEventListener('click', () => {
+  document.getElementById('adminAuthOverlay').classList.remove('open');
+});
+document.getElementById('authSubmitBtn').addEventListener('click', async function() {
+  const admin_number = document.getElementById('authNumber').value.trim();
+  const password = document.getElementById('authPassword').value.trim();
+  const errEl = document.getElementById('authErr');
+  if (!admin_number || !password) { errEl.textContent = '모든 항목을 입력하세요.'; return; }
+  this.disabled = true; this.textContent = '인증 중...';
+  try {
+    const res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ admin_number, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error; return; }
+    document.getElementById('adminAuthOverlay').classList.remove('open');
+    document.getElementById('adminPanelOverlay').classList.add('open');
+    errEl.textContent = '';
+  } catch(e) {
+    errEl.textContent = '인증 중 오류가 발생했습니다.';
+  } finally {
+    this.disabled = false; this.textContent = '인증하기';
+  }
+});
+// 엔터키 지원
+document.getElementById('authPassword').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('authSubmitBtn').click();
+});
+
+// 관리자 패널
+document.getElementById('adminPanelBack').addEventListener('click', () => {
+  document.getElementById('adminPanelOverlay').classList.remove('open');
+});
+document.getElementById('changePwRow').addEventListener('click', () => {
+  document.getElementById('cwCurrentPw').value = '';
+  document.getElementById('cwNewPw').value = '';
+  document.getElementById('cwNewPwConfirm').value = '';
+  document.getElementById('changePwErr').textContent = '';
+  document.getElementById('changePwOverlay').classList.add('open');
+});
+
+// 비밀번호 변경
+document.getElementById('changePwBack').addEventListener('click', () => {
+  document.getElementById('changePwOverlay').classList.remove('open');
+});
+document.getElementById('changePwBtn').addEventListener('click', async function() {
+  const current_password = document.getElementById('cwCurrentPw').value.trim();
+  const new_password = document.getElementById('cwNewPw').value.trim();
+  const confirm = document.getElementById('cwNewPwConfirm').value.trim();
+  const errEl = document.getElementById('changePwErr');
+  if (!current_password || !new_password || !confirm) { errEl.textContent = '모든 항목을 입력하세요.'; return; }
+  if (new_password !== confirm) { errEl.textContent = '새 비밀번호가 일치하지 않습니다.'; return; }
+  if (new_password.length < 4) { errEl.textContent = '비밀번호는 4자 이상이어야 합니다.'; return; }
+  this.disabled = true; this.textContent = '변경 중...';
+  try {
+    const res = await fetch('/api/auth', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ admin_number: '1101', current_password, new_password }),
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error; return; }
+    document.getElementById('changePwOverlay').classList.remove('open');
+    showToast('✓ 비밀번호가 변경되었습니다');
+  } catch(e) {
+    errEl.textContent = '오류가 발생했습니다.';
+  } finally {
+    this.disabled = false; this.textContent = '변경하기';
+  }
+});
 
 function switchTab(name){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
