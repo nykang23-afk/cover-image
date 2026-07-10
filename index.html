@@ -390,7 +390,7 @@ async function loadBooks(){
     const data = await res.json();
     if(data.results){
       books = data.results
-        .filter(p => (p.properties['제목']?.title?.[0]?.plain_text || '') !== '__ADMIN__')
+        .filter(p => (p.properties['제목']?.title?.[0]?.plain_text || '') !== 'ADMIN')
         .map((p, i) => parseBook(p, i+1));
       nextBookId = books.length + 1;
     }
