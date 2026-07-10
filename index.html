@@ -389,7 +389,9 @@ async function loadBooks(){
     const res = await fetch('/api/notion');
     const data = await res.json();
     if(data.results){
-      books = data.results.map((p, i) => parseBook(p, i+1));
+      books = data.results
+        .filter(p => (p.properties['제목']?.title?.[0]?.plain_text || '') !== '__ADMIN__')
+        .map((p, i) => parseBook(p, i+1));
       nextBookId = books.length + 1;
     }
   } catch(e) {
