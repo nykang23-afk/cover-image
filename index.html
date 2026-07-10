@@ -111,6 +111,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .auth-btn:hover{opacity:.85}
 .auth-btn:disabled{opacity:.4;cursor:default}
 .auth-err{font-size:13px;color:#e24b4a;min-height:18px;text-align:center}
+.delete-card-btn{position:absolute;top:5px;right:5px;width:22px;height:22px;background:rgba(220,50,50,.85);border:none;border-radius:50%;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;padding:0}
 .detail-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:flex-end;justify-content:center}
 .detail-overlay.open{display:flex}
 .detail-sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;overflow-x:hidden;padding:0 0 env(safe-area-inset-bottom,20px);-webkit-overflow-scrolling:touch}
@@ -361,6 +362,7 @@ const COVER_MAP = {
 
 let books = [], filteredBooks = [], currentPage = 1;
 let cardCount = 0, cards = [], nextBookId = 1;
+let isAdmin = false;
 
 function badgeClass(s){ return({'완료':'badge-done','진행 중':'badge-wip','시작 전':'badge-not','중단':'badge-stop'})[s]||'badge-not'; }
 
@@ -379,7 +381,7 @@ function parseBook(page, idx){
   const status = props['완독 여부']?.status?.name || props['완독 여부']?.select?.name || '시작 전';
   const genres = (props['장르']?.multi_select || []).map(g => g.name);
   const memo = props['메모']?.rich_text?.[0]?.plain_text || '';
-  return { id: idx, title, author, platform, status, genres, memo };
+  return { id: idx, notionId: page.id, title, author, platform, status, genres, memo };
 }
 
 async function loadBooks(){
@@ -408,10 +410,11 @@ function renderGrid(list, page){
   const start = (page-1)*PAGE_SIZE;
   const pageItems = list.slice(start, start+PAGE_SIZE);
   grid.innerHTML = pageItems.map(b => `
-    <div class="book-card" data-id="${b.id}">
+    <div class="book-card" data-id="${b.id}" data-notion-id="${b.notionId||''}">
       <div class="book-cover-wrap">
         ${mkCoverImg(b.title,'100%','100%')}
         <div class="book-status-bar"><span class="book-status-text">${b.status}</span></div>
+        ${isAdmin ? `<button class="delete-card-btn" data-notion-id="${b.notionId||''}" data-title="${b.title}" onclick="deleteBook(this)">✕</button>` : ''}
       </div>
       <div class="book-info"><div class="book-title">${b.title}</div></div>
     </div>`).join('');
@@ -636,6 +639,8 @@ document.getElementById('authSubmitBtn').addEventListener('click', async functio
     document.getElementById('adminAuthOverlay').classList.remove('open');
     document.getElementById('adminPanelOverlay').classList.add('open');
     errEl.textContent = '';
+    isAdmin = true;
+    renderGrid(filteredBooks, currentPage);
   } catch(e) {
     errEl.textContent = '인증 중 오류가 발생했습니다.';
   } finally {
@@ -650,6 +655,8 @@ document.getElementById('authPassword').addEventListener('keydown', e => {
 // 관리자 패널
 document.getElementById('adminPanelBack').addEventListener('click', () => {
   document.getElementById('adminPanelOverlay').classList.remove('open');
+  isAdmin = false;
+  renderGrid(filteredBooks, currentPage);
 });
 document.getElementById('changePwRow').addEventListener('click', () => {
   document.getElementById('cwCurrentPw').value = '';
@@ -688,6 +695,28 @@ document.getElementById('changePwBtn').addEventListener('click', async function(
     this.disabled = false; this.textContent = '변경하기';
   }
 });
+
+async function deleteBook(btn) {
+  const notionId = btn.dataset.notionId;
+  const title = btn.dataset.title;
+  if (!confirm(`"${title}" 를 삭제하시겠습니까?`)) return;
+  btn.disabled = true; btn.textContent = '…';
+  try {
+    const res = await fetch('/api/notion', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ notionId }),
+    });
+    if (!res.ok) throw new Error('삭제 실패');
+    books = books.filter(b => b.notionId !== notionId);
+    filteredBooks = filteredBooks.filter(b => b.notionId !== notionId);
+    renderGrid(filteredBooks, currentPage);
+    showToast(`"${title}" 삭제 완료`);
+  } catch(e) {
+    btn.disabled = false; btn.textContent = '✕';
+    showToast('삭제 중 오류가 발생했습니다');
+  }
+}
 
 function switchTab(name){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
