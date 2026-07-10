@@ -963,7 +963,7 @@ function switchTab(name){
   document.querySelectorAll('.tab-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   document.getElementById('tabBtn-'+name).classList.add('active');
-  if(name==='drama' && !dramaLoaded) loadDramas();
+  if(name==='drama' && !dramaLoaded) { dramaLoaded=true; renderDramaGrid(filteredDramas); }
 }
 
 // ─── Drama ───────────────────────────────────────────
@@ -1194,7 +1194,10 @@ function renderHomeLatestDrama(){
   }).join('');
 }
 
-loadBooks().then(renderHomeLatestBook);
+Promise.all([loadBooks(), loadDramas()]).then(() => {
+  renderHomeLatestBook();
+  renderHomeLatestDrama();
+});
 addCard();
 </script>
 </body>
