@@ -606,22 +606,47 @@ function renderPagination(list, page){
 function openDetail(b){
   const ov = document.getElementById('detailOverlay');
   const db = document.getElementById('detailBody');
+  const statusOptions = [
+    {v:'시작 전',l:'시작 전'},{v:'진행 중',l:'진행 중'},{v:'완료',l:'완료'},{v:'중단',l:'중단'}
+  ];
   db.innerHTML = `
     <div class="detail-top">
       <div class="detail-cover">${mkCoverImg(b.title,'80px','107px')}</div>
       <div class="detail-meta">
         <div class="detail-title">${b.title}</div>
         <div class="detail-author">${b.author||'저자 미상'}</div>
-        <span class="badge ${badgeClass(b.status)}">${b.status}</span>
+        <span class="badge ${badgeClass(b.status)}" id="detailStatusBadge">${b.status}</span>
       </div>
     </div>
     <div class="detail-divider"></div>
     <div class="detail-row"><span class="detail-row-label">플랫폼</span><span class="detail-row-val">${b.platform||'-'}</span></div>
     <div class="detail-row"><span class="detail-row-label">장르</span><span class="detail-row-val">${b.genres&&b.genres.length?b.genres.join(', '):'-'}</span></div>
     ${b.memo?`<div class="detail-memo">${b.memo}</div>`:''}
+    <div class="detail-divider"></div>
+    <div style="font-size:11px;color:#aaa;font-weight:500;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">완독 여부</div>
+    <div class="drama-status-btns">
+      ${statusOptions.map(s=>`<button class="drama-status-btn${b.status===s.v?' active':''}" data-status="${s.v}" data-notion-id="${b.notionId}">${s.l}</button>`).join('')}
+    </div>
     <button class="detail-close" id="dCloseBtn">닫기</button>`;
   ov.classList.add('open');
   db.querySelector('#dCloseBtn').addEventListener('click', ()=>ov.classList.remove('open'));
+  db.querySelectorAll('.drama-status-btn').forEach(btn=>{
+    btn.addEventListener('click', async function(){
+      const status = this.dataset.status;
+      const notionId = this.dataset.notionId;
+      db.querySelectorAll('.drama-status-btn').forEach(x=>x.classList.remove('active'));
+      this.classList.add('active');
+      const badge = db.querySelector('#detailStatusBadge');
+      badge.textContent = status;
+      badge.className = `badge ${badgeClass(status)}`;
+      try {
+        await fetch('/api/notion',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({notionId,status})});
+        const bk = books.find(x=>x.notionId===notionId);
+        if(bk){ bk.status=status; filteredBooks=filteredBooks.map(x=>x.notionId===notionId?{...x,status}:x); renderGrid(filteredBooks,currentPage); }
+        showToast('✓ 완독 여부 업데이트 완료');
+      } catch(e){ showToast('업데이트 중 오류가 발생했습니다'); }
+    });
+  });
 }
 document.getElementById('detailOverlay').addEventListener('click', function(e){ if(e.target===this||e.target.closest('.detail-sheet')===null) this.classList.remove('open'); });
 

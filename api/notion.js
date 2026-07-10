@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -57,6 +57,25 @@ export default async function handler(req, res) {
         return res.status(response.status).json({ error: data, status: response.status });
       }
       return res.status(200).json(data);
+    }
+
+    if (req.method === 'PATCH') {
+      const { notionId, status } = req.body;
+      if (!notionId) return res.status(400).json({ error: 'notionId가 필요합니다.' });
+      const response = await fetch(`https://api.notion.com/v1/pages/${notionId}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${NOTION_TOKEN}`,
+          'Content-Type': 'application/json',
+          'Notion-Version': '2022-06-28',
+        },
+        body: JSON.stringify({
+          properties: { '완독 여부': { status: { name: status } } },
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) return res.status(response.status).json({ error: data });
+      return res.status(200).json({ success: true });
     }
 
     if (req.method === 'DELETE') {
