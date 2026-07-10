@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
 <title>네이나's 도서 리스트</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html{touch-action:manipulation;-ms-touch-action:manipulation}
-body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:#f5f4f0;min-height:100vh;color:#1a1a1a}
-.app{max-width:480px;margin:0 auto;background:#f5f4f0;min-height:100vh;display:flex;flex-direction:column}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{touch-action:manipulation;-ms-touch-action:manipulation;height:100%}
+body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:none;height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:#ebe8e1;min-height:100vh;min-height:100dvh;color:#1a1a1a}
+.app{max-width:480px;margin:0 auto;background:#f5f4f0;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;position:relative}
 .header{background:#fff;border-bottom:0.5px solid #e0ddd6;padding:14px 16px;position:sticky;top:0;z-index:100}
 .header-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .header-title{font-size:17px;font-weight:600;color:#1a1a1a;flex:1}
@@ -21,9 +21,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .register-btn:hover{background:#f5f4f0}
 .search-bar{margin-top:10px;display:none;align-items:center;gap:8px}
 .search-bar.open{display:flex}
-.search-bar input{flex:1;height:36px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:14px;background:#f5f4f0;color:#1a1a1a;outline:none}
+.search-bar input{flex:1;height:36px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:16px;background:#f5f4f0;color:#1a1a1a;outline:none}
 .search-bar input:focus{border-color:#999}
-.content{flex:1;padding:12px 12px 80px}
+.content{flex:1;padding:12px 12px calc(80px + env(safe-area-inset-bottom,0px));overflow-y:auto;-webkit-overflow-scrolling:touch}
 .empty{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
 .loading{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
 .book-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:16px}
@@ -42,8 +42,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .page-btn:disabled{opacity:.35;cursor:default}
 .page-info{font-size:12px;color:#aaa;margin:0 2px}
 .page-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.filter-bar{display:flex;gap:6px;padding:10px 0 4px}
-.filter-select{flex:1;height:34px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 10px;font-size:12px;background:#fff;color:#1a1a1a;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;font-family:inherit}
+.filter-bar{display:flex;gap:6px;padding:10px 0 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter-select{flex:1;min-width:0;height:36px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 10px;font-size:12px;background:#fff;color:#1a1a1a;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;font-family:inherit;-webkit-appearance:none}
 .filter-select:focus{border-color:#999}
 .overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:flex-end;justify-content:center;overscroll-behavior:none;padding-top:56px}
 .overlay.open{display:flex}
@@ -56,9 +57,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .form-section{margin-bottom:13px}
 .form-label{font-size:12px;color:#666;margin-bottom:5px;display:block}
 .form-required{color:#e24b4a;margin-left:2px}
-.form-input{width:100%;height:40px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:14px;background:#f5f4f0;color:#1a1a1a;outline:none;transition:border-color .15s;font-family:inherit}
+.form-input{width:100%;height:40px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:16px;background:#f5f4f0;color:#1a1a1a;outline:none;transition:border-color .15s;font-family:inherit}
 .form-input:focus{border-color:#999}
-.form-select{width:100%;height:40px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:14px;background:#f5f4f0;color:#1a1a1a;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;font-family:inherit}
+.form-select{width:100%;height:44px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:16px;background:#f5f4f0;color:#1a1a1a;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;font-family:inherit}
 .dup-warn{font-size:12px;color:#d85a30;margin-top:4px;display:none}
 .dup-warn.show{display:block}
 .genre-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:4px}
@@ -74,17 +75,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .card-num{font-size:12px;color:#888}
 .remove-card-btn{background:none;border:none;font-size:14px;color:#bbb;cursor:pointer;padding:4px;line-height:1}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+.toast{position:fixed;bottom:calc(68px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;max-width:calc(100% - 32px)}
 .toast.show{opacity:1}
 .tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:0.5px solid rgba(26,26,26,.06);display:flex;align-items:stretch;z-index:150;padding-bottom:env(safe-area-inset-bottom,0px)}
-.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0 6px;cursor:pointer;gap:3px;border:none;background:none;color:#aaa;transition:color .15s;font-family:inherit}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 0 8px;cursor:pointer;gap:4px;border:none;background:none;color:#b3ada0;transition:color .2s;font-family:inherit;min-height:52px;user-select:none}
 .tab-item.active{color:#1a1a1a}
 .tab-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.tab-item span{font-size:10px;font-weight:500}
-.tab-page{display:none;flex:1}
-.tab-page.active{display:flex;flex-direction:column}
+.tab-item span{font-size:10px;font-weight:500;letter-spacing:.1px}
+.tab-page{display:none;flex:1;overflow:hidden}
+.tab-page.active{display:flex;flex-direction:column;overflow:hidden}
 .coming-soon{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#bbb;font-size:14px;padding-bottom:60px}
 .coming-soon svg{width:36px;height:36px;stroke:#ddd;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.home-tab-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 .home-header{display:flex;justify-content:flex-end;padding:14px 16px 0}
 .home-banner{margin:12px 12px 0;border-radius:20px;overflow:hidden;aspect-ratio:16/7;position:relative;background:linear-gradient(180deg,#ece7dc 0%,#ddd6c8 55%,#cfc7b6 100%);box-shadow:0 8px 24px -12px rgba(26,26,26,.28)}
 .home-section{padding:20px 12px 0}
@@ -125,7 +127,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .auth-icon{font-size:40px;margin-bottom:4px}
 .auth-title{font-size:20px;font-weight:600;color:#1a1a1a;margin-bottom:4px}
 .auth-sub{font-size:13px;color:#aaa;margin-bottom:8px}
-.auth-input{width:100%;height:48px;border:0.5px solid #d0cdc6;border-radius:10px;padding:0 16px;font-size:16px;background:#fff;color:#1a1a1a;outline:none;transition:border-color .15s;font-family:inherit;max-width:320px}
+.auth-input{width:100%;height:48px;border:0.5px solid #d0cdc6;border-radius:10px;padding:0 16px;font-size:16px;background:#fff;color:#1a1a1a;outline:none;transition:border-color .15s;font-family:inherit;max-width:320px;-webkit-appearance:none}
 .auth-input:focus{border-color:#1a1a1a}
 .auth-btn{width:100%;max-width:320px;height:48px;background:#1a1a1a;border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
 .auth-btn:hover{opacity:.85}
@@ -198,10 +200,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 <!-- Tab: Home -->
 <div class="tab-page" id="tab-home">
   <!-- 일반 모드 -->
-  <div id="homeNormal">
+  <div id="homeNormal" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
     <div class="home-header">
       <button class="admin-entry-btn" id="adminEntryBtn">🔐 관리자</button>
     </div>
+    <div class="home-tab-scroll">
     <!-- 배너 영역 (수묵화 산 풍경) -->
     <div class="home-banner" id="homeBanner">
       <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(115deg,rgba(26,26,26,.02) 0px,rgba(26,26,26,.02) 1px,transparent 1px,transparent 6px);mix-blend-mode:multiply;pointer-events:none"></div>
@@ -231,6 +234,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
       </div>
       <div class="home-drama-grid" id="homeLatestDrama"></div>
     </div>
+    </div><!-- /home-tab-scroll -->
   </div>
   <!-- 관리자 모드 -->
   <div id="homeAdmin" style="display:none">
