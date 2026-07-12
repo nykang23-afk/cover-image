@@ -387,7 +387,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
     </div>
     <!-- 올해 도서 -->
     <div class="dash-section">
-      <div class="dash-section-title">올해 도서 완독 현황</div>
+      <div class="dash-section-title">도서 완독 현황</div>
       <div class="dash-chart-row">
         <div id="bookPieChart" class="dash-pie-wrap"></div>
         <div id="bookLegend" class="dash-legend"></div>
@@ -395,7 +395,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
     </div>
     <!-- 올해 드라마 -->
     <div class="dash-section">
-      <div class="dash-section-title">올해 드라마 시청 현황</div>
+      <div class="dash-section-title">드라마 시청 현황</div>
       <div class="dash-chart-row">
         <div id="dramaPieChart" class="dash-pie-wrap"></div>
         <div id="dramaLegend" class="dash-legend"></div>
@@ -1048,30 +1048,30 @@ function renderDashboard(){
   document.getElementById('totalBookCount').textContent  = books.filter(b=>b.title!=='ADMIN').length + '권';
   document.getElementById('totalDramaCount').textContent = dramas.length + '편';
 
-  // 올해 도서
-  const yearBooks = books.filter(b=>b.createdYear===thisYear && b.title!=='ADMIN');
+  // 도서 완독 현황 (전체)
+  const allBooks = books.filter(b=>b.title!=='ADMIN');
   const bookGroups = {};
-  yearBooks.forEach(b=>{ bookGroups[b.status]=(bookGroups[b.status]||0)+1; });
+  allBooks.forEach(b=>{ bookGroups[b.status]=(bookGroups[b.status]||0)+1; });
   const bookOrder = ['완료','진행 중','시작 전','중단'];
   const bookSegs = bookOrder.filter(s=>bookGroups[s]).map(s=>({label:BOOK_STATUS_LABELS[s],value:bookGroups[s],color:BOOK_STATUS_COLORS[s]}));
-  const bookTotal = yearBooks.length;
+  const bookTotal = allBooks.length;
   if(!bookTotal){
-    document.getElementById('bookPieChart').innerHTML='<div class="dash-empty">올해 등록된 도서가 없습니다</div>';
+    document.getElementById('bookPieChart').innerHTML='<div class="dash-empty">등록된 도서가 없습니다</div>';
     document.getElementById('bookLegend').innerHTML='';
   } else {
     document.getElementById('bookPieChart').innerHTML=buildPieSVG(bookSegs);
     document.getElementById('bookLegend').innerHTML=buildLegendHTML(bookSegs,bookTotal)+`<div style="margin-top:4px;padding-top:8px;border-top:0.5px solid #e8e5de;font-size:11px;color:#aaa">총 ${bookTotal}권</div>`;
   }
 
-  // 올해 드라마
-  const yearDramas = dramas.filter(d=>d.createdYear===thisYear);
+  // 드라마 시청 현황 (전체)
+  const allDramas = dramas;
   const dramaGroups = {};
-  yearDramas.forEach(d=>{ dramaGroups[d.status]=(dramaGroups[d.status]||0)+1; });
+  allDramas.forEach(d=>{ dramaGroups[d.status]=(dramaGroups[d.status]||0)+1; });
   const dramaOrder = ['완료','진행 중','시작 전','드롭'];
   const dramaSegs = dramaOrder.filter(s=>dramaGroups[s]).map(s=>({label:DRAMA_STATUS_LABELS[s],value:dramaGroups[s],color:DRAMA_STATUS_COLORS[s]}));
-  const dramaTotal = yearDramas.length;
+  const dramaTotal = allDramas.length;
   if(!dramaTotal){
-    document.getElementById('dramaPieChart').innerHTML='<div class="dash-empty">올해 등록된 드라마가 없습니다</div>';
+    document.getElementById('dramaPieChart').innerHTML='<div class="dash-empty">등록된 드라마가 없습니다</div>';
     document.getElementById('dramaLegend').innerHTML='';
   } else {
     document.getElementById('dramaPieChart').innerHTML=buildPieSVG(dramaSegs);
