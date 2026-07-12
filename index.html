@@ -566,6 +566,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 <script>
 const PAGE_SIZE = 6;
 const PLATFORMS = ['시리즈','카카오페이지','리디북스','알라딘','교보문고','밀리의서재','직접구매'];
+const PLATFORM_COLORS = {'시리즈':'#00B900','카카오페이지':'#FFD700','리디북스':'#E84125','알라딘':'#E20000','교보문고':'#F05A00','밀리의서재':'#121212','직접구매':'#6B6B6B'};
 const STATUS_LIST = [{value:'시작 전',label:'시작 전'},{value:'진행 중',label:'진행 중'},{value:'완료',label:'완료'},{value:'중단',label:'중단'}];
 const GENRES = ['소설','에세이','자기계발','판타지','SF','역사','경제경영','로맨스','환생/빙의','농가물'];
 
@@ -657,6 +658,7 @@ function renderGrid(list, page){
     <div class="book-card" data-id="${b.id}" data-notion-id="${b.notionId||''}">
       <div class="book-cover-wrap">
         ${mkCoverImg(b.title,'100%','100%')}
+        ${b.platform ? `<div class="ott-badges"><span class="ott-badge" style="background:${PLATFORM_COLORS[b.platform]||'#888'}">${b.platform}</span></div>` : ''}
         <div class="book-status-bar"><span class="book-status-text">${b.status}</span></div>
         ${isAdmin ? `<button class="delete-card-btn" data-notion-id="${b.notionId||''}" data-title="${b.title}" onclick="deleteBook(this)">✕</button>` : ''}
       </div>
@@ -1298,7 +1300,6 @@ function renderHomeLatestBook(){
     return `<div class="home-mini-card" onclick="switchTab('book')">
       <div class="home-mini-cover">${thumb}</div>
       <div class="home-mini-title">${b.title}</div>
-      <div class="home-mini-sub">${b.author||''}</div>
     </div>`;
   }).join('');
 }
