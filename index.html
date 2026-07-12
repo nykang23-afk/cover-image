@@ -99,8 +99,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .home-mini-card{display:flex;flex-direction:column;gap:6px;cursor:pointer}
 .home-mini-cover{width:100%;aspect-ratio:3/4;border-radius:12px;background:linear-gradient(155deg,#efece5 0%,#e2ddd2 100%);box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:22px}
 .home-mini-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.home-mini-drama-cover{width:100%;aspect-ratio:2/3;border-radius:12px;background:linear-gradient(155deg,#efece5 0%,#e2ddd2 100%);box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:22px}
-.home-mini-drama-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.home-mini-drama-cover{width:100%;aspect-ratio:16/10;border-radius:12px;background:linear-gradient(155deg,#efece5 0%,#e2ddd2 100%);box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:22px}
+.home-mini-drama-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .home-mini-title{font-size:12px;font-weight:500;color:#1a1a1a;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .home-mini-sub{font-size:11px;color:#9a958a}
 .admin-entry-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 14px;height:34px;font-size:13px;font-weight:500;cursor:pointer;color:#666;font-family:inherit;transition:background .15s}
@@ -162,8 +162,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .drama-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px}
 .drama-card{background:#fff;border:none;border-radius:12px;overflow:hidden;cursor:pointer;transition:box-shadow .15s;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18)}
 .drama-card:hover{box-shadow:0 2px 8px rgba(26,26,26,.1),0 6px 16px -6px rgba(26,26,26,.22)}
-.drama-thumb{position:relative;width:100%;aspect-ratio:2/3;background:#222;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden}
-.drama-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drama-thumb{position:relative;width:100%;aspect-ratio:16/9;background:#222;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden}
+.drama-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .ott-badges{position:absolute;top:5px;left:5px;display:flex;gap:3px;flex-wrap:wrap;z-index:2}
 .ott-badge{font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;color:#fff;letter-spacing:.3px;white-space:nowrap}
 .drama-status-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);padding:3px 6px;z-index:2}
@@ -176,8 +176,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .drama-detail-sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;overflow-x:hidden;padding:0 0 env(safe-area-inset-bottom,20px);-webkit-overflow-scrolling:touch}
 .drama-detail-handle{width:36px;height:4px;background:#ddd;border-radius:2px;margin:12px auto 0}
 .drama-detail-body{padding:16px}
-.drama-detail-thumb{width:60%;aspect-ratio:2/3;background:#222;border-radius:10px;overflow:hidden;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:40px;position:relative}
-.drama-detail-thumb img{width:100%;height:100%;object-fit:cover}
+.drama-detail-thumb{width:100%;aspect-ratio:16/9;background:#222;border-radius:10px;overflow:hidden;margin-bottom:14px;display:flex;align-items:center;justify-content:center;font-size:40px;position:relative}
+.drama-detail-thumb img{width:100%;height:100%;object-fit:contain}
 .drama-detail-title{font-size:18px;font-weight:600;color:#1a1a1a;margin-bottom:6px;line-height:1.35}
 .drama-ott-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
 .drama-detail-divider{height:0.5px;background:#e8e5de;margin:12px 0}
