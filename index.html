@@ -1013,10 +1013,13 @@ const BOOK_STATUS_LABELS  = {'완료':'완독','진행 중':'읽는 중','시작
 const DRAMA_STATUS_LABELS = {'완료':'시청 완료','진행 중':'시청 중','시작 전':'보고싶은','드롭':'드롭'};
 
 function buildPieSVG(segments) {
-  // segments: [{color, value}]
   const total = segments.reduce((s,d)=>s+d.value,0);
-  if(!total) return '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="#e8e5de"/><circle cx="60" cy="60" r="28" fill="#fff"/></svg>';
+  if(!total) return '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="#e8e5de"/><circle cx="60" cy="60" r="28" fill="#fff"/></svg>';
   const cx=60, cy=60, R=52, r=28;
+  // 단일 항목이면 완전한 도넛 원으로 표현
+  if(segments.length===1){
+    return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><circle cx="${cx}" cy="${cy}" r="${R}" fill="${segments[0].color}"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff"/></svg>`;
+  }
   let angle = -Math.PI/2, paths='';
   segments.forEach(seg=>{
     if(!seg.value) return;
