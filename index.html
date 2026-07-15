@@ -370,12 +370,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
     <div class="header-top">
       <div class="home-title-wrap">
         <span class="home-title-main">네이나의 서가</span>
+        <span class="home-title-sub">書架</span>
       </div>
       <div class="header-actions">
         <button class="icon-btn" id="searchToggle" aria-label="검색">
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </button>
-        <button class="register-btn" id="openForm">+ 도서 등록</button>
+        <button class="admin-entry-btn" id="openForm">+ 도서 등록</button>
       </div>
     </div>
     <div class="search-bar" id="searchBar">
@@ -1527,11 +1528,12 @@ async function toggleBookFavorite(notionId, bookId){
   if(!book) return;
   const newVal = !book.favorite;
   book.favorite = newVal;
+  renderGrid(filteredBooks, currentPage);
   renderHomeLatestBook();
   renderHomeStats();
   try {
     await fetch('/api/notion',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({notionId,favorite:newVal})});
-  } catch(e){ book.favorite=!newVal; renderHomeLatestBook(); renderHomeStats(); }
+  } catch(e){ book.favorite=!newVal; renderGrid(filteredBooks,currentPage); renderHomeLatestBook(); renderHomeStats(); }
 }
 
 async function toggleDramaFavorite(notionId, dramaId){
