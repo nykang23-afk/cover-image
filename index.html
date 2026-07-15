@@ -759,7 +759,6 @@ function renderGrid(list, page){
       <div class="book-cover-wrap">
         <div class="book-cover-ph">COVER</div>
         ${mkCoverImg(b.title,'100%','100%')}
-        <div class="book-cover-ribbon"></div>
         <div class="book-cover-status ${statusClass(b.status)}">${b.status}</div>
         ${b.favorite ? `<div class="book-cover-stamp">인생작</div>` : ''}
         ${isAdmin ? `<button class="delete-card-btn" data-notion-id="${b.notionId||''}" data-title="${b.title}" onclick="deleteBook(this)">✕</button>` : ''}
