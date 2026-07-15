@@ -225,30 +225,58 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .badge-want{background:#f1efe8;color:#5f5e5a}
 .badge-drop{background:#fcebeb;color:#a32d2d}
 
-/* ── Home Redesign ── */
-.home-header{padding:18px 16px 12px;display:flex;justify-content:space-between;align-items:flex-start}
-.home-title-wrap{display:flex;flex-direction:column;gap:3px}
-.home-title-main{font-family:'Noto Serif KR',serif;font-size:21px;font-weight:700;color:#1f1c18;letter-spacing:-0.4px;line-height:1.2}
-.home-title-sub{font-size:11px;color:#b0a99e;letter-spacing:2.5px;font-weight:400;font-family:'Noto Sans KR',sans-serif}
-.home-banner{margin:0 12px 0;border-radius:20px;overflow:hidden;height:170px;position:relative;background:linear-gradient(180deg,#ece7dc 0%,#ddd6c8 55%,#cfc7b6 100%);box-shadow:0 8px 28px -10px rgba(26,26,26,.32)}
-.home-stats-bar{display:flex;align-items:center;gap:6px;padding:12px 16px 4px;font-size:12px;color:#b0a99e;font-family:'Noto Sans KR',sans-serif}
-.home-stats-num{font-weight:600;color:#6b6258}
-.home-stats-sep{width:3px;height:3px;border-radius:50%;background:#d5cfc6}
+/* ── Home Redesign v2 (Claude Design) ── */
+.home-header{padding:16px 16px 10px;display:flex;justify-content:space-between;align-items:flex-start}
+.home-title-wrap{display:flex;flex-direction:column;gap:2px}
+.home-title-main{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700;color:#1f1c18;letter-spacing:-0.3px;line-height:1.2}
+.home-title-sub{font-size:10.5px;color:#b0a99e;letter-spacing:2px;font-weight:400;font-family:'Noto Sans KR',sans-serif}
+/* Hero card (replaces banner) */
+.home-hero{margin:0 12px;background:#faf7f1;border-radius:18px;padding:18px 18px 16px;box-shadow:0 2px 12px -4px rgba(50,40,20,.14),0 1px 3px rgba(50,40,20,.06)}
+.home-hero-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:#1f1c18;letter-spacing:-0.4px;margin-bottom:4px}
+.home-hero-sub{font-size:12px;color:#a89e92;line-height:1.55;margin-bottom:16px}
+.home-hero-stats{display:flex}
+.home-hero-stat{flex:1;display:flex;flex-direction:column;gap:3px;padding-right:16px;border-right:1px solid #e5dece}
+.home-hero-stat:last-child{border-right:none;padding-right:0;padding-left:16px}
+.home-hero-stat:not(:first-child):not(:last-child){padding:0 16px}
+.home-hero-stat-num{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:#1f1c18;line-height:1}
+.home-hero-stat-label{font-size:10px;color:#a89e92;font-weight:500;margin-top:2px}
+/* Sections */
 .home-section{padding:20px 12px 0}
 .home-section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
 .home-section-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:600;color:#1f1c18;letter-spacing:-0.2px}
-.home-more-btn{background:none;border:none;font-size:11.5px;color:#b0a99e;cursor:pointer;padding:2px 0;font-family:'Noto Sans KR',sans-serif;letter-spacing:.2px}
+.home-more-btn{background:none;border:none;font-size:11.5px;color:#b0a99e;cursor:pointer;padding:2px 0;font-family:'Noto Sans KR',sans-serif}
 .home-more-btn:hover{color:#6b6258}
+.home-section-divider{height:1px;background:linear-gradient(90deg,transparent,#e0d9cf 20%,#e0d9cf 80%,transparent);margin:20px 12px 0}
+/* Book cards (Claude Design style) */
 .home-book-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.home-drama-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.home-mini-card{display:flex;flex-direction:column;gap:7px;cursor:pointer}
-.home-mini-cover{width:100%;aspect-ratio:3/4;border-radius:11px;background:linear-gradient(155deg,#f0ebe0 0%,#e5ddd0 100%);box-shadow:0 2px 8px -3px rgba(26,26,26,.18),0 1px 2px rgba(26,26,26,.06);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:22px}
-.home-mini-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.home-mini-drama-cover{width:100%;aspect-ratio:16/10;border-radius:11px;background:#1e1c18;box-shadow:0 2px 8px -3px rgba(26,26,26,.22),0 1px 2px rgba(26,26,26,.08);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:22px}
-.home-mini-drama-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.home-mini-title{font-size:12.5px;font-weight:500;color:#1f1c18;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Noto Sans KR',sans-serif;letter-spacing:-0.1px}
-.home-mini-ott{display:inline-block;font-size:9.5px;font-weight:600;padding:2px 6px;border-radius:4px;color:#fff;margin-bottom:1px}
-.home-section-divider{height:1px;background:linear-gradient(90deg,transparent,#e0d9cf 20%,#e0d9cf 80%,transparent);margin:4px 16px 0}
+.home-book-card{display:flex;flex-direction:column;gap:6px;cursor:pointer}
+.home-book-cover{position:relative;width:100%;aspect-ratio:3/4;border-radius:11px;background:repeating-linear-gradient(135deg,#7a9b6e 0,#7a9b6e 10px,#8aac7e 10px,#8aac7e 20px);box-shadow:0 2px 8px -3px rgba(26,26,26,.2),0 1px 2px rgba(26,26,26,.08);overflow:hidden}
+.home-book-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.home-book-cover-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:9px;letter-spacing:.12em;color:rgba(255,255,255,.45);z-index:0}
+.home-book-ribbon{position:absolute;top:7px;left:9px;width:12px;height:20px;background:#8b4c2a;clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);z-index:2}
+.home-book-stamp{position:absolute;bottom:7px;right:7px;width:38px;height:38px;border-radius:50%;border:2px solid #a0603a;color:#a0603a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;transform:rotate(-9deg);background:rgba(250,247,241,.88);z-index:3}
+.home-book-title{font-size:12px;font-weight:500;color:#1f1c18;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Noto Sans KR',sans-serif}
+.home-book-author{font-size:10.5px;color:#a89e92;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-book-stamp-btn{background:none;border:1px solid #ddd5c8;border-radius:7px;padding:3px 0;font-size:10px;color:#a89e92;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s;width:100%;text-align:center}
+.home-book-stamp-btn:hover,.home-book-stamp-btn.stamped{border-color:#c8a085;color:#a0603a;background:#fdf6f0}
+/* Drama ticket cards */
+.home-drama-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.home-drama-ticket{display:flex;background:#faf7f1;border:1px solid #ddd5c8;border-radius:12px;overflow:visible;box-shadow:0 2px 6px -2px rgba(50,40,20,.1);position:relative;cursor:pointer}
+.hdt-main{flex:1;padding:11px 12px 10px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.hdt-title{font-family:'Noto Serif KR',serif;font-weight:700;font-size:13px;line-height:1.3;color:#1f1c18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hdt-cast{font-size:10px;color:#a89e92;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:13px}
+.hdt-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.hdt-ott{font-size:10px;padding:2px 6px;border-radius:999px;background:rgba(75,105,58,.12);color:#4a6937;font-weight:500;white-space:nowrap}
+.hdt-status{font-size:10px;padding:2px 6px;border-radius:999px;white-space:nowrap}
+.hdt-stamp-btn{margin-top:7px;align-self:flex-start;background:none;border:1px solid #ddd5c8;border-radius:7px;padding:3px 8px;font-size:9.5px;color:#a89e92;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s;white-space:nowrap}
+.hdt-stamp-btn:hover,.hdt-stamp-btn.stamped{border-color:#c8a085;color:#a0603a;background:#fdf6f0}
+.hdt-divider{width:1px;background:repeating-linear-gradient(to bottom,#ddd5c8 0 4px,transparent 4px 8px);position:relative;flex-shrink:0;margin:8px 0}
+.hdt-hole{position:absolute;left:-6px;width:12px;height:12px;border-radius:50%;background:#f0ebe0;z-index:1}
+.hdt-hole.top{top:-12px}
+.hdt-hole.bottom{bottom:-12px}
+.hdt-stub{width:28px;display:flex;align-items:center;justify-content:center;background:#ede8de;border-radius:0 11px 11px 0;flex-shrink:0}
+.hdt-stub-text{transform:rotate(180deg);writing-mode:vertical-rl;font-size:9px;color:#b0a99e;letter-spacing:.2em;font-weight:500;text-transform:uppercase}
+.hdt-fav-stamp{position:absolute;top:6px;right:34px;width:32px;height:32px;border-radius:50%;border:2px solid #a0603a;color:#a0603a;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;transform:rotate(-9deg);background:rgba(250,247,241,.92);pointer-events:none;z-index:2}
 </style>
 </head>
 <body>
@@ -260,45 +288,45 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
   <div id="homeNormal" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
     <div class="home-header">
       <div class="home-title-wrap">
-        <span class="home-title-main">네이나의 연화당</span>
-        <span class="home-title-sub">煙花堂 · 書架와 映閣</span>
+        <span class="home-title-main">네이나의 연화당·영각</span>
+        <span class="home-title-sub">水墨</span>
       </div>
-      <button class="admin-entry-btn" id="adminEntryBtn">관리자</button>
+      <button class="admin-entry-btn" id="adminEntryBtn">🔐 관리자</button>
     </div>
     <div class="home-tab-scroll">
-    <!-- 배너 영역 (수묵화 산 풍경) -->
-    <div class="home-banner" id="homeBanner">
-      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(115deg,rgba(26,26,26,.02) 0px,rgba(26,26,26,.02) 1px,transparent 1px,transparent 6px);mix-blend-mode:multiply;pointer-events:none"></div>
-      <div style="position:absolute;top:16%;right:14%;width:13%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(181,72,47,.33) 0%,rgba(181,72,47,.13) 45%,transparent 75%);filter:blur(1px)"></div>
-      <div style="position:absolute;left:-5%;right:-5%;bottom:40%;height:24%;background:rgba(245,242,235,.85);filter:blur(10px);opacity:.75"></div>
-      <div style="position:absolute;left:-8%;right:-8%;bottom:0;height:50%;background:#a6a094;clip-path:polygon(0% 100%,0% 62%,10% 54%,20% 60%,32% 48%,46% 58%,58% 44%,72% 56%,86% 46%,100% 58%,100% 100%);filter:blur(5px);opacity:.5"></div>
-      <div style="position:absolute;left:-5%;right:-5%;bottom:24%;height:16%;background:rgba(245,242,235,.85);filter:blur(8px);opacity:.6"></div>
-      <div style="position:absolute;left:-8%;right:-8%;bottom:0;height:38%;background:#726b5e;clip-path:polygon(0% 100%,0% 66%,10% 56%,22% 64%,36% 50%,50% 60%,64% 46%,78% 58%,90% 48%,100% 60%,100% 100%);filter:blur(2.5px);opacity:.68"></div>
-      <div style="position:absolute;left:-5%;right:-5%;bottom:8%;height:12%;background:rgba(245,242,235,.85);filter:blur(6px);opacity:.55"></div>
-      <div style="position:absolute;left:-8%;right:-8%;bottom:0;height:24%;background:#39352d;clip-path:polygon(0% 100%,0% 70%,12% 60%,26% 68%,42% 54%,58% 66%,74% 52%,88% 64%,100% 55%,100% 100%);filter:blur(.5px)"></div>
-      <div style="position:absolute;left:0;right:0;bottom:0;height:22%;background:linear-gradient(to top,rgba(0,0,0,.14),transparent)"></div>
-      <div style="position:absolute;left:16px;bottom:14px;font-size:11px;font-weight:500;color:rgba(255,255,255,.9);letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,.35)">水墨</div>
-    </div>
-    <!-- 통계 바 -->
-    <div class="home-stats-bar" id="homeStatsBar">
-      <span>도서 <span class="home-stats-num" id="homeStatBooks">-</span>권</span>
-      <span class="home-stats-sep"></span>
-      <span>드라마 <span class="home-stats-num" id="homeStatDramas">-</span>편</span>
+    <!-- 히어로 카드 -->
+    <div class="home-hero">
+      <div class="home-hero-title">네이나의 서재 다이어리</div>
+      <div class="home-hero-sub">읽은 소설과 본 드라마를 책갈피와 티켓처럼 모아두는 공간이에요.</div>
+      <div class="home-hero-stats">
+        <div class="home-hero-stat">
+          <span class="home-hero-stat-num" id="homeStatBooks">-</span>
+          <span class="home-hero-stat-label">등록 도서</span>
+        </div>
+        <div class="home-hero-stat">
+          <span class="home-hero-stat-num" id="homeStatDramas">-</span>
+          <span class="home-hero-stat-label">등록 드라마</span>
+        </div>
+        <div class="home-hero-stat">
+          <span class="home-hero-stat-num" id="homeStatFavs">-</span>
+          <span class="home-hero-stat-label">인생작 도장</span>
+        </div>
+      </div>
     </div>
     <!-- 최근 도서 -->
     <div class="home-section">
       <div class="home-section-header">
-        <span class="home-section-title">최근 등록한 책</span>
-        <button class="home-more-btn" onclick="switchTab('book')">전체보기 →</button>
+        <span class="home-section-title">📚 최근 등록한 책</span>
+        <button class="home-more-btn" onclick="switchTab('book')">전체보기 ›</button>
       </div>
       <div class="home-book-grid" id="homeLatestBook"></div>
     </div>
     <div class="home-section-divider"></div>
     <!-- 최근 드라마 -->
-    <div class="home-section" style="padding-bottom:24px">
+    <div class="home-section" style="padding-bottom:28px">
       <div class="home-section-header">
-        <span class="home-section-title">최근 시청한 드라마</span>
-        <button class="home-more-btn" onclick="switchTab('drama')">전체보기 →</button>
+        <span class="home-section-title">🎬 최근 시청한 드라마</span>
+        <button class="home-more-btn" onclick="switchTab('drama')">전체보기 ›</button>
       </div>
       <div class="home-drama-grid" id="homeLatestDrama"></div>
     </div>
@@ -681,7 +709,8 @@ function parseBook(page, idx){
   const genres = (props['장르']?.multi_select || []).map(g => g.name);
   const memo = props['메모']?.rich_text?.[0]?.plain_text || '';
   const createdYear = new Date(page.created_time).getFullYear();
-  return { id: idx, notionId: page.id, title, author, platform, status, genres, memo, createdYear };
+  const favorite = props['인생작']?.checkbox || false;
+  return { id: idx, notionId: page.id, title, author, platform, status, genres, memo, createdYear, favorite };
 }
 
 async function loadBooks(){
@@ -1220,6 +1249,7 @@ function parseDrama(page, idx){
     status: p['시청 여부']?.status?.name || '시작 전',
     genre: (p['장르']?.multi_select||[]).map(g=>g.name),
     createdYear: new Date(page.created_time).getFullYear(),
+    favorite: p['인생작']?.checkbox || false,
   };
 }
 
@@ -1395,10 +1425,20 @@ function renderHomeLatestBook(){
   if(!list.length){ el.innerHTML='<div style="font-size:13px;color:#aaa;grid-column:1/-1">등록된 도서가 없습니다</div>'; return; }
   el.innerHTML = list.map(b => {
     const url = COVER_MAP[b.title];
-    const thumb = url ? `<img src="${url}" alt="${b.title}" onerror="this.outerHTML='<span>📖</span>'">` : '<span>📖</span>';
-    return `<div class="home-mini-card" onclick="switchTab('book')">
-      <div class="home-mini-cover">${thumb}</div>
-      <div class="home-mini-title">${b.title}</div>
+    const imgHtml = url ? `<img src="${url}" alt="${b.title}" onerror="this.style.display='none'">` : '';
+    const stampHtml = b.favorite ? `<div class="home-book-stamp">인생작</div>` : '';
+    return `<div class="home-book-card">
+      <div class="home-book-cover" onclick="switchTab('book')">
+        <div class="home-book-cover-ph">COVER</div>
+        ${imgHtml}
+        <div class="home-book-ribbon"></div>
+        ${stampHtml}
+      </div>
+      <div class="home-book-title">${b.title}</div>
+      <div class="home-book-author">${b.author||''}</div>
+      <button class="home-book-stamp-btn${b.favorite?' stamped':''}" onclick="toggleBookFavorite('${b.notionId}',${b.id})">
+        ${b.favorite ? '★ 인생작 도장 찍음' : '인생작 도장 찍기'}
+      </button>
     </div>`;
   }).join('');
 }
@@ -1409,27 +1449,74 @@ function renderHomeLatestDrama(){
   const list = dramas.slice(0,4);
   if(!list.length){ el.innerHTML='<div style="font-size:13px;color:#aaa;grid-column:1/-1">등록된 드라마가 없습니다</div>'; return; }
   el.innerHTML = list.map(d => {
-    const url = DRAMA_COVER_MAP[d.title] || d.thumbnail;
-    const thumb = url ? `<img src="${url}" alt="${d.title}" onerror="this.outerHTML='<span>📺</span>'">` : '<span>📺</span>';
-    const ottColor = d.ott&&d.ott.length ? (OTT_COLORS[d.ott[0]]||'#888') : '';
     const ottLabel = d.ott&&d.ott.length ? d.ott[0] : '';
-    return `<div class="home-mini-card" onclick="switchTab('drama')">
-      <div class="home-mini-drama-cover">
-        ${thumb}
-        ${ottLabel?`<div style="position:absolute;top:7px;left:7px;font-size:9.5px;font-weight:700;color:#fff;padding:2px 6px;border-radius:4px;background:${ottColor};letter-spacing:.2px">${ottLabel}</div>`:''}
+    const statusLabel = DRAMA_STATUS_LABELS[d.status] || d.status;
+    const statusStyle = (() => {
+      const map = {
+        '완료':'background:#daebc8;color:#3d6b25',
+        '진행 중':'background:#f5e8b0;color:#7a6420',
+        '시작 전':'background:#e8e2d8;color:#7a746e',
+        '드롭':'background:#f5dece;color:#8a4a2a',
+        '중단':'background:#f5dece;color:#8a4a2a',
+      };
+      return map[d.status] || map['시작 전'];
+    })();
+    const favStamp = d.favorite ? `<div class="hdt-fav-stamp">인생작</div>` : '';
+    return `<div class="home-drama-ticket">
+      <div class="hdt-main">
+        <div class="hdt-title" onclick="switchTab('drama')">${d.title}</div>
+        <div class="hdt-cast">${d.cast||''}</div>
+        <div class="hdt-badges">
+          ${ottLabel?`<span class="hdt-ott">${ottLabel}</span>`:''}
+          <span class="hdt-status" style="${statusStyle}">${statusLabel}</span>
+        </div>
+        <button class="hdt-stamp-btn${d.favorite?' stamped':''}" onclick="toggleDramaFavorite('${d.notionId}',${d.id})">
+          ${d.favorite ? '★ 인생작 도장 찍음' : '인생작 도장 찍기'}
+        </button>
       </div>
-      <div class="home-mini-title">${d.title}</div>
+      <div class="hdt-divider">
+        <div class="hdt-hole top"></div>
+        <div class="hdt-hole bottom"></div>
+      </div>
+      <div class="hdt-stub"><span class="hdt-stub-text">Ticket</span></div>
+      ${favStamp}
     </div>`;
   }).join('');
 }
 
 function renderHomeStats(){
-  const bookCount = books.filter(b=>b.title!=='ADMIN').length;
-  const dramaCount = dramas.length;
+  const allBooks = books.filter(b=>b.title!=='ADMIN');
+  const favCount = allBooks.filter(b=>b.favorite).length + dramas.filter(d=>d.favorite).length;
   const bEl = document.getElementById('homeStatBooks');
   const dEl = document.getElementById('homeStatDramas');
-  if(bEl) bEl.textContent = bookCount;
-  if(dEl) dEl.textContent = dramaCount;
+  const fEl = document.getElementById('homeStatFavs');
+  if(bEl) bEl.textContent = allBooks.length;
+  if(dEl) dEl.textContent = dramas.length;
+  if(fEl) fEl.textContent = favCount;
+}
+
+async function toggleBookFavorite(notionId, bookId){
+  const book = books.find(b=>b.id===bookId);
+  if(!book) return;
+  const newVal = !book.favorite;
+  book.favorite = newVal;
+  renderHomeLatestBook();
+  renderHomeStats();
+  try {
+    await fetch('/api/notion',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({notionId,favorite:newVal})});
+  } catch(e){ book.favorite=!newVal; renderHomeLatestBook(); renderHomeStats(); }
+}
+
+async function toggleDramaFavorite(notionId, dramaId){
+  const drama = dramas.find(d=>d.id===dramaId);
+  if(!drama) return;
+  const newVal = !drama.favorite;
+  drama.favorite = newVal;
+  renderHomeLatestDrama();
+  renderHomeStats();
+  try {
+    await fetch('/api/drama',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({notionId,favorite:newVal})});
+  } catch(e){ drama.favorite=!newVal; renderHomeLatestDrama(); renderHomeStats(); }
 }
 
 Promise.all([loadBooks(), loadDramas()]).then(() => {

@@ -60,19 +60,28 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'PATCH') {
-      const { notionId, status } = req.body;
+      const { notionId, status, favorite } = req.body;
       if (!notionId) return res.status(400).json({ error: 'notionId가 필요합니다.' });
-      const response = await fetch(`https://api.notion.com/v1/pages/${notionId}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${NOTION_TOKEN}`,
-          'Content-Type': 'application/json',
-          'Notion-Version': '2022-06-28',
-        },
-        body: JSON.stringify({
-          properties: { '완독 여부': { status: { name: status } } },
-        }),
+      const notionHeaders = {
+        'Authorization': `Bearer ${NOTION_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Notion-Version': '2022-06-28',
+      };
+      const props = {};
+      if (status !== undefined) props['완독 여부'] = { status: { name: status } };
+      if (favorite !== undefined) props['인생작'] = { checkbox: favorite };
+      const tryPatch = () => fetch(`https://api.notion.com/v1/pages/${notionId}`, {
+        method: 'PATCH', headers: notionHeaders,
+        body: JSON.stringify({ properties: props }),
       });
+      let response = await tryPatch();
+      if (!response.ok && favorite !== undefined) {
+        await fetch(`https://api.notion.com/v1/databases/${NOTION_DB_ID}`, {
+          method: 'PATCH', headers: notionHeaders,
+          body: JSON.stringify({ properties: { '인생작': { checkbox: {} } } }),
+        });
+        response = await tryPatch();
+      }
       const data = await response.json();
       if (!response.ok) return res.status(response.status).json({ error: data });
       return res.status(200).json({ success: true });

@@ -51,16 +51,24 @@ export default async function handler(req, res) {
       return res.status(200).json(data);
     }
 
-    // 시청 여부 업데이트
+    // 시청 여부 / 인생작 업데이트
     if (req.method === 'PATCH') {
-      const { notionId, status } = req.body;
-      const r = await fetch(`https://api.notion.com/v1/pages/${notionId}`, {
-        method: 'PATCH',
-        headers,
-        body: JSON.stringify({
-          properties: { '시청 여부': { status: { name: status } } },
-        }),
+      const { notionId, status, favorite } = req.body;
+      const props = {};
+      if (status !== undefined) props['시청 여부'] = { status: { name: status } };
+      if (favorite !== undefined) props['인생작'] = { checkbox: favorite };
+      const tryPatch = () => fetch(`https://api.notion.com/v1/pages/${notionId}`, {
+        method: 'PATCH', headers,
+        body: JSON.stringify({ properties: props }),
       });
+      let r = await tryPatch();
+      if (!r.ok && favorite !== undefined) {
+        await fetch(`https://api.notion.com/v1/databases/${DRAMA_DB_ID}`, {
+          method: 'PATCH', headers,
+          body: JSON.stringify({ properties: { '인생작': { checkbox: {} } } }),
+        });
+        r = await tryPatch();
+      }
       const data = await r.json();
       if (!r.ok) return res.status(r.status).json({ error: data });
       return res.status(200).json({ success: true });
