@@ -208,6 +208,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .dash-legend-label{font-size:12px;color:#555;flex:1}
 .dash-legend-val{font-size:12px;font-weight:600;color:#1a1a1a;font-variant-numeric:tabular-nums}
 .dash-empty{font-size:13px;color:#aaa;text-align:center;padding:20px 0}
+.dash-split-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+.dash-half{flex-direction:column;align-items:center;gap:12px}
+.dash-half .dash-legend{width:100%}
+.dash-genre-panel{background:#fff;border-radius:14px;padding:14px 12px;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);display:flex;flex-direction:column;gap:7px}
+.dash-genre-title{font-size:11px;font-weight:600;color:#9a958a;letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px}
+.dash-genre-item{display:flex;flex-direction:column;gap:3px}
+.dash-genre-name{font-size:11px;color:#333;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dash-genre-bar-wrap{height:5px;background:#ede8df;border-radius:3px;overflow:hidden}
+.dash-genre-bar{height:100%;border-radius:3px;background:#7c6a52;transition:width .4s ease}
+.dash-genre-count{font-size:10px;color:#aaa;text-align:right;font-variant-numeric:tabular-nums}
 .badge-watched{background:#eaf3de;color:#3b6d11}
 .badge-want{background:#f1efe8;color:#5f5e5a}
 .badge-drop{background:#fcebeb;color:#a32d2d}
@@ -384,20 +394,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
         <div class="dash-stat-label">전체 등록 드라마</div>
       </div>
     </div>
-    <!-- 올해 도서 -->
+    <!-- 도서 -->
     <div class="dash-section">
       <div class="dash-section-title">도서 완독 현황</div>
-      <div class="dash-chart-row">
-        <div id="bookPieChart" class="dash-pie-wrap"></div>
-        <div id="bookLegend" class="dash-legend"></div>
+      <div class="dash-split-row">
+        <div class="dash-chart-row dash-half">
+          <div id="bookPieChart" class="dash-pie-wrap"></div>
+          <div id="bookLegend" class="dash-legend"></div>
+        </div>
+        <div class="dash-genre-panel" id="bookGenrePanel"></div>
       </div>
     </div>
-    <!-- 올해 드라마 -->
+    <!-- 드라마 -->
     <div class="dash-section">
       <div class="dash-section-title">드라마 시청 현황</div>
-      <div class="dash-chart-row">
-        <div id="dramaPieChart" class="dash-pie-wrap"></div>
-        <div id="dramaLegend" class="dash-legend"></div>
+      <div class="dash-split-row">
+        <div class="dash-chart-row dash-half">
+          <div id="dramaPieChart" class="dash-pie-wrap"></div>
+          <div id="dramaLegend" class="dash-legend"></div>
+        </div>
+        <div class="dash-genre-panel" id="dramaGenrePanel"></div>
       </div>
     </div>
   </div>
@@ -1045,15 +1061,38 @@ function buildLegendHTML(segments, total) {
     </div>`).join('');
 }
 
-function renderDashboard(){
-  const thisYear = new Date().getFullYear();
+function buildGenreHTML(items, accentColor){
+  if(!items.length) return '<div class="dash-empty" style="padding:12px 0">장르 데이터 없음</div>';
+  const max = items[0].count;
+  return `<div class="dash-genre-title">취향 분석</div>` +
+    items.slice(0,6).map(g=>`
+    <div class="dash-genre-item">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="dash-genre-name">${g.name}</span>
+        <span class="dash-genre-count">${g.count}</span>
+      </div>
+      <div class="dash-genre-bar-wrap">
+        <div class="dash-genre-bar" style="width:${Math.round(g.count/max*100)}%;background:${accentColor}"></div>
+      </div>
+    </div>`).join('');
+}
 
+function calcGenres(list, key){
+  const map = {};
+  list.forEach(item=>{
+    const genres = item[key]||[];
+    genres.forEach(g=>{ map[g]=(map[g]||0)+1; });
+  });
+  return Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([name,count])=>({name,count}));
+}
+
+function renderDashboard(){
   // 전체 통계
-  document.getElementById('totalBookCount').textContent  = books.filter(b=>b.title!=='ADMIN').length + '권';
+  const allBooks = books.filter(b=>b.title!=='ADMIN');
+  document.getElementById('totalBookCount').textContent  = allBooks.length + '권';
   document.getElementById('totalDramaCount').textContent = dramas.length + '편';
 
-  // 도서 완독 현황 (전체)
-  const allBooks = books.filter(b=>b.title!=='ADMIN');
+  // 도서 완독 현황
   const bookGroups = {};
   allBooks.forEach(b=>{ bookGroups[b.status]=(bookGroups[b.status]||0)+1; });
   const bookOrder = ['완료','진행 중','시작 전','중단'];
@@ -1062,24 +1101,27 @@ function renderDashboard(){
   if(!bookTotal){
     document.getElementById('bookPieChart').innerHTML='<div class="dash-empty">등록된 도서가 없습니다</div>';
     document.getElementById('bookLegend').innerHTML='';
+    document.getElementById('bookGenrePanel').innerHTML='';
   } else {
     document.getElementById('bookPieChart').innerHTML=buildPieSVG(bookSegs);
     document.getElementById('bookLegend').innerHTML=buildLegendHTML(bookSegs,bookTotal)+`<div style="margin-top:4px;padding-top:8px;border-top:0.5px solid #e8e5de;font-size:11px;color:#aaa">총 ${bookTotal}권</div>`;
+    document.getElementById('bookGenrePanel').innerHTML=buildGenreHTML(calcGenres(allBooks,'genres'),'#6b8f4e');
   }
 
-  // 드라마 시청 현황 (전체)
-  const allDramas = dramas;
+  // 드라마 시청 현황
   const dramaGroups = {};
-  allDramas.forEach(d=>{ dramaGroups[d.status]=(dramaGroups[d.status]||0)+1; });
+  dramas.forEach(d=>{ dramaGroups[d.status]=(dramaGroups[d.status]||0)+1; });
   const dramaOrder = ['완료','진행 중','시작 전','드롭','중단'];
   const dramaSegs = dramaOrder.filter(s=>dramaGroups[s]).map(s=>({label:DRAMA_STATUS_LABELS[s],value:dramaGroups[s],color:DRAMA_STATUS_COLORS[s]}));
-  const dramaTotal = allDramas.length;
+  const dramaTotal = dramas.length;
   if(!dramaTotal){
     document.getElementById('dramaPieChart').innerHTML='<div class="dash-empty">등록된 드라마가 없습니다</div>';
     document.getElementById('dramaLegend').innerHTML='';
+    document.getElementById('dramaGenrePanel').innerHTML='';
   } else {
     document.getElementById('dramaPieChart').innerHTML=buildPieSVG(dramaSegs);
     document.getElementById('dramaLegend').innerHTML=buildLegendHTML(dramaSegs,dramaTotal)+`<div style="margin-top:4px;padding-top:8px;border-top:0.5px solid #e8e5de;font-size:11px;color:#aaa">총 ${dramaTotal}편</div>`;
+    document.getElementById('dramaGenrePanel').innerHTML=buildGenreHTML(calcGenres(dramas,'genre'),'#1a56db');
   }
 }
 
