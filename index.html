@@ -234,7 +234,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .home-hero{margin:0 12px;background:#faf7f1;border-radius:18px;padding:18px 18px 16px;box-shadow:0 2px 12px -4px rgba(50,40,20,.14),0 1px 3px rgba(50,40,20,.06)}
 .home-hero-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:#1f1c18;letter-spacing:-0.4px;margin-bottom:4px}
 .home-hero-sub{font-size:12px;color:#a89e92;line-height:1.55;margin-bottom:16px}
-.home-hero-stats{display:flex}
+.home-hero-stats{display:flex;justify-content:center}
 .home-hero-stat{flex:1;display:flex;flex-direction:column;gap:3px;padding-right:16px;border-right:1px solid #e5dece}
 .home-hero-stat:last-child{border-right:none;padding-right:0;padding-left:16px}
 .home-hero-stat:not(:first-child):not(:last-child){padding:0 16px}
@@ -289,7 +289,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
     <div class="home-header">
       <div class="home-title-wrap">
         <span class="home-title-main">네이나의 연화당·영각</span>
-        <span class="home-title-sub">水墨</span>
+        <span class="home-title-sub"></span>
       </div>
       <button class="admin-entry-btn" id="adminEntryBtn">🔐 관리자</button>
     </div>
@@ -1446,7 +1446,7 @@ function renderHomeLatestBook(){
 function renderHomeLatestDrama(){
   const el = document.getElementById('homeLatestDrama');
   if(!el) return;
-  const list = dramas.slice(0,4);
+  const list = dramas.slice(0,2);
   if(!list.length){ el.innerHTML='<div style="font-size:13px;color:#aaa;grid-column:1/-1">등록된 드라마가 없습니다</div>'; return; }
   el.innerHTML = list.map(d => {
     const ottLabel = d.ott&&d.ott.length ? d.ott[0] : '';
