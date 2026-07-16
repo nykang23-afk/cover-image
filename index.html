@@ -6,7 +6,7 @@
 <title>네이나의 연화당</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600&family=Gaegu:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{touch-action:manipulation;-ms-touch-action:manipulation;height:100%}
@@ -206,28 +206,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .badge-watching{background:#e8f0fe;color:#1a56db}
 
 /* Dashboard */
-.dash-total-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.dash-stat-card{background:#faf7f1;border:1px solid #ddd5c8;border-radius:14px;padding:18px 16px;box-shadow:0 2px 8px -3px rgba(50,40,20,.10),0 1px 2px rgba(50,40,20,.05);display:flex;flex-direction:column;gap:4px}
-.dash-stat-num{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:700;color:#1f1c18;line-height:1;font-variant-numeric:tabular-nums}
-.dash-stat-label{font-size:11px;color:#a89e92;font-weight:500}
-.dash-section{margin-bottom:20px}
-.dash-section-title{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700;color:#1f1c18;margin-bottom:10px;letter-spacing:-0.2px}
-.dash-chart-row{background:#faf7f1;border:1px solid #ddd5c8;border-radius:14px;padding:16px 14px;box-shadow:0 2px 8px -3px rgba(50,40,20,.10),0 1px 2px rgba(50,40,20,.05);display:flex;align-items:center;gap:14px}
-.dash-pie-wrap{flex-shrink:0;width:100px;height:100px}
-.dash-pie-wrap svg{width:100px;height:100px}
-.dash-legend{flex:1;display:flex;flex-direction:column;gap:7px}
-.dash-legend-item{display:flex;align-items:center;gap:7px}
-.dash-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.dash-legend-label{font-size:11.5px;color:#5a5450;flex:1}
-.dash-legend-val{font-size:12px;font-weight:700;color:#1f1c18;font-variant-numeric:tabular-nums}
+.dash-total-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.dash-stat-card{background:#ddd5c5;border:1px solid #ccc4b5;border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:4px}
+.dash-stat-num{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:700;color:#1f1c18;line-height:1;font-variant-numeric:tabular-nums}
+.dash-stat-label{font-size:12.5px;color:#7a746e;font-weight:400;margin-top:4px}
+.dash-section{margin-bottom:28px}
+.dash-section-title{font-size:14px;font-weight:700;color:#1f1c18;margin-bottom:12px}
+/* Charts side by side */
+.dash-charts-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:0}
+.dash-chart-block{flex:1;min-width:140px}
+.dash-chart-block-title{font-size:14px;font-weight:700;color:#1f1c18;margin-bottom:12px}
+.dash-chart-inner{display:flex;align-items:center;gap:10px}
+.dash-pie-css{width:72px;height:72px;border-radius:50%;flex-shrink:0}
+.dash-legend{display:flex;flex-direction:column;gap:5px}
+.dash-legend-item{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#3a3530}
+.dash-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .dash-empty{font-size:13px;color:#aaa;text-align:center;padding:20px 0}
-.dash-genre-panel{background:#faf7f1;border:1px solid #ddd5c8;border-radius:14px;padding:14px 14px;box-shadow:0 2px 8px -3px rgba(50,40,20,.10),0 1px 2px rgba(50,40,20,.05);display:flex;flex-direction:column;gap:7px;margin-top:10px}
-.dash-genre-title{font-size:10.5px;font-weight:600;color:#a89e92;letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px}
-.dash-genre-item{display:flex;flex-direction:column;gap:3px}
-.dash-genre-name{font-size:11px;color:#3a3530;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dash-genre-bar-wrap{height:4px;background:#e8e0d4;border-radius:3px;overflow:hidden}
-.dash-genre-bar{height:100%;border-radius:3px;transition:width .4s ease}
-.dash-genre-count{font-size:10px;color:#b0a99e;text-align:right;font-variant-numeric:tabular-nums}
+/* Genre bars */
+.dash-genre-section{margin-bottom:28px}
+.dash-genre-section-title{font-size:14px;font-weight:700;color:#1f1c18;margin-bottom:14px}
+.dash-genre-bars{display:flex;flex-direction:column;gap:8px}
+.dash-genre-row{display:flex;align-items:center;gap:10px}
+.dash-genre-name{width:52px;font-size:12.5px;color:#7a746e;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dash-genre-bar-wrap{flex:1;height:10px;background:#ddd5c5;border-radius:6px;overflow:hidden}
+.dash-genre-bar{height:100%;border-radius:6px;background:#b8920e;transition:width .5s ease}
+.dash-genre-count{width:20px;font-size:12px;color:#7a746e;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
+/* Cork board */
+.dash-cork-section{margin-bottom:24px}
+.dash-cork-title{font-size:14px;font-weight:700;color:#1f1c18;margin-bottom:14px}
+.dash-cork-board{background:#cfc0a8;border:1px solid #bfb09a;border-radius:16px;padding:20px;display:flex;flex-wrap:wrap;gap:16px}
+.dash-cork-card{background:#faf7f1;border:1px solid #ccc4b5;box-shadow:0 6px 14px rgba(60,40,20,.16);border-radius:8px;padding:10px 14px;font-family:'Gaegu',cursive;font-size:16px;min-width:120px;position:relative;flex:1}
+.dash-cork-card::before{content:'';position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:#a0603a;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.dash-cork-type{font-size:11px;color:#7a746e;font-family:'Noto Sans KR',sans-serif;margin-bottom:2px}
+.dash-cork-empty{font-size:13px;color:#a89e92;text-align:center;padding:16px 0;width:100%;font-family:'Noto Sans KR',sans-serif}
 .badge-watched{background:#eaf3de;color:#3b6d11}
 .badge-want{background:#f1efe8;color:#5f5e5a}
 .badge-drop{background:#fcebeb;color:#a32d2d}
@@ -476,23 +487,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
         <div class="dash-stat-label">전체 등록 드라마</div>
       </div>
     </div>
-    <!-- 도서 -->
-    <div class="dash-section">
-      <div class="dash-section-title">도서 완독 현황</div>
-      <div class="dash-chart-row">
-        <div id="bookPieChart" class="dash-pie-wrap"></div>
-        <div id="bookLegend" class="dash-legend"></div>
+    <!-- 차트 2컬럼 -->
+    <div class="dash-charts-row">
+      <div class="dash-chart-block">
+        <div class="dash-chart-block-title">도서 완독 현황</div>
+        <div class="dash-chart-inner">
+          <div id="bookPieChart" class="dash-pie-css"></div>
+          <div id="bookLegend" class="dash-legend"></div>
+        </div>
       </div>
-      <div class="dash-genre-panel" id="bookGenrePanel"></div>
+      <div class="dash-chart-block">
+        <div class="dash-chart-block-title">드라마 시청 현황</div>
+        <div class="dash-chart-inner">
+          <div id="dramaPieChart" class="dash-pie-css"></div>
+          <div id="dramaLegend" class="dash-legend"></div>
+        </div>
+      </div>
     </div>
-    <!-- 드라마 -->
-    <div class="dash-section">
-      <div class="dash-section-title">드라마 시청 현황</div>
-      <div class="dash-chart-row">
-        <div id="dramaPieChart" class="dash-pie-wrap"></div>
-        <div id="dramaLegend" class="dash-legend"></div>
-      </div>
-      <div class="dash-genre-panel" id="dramaGenrePanel"></div>
+    <!-- 장르 -->
+    <div class="dash-genre-section">
+      <div class="dash-genre-section-title">취향 아카이브 · 즐겨 찾는 장르</div>
+      <div class="dash-genre-bars" id="genreBarPanel"></div>
+    </div>
+    <!-- 인생작 코르크보드 -->
+    <div class="dash-cork-section">
+      <div class="dash-cork-title">✂️ 인생작 코르크보드</div>
+      <div class="dash-cork-board" id="corkBoard"></div>
     </div>
   </div>
 </div>
@@ -1118,101 +1138,91 @@ async function deleteBook(btn) {
 
 // ─── Dashboard ───────────────────────────────────────
 const BOOK_STATUS_COLORS  = {'완료':'#4e7a30','진행 중':'#c49a18','시작 전':'#9c9589','중단':'#b84a2a'};
-const DRAMA_STATUS_COLORS = {'완료':'#4e7a30','진행 중':'#5a7ec4','시작 전':'#9c9589','드롭':'#b84a2a','중단':'#b84a2a'};
+const DRAMA_STATUS_COLORS = {'완료':'#4e7a30','진행 중':'#c49a18','시작 전':'#9c9589','드롭':'#b84a2a','중단':'#b84a2a'};
 const BOOK_STATUS_LABELS  = {'완료':'완독','진행 중':'읽는 중','시작 전':'시작 전','중단':'중단'};
 const DRAMA_STATUS_LABELS = {'완료':'시청 완료','진행 중':'시청 중','시작 전':'보고싶은','드롭':'드롭','중단':'중단'};
 
-function buildPieSVG(segments) {
+function buildPieConic(segments) {
   const total = segments.reduce((s,d)=>s+d.value,0);
-  if(!total) return '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="56" fill="#e8e0d4"/></svg>';
-  const cx=60, cy=60, R=56;
-  if(segments.length===1){
-    return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><circle cx="${cx}" cy="${cy}" r="${R}" fill="${segments[0].color}"/></svg>`;
-  }
-  let angle = -Math.PI/2, paths='';
-  segments.forEach(seg=>{
-    if(!seg.value) return;
-    const sweep = (seg.value/total)*Math.PI*2;
-    const x1=cx+R*Math.cos(angle), y1=cy+R*Math.sin(angle);
-    const x2=cx+R*Math.cos(angle+sweep), y2=cy+R*Math.sin(angle+sweep);
-    const large=sweep>Math.PI?1:0;
-    paths+=`<path d="M${cx},${cy} L${x1},${y1} A${R},${R},0,${large},1,${x2},${y2} Z" fill="${seg.color}"/>`;
-    angle+=sweep;
+  if(!total) return 'background:#ddd5c5';
+  if(segments.length===1) return `background:${segments[0].color}`;
+  let acc=0;
+  const stops = segments.map(seg=>{
+    const from=acc/total*360; acc+=seg.value; const to=acc/total*360;
+    return `${seg.color} ${from}deg ${to}deg`;
   });
-  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
+  return `background:conic-gradient(${stops.join(',')})`;
 }
 
-function buildLegendHTML(segments, total) {
+function buildLegendHTML(segments) {
   return segments.map(s=>`
     <div class="dash-legend-item">
-      <div class="dash-legend-dot" style="background:${s.color}"></div>
-      <span class="dash-legend-label">${s.label}</span>
-      <span class="dash-legend-val">${s.value}</span>
+      <span class="dash-legend-dot" style="background:${s.color}"></span>
+      ${s.label} ${s.value}
     </div>`).join('');
 }
 
-function buildGenreHTML(items, accentColor){
-  if(!items.length) return '<div class="dash-empty" style="padding:12px 0">장르 데이터 없음</div>';
-  const max = items[0].count;
-  return `<div class="dash-genre-title">취향 분석</div>` +
-    items.slice(0,6).map(g=>`
-    <div class="dash-genre-item">
-      <div style="display:flex;justify-content:space-between;align-items:baseline">
-        <span class="dash-genre-name">${g.name}</span>
-        <span class="dash-genre-count">${g.count}</span>
-      </div>
-      <div class="dash-genre-bar-wrap">
-        <div class="dash-genre-bar" style="width:${Math.round(g.count/max*100)}%;background:${accentColor}"></div>
-      </div>
-    </div>`).join('');
-}
-
-function calcGenres(list, key){
+function calcGenresCombined(bookList, dramaList){
   const map = {};
-  list.forEach(item=>{
-    const genres = item[key]||[];
-    genres.forEach(g=>{ map[g]=(map[g]||0)+1; });
-  });
-  return Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([name,count])=>({name,count}));
+  bookList.forEach(b=>(b.genres||[]).forEach(g=>{ map[g]=(map[g]||0)+1; }));
+  dramaList.forEach(d=>(d.genre||[]).forEach(g=>{ map[g]=(map[g]||0)+1; }));
+  return Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([label,count])=>({label,count}));
+}
+
+function buildGenreBarsHTML(items){
+  if(!items.length) return '<div class="dash-empty">장르 데이터 없음</div>';
+  const max=items[0].count;
+  return items.slice(0,6).map(g=>`
+    <div class="dash-genre-row">
+      <span class="dash-genre-name">${g.label}</span>
+      <div class="dash-genre-bar-wrap"><div class="dash-genre-bar" style="width:${Math.round(g.count/max*100)}%"></div></div>
+      <span class="dash-genre-count">${g.count}</span>
+    </div>`).join('');
+}
+
+function buildCorkBoardHTML(bookList, dramaList){
+  const rots=[-6,-3,0,3,6,-4,4,-2,2];
+  const favBooks  = bookList.filter(b=>b.favorite).map((b,i)=>({title:b.title,typeLabel:'📖 도서',rot:rots[i%rots.length]}));
+  const favDramas = dramaList.filter(d=>d.favorite).map((d,i)=>({title:d.title,typeLabel:'🎬 드라마',rot:rots[(i+3)%rots.length]}));
+  const all=[...favBooks,...favDramas];
+  if(!all.length) return '<div class="dash-cork-empty">아직 인생작이 없어요</div>';
+  return all.map(f=>`
+    <div class="dash-cork-card" style="transform:rotate(${f.rot}deg)">
+      <div class="dash-cork-type">${f.typeLabel}</div>
+      <div>${f.title}</div>
+    </div>`).join('');
 }
 
 function renderDashboard(){
-  // 전체 통계
   const allBooks = books.filter(b=>b.title!=='ADMIN');
   document.getElementById('totalBookCount').textContent  = allBooks.length + '권';
   document.getElementById('totalDramaCount').textContent = dramas.length + '편';
 
-  // 도서 완독 현황
-  const bookGroups = {};
+  // 도서 파이
+  const bookGroups={};
   allBooks.forEach(b=>{ bookGroups[b.status]=(bookGroups[b.status]||0)+1; });
-  const bookOrder = ['완료','진행 중','시작 전','중단'];
-  const bookSegs = bookOrder.filter(s=>bookGroups[s]).map(s=>({label:BOOK_STATUS_LABELS[s],value:bookGroups[s],color:BOOK_STATUS_COLORS[s]}));
-  const bookTotal = allBooks.length;
-  if(!bookTotal){
-    document.getElementById('bookPieChart').innerHTML='<div class="dash-empty">등록된 도서가 없습니다</div>';
-    document.getElementById('bookLegend').innerHTML='';
-    document.getElementById('bookGenrePanel').innerHTML='';
-  } else {
-    document.getElementById('bookPieChart').innerHTML=buildPieSVG(bookSegs);
-    document.getElementById('bookLegend').innerHTML=buildLegendHTML(bookSegs,bookTotal);
-    document.getElementById('bookGenrePanel').innerHTML=buildGenreHTML(calcGenres(allBooks,'genres'),'#6b8f4e');
-  }
+  const bookSegs=['완료','진행 중','시작 전','중단'].filter(s=>bookGroups[s]).map(s=>({label:BOOK_STATUS_LABELS[s],value:bookGroups[s],color:BOOK_STATUS_COLORS[s]}));
+  const bookPieEl=document.getElementById('bookPieChart');
+  bookPieEl.style.cssText=''; bookPieEl.innerHTML='';
+  if(!allBooks.length) bookPieEl.style.background='#ddd5c5';
+  else { const style=buildPieConic(bookSegs); bookPieEl.setAttribute('style',style); }
+  document.getElementById('bookLegend').innerHTML=allBooks.length?buildLegendHTML(bookSegs):'';
 
-  // 드라마 시청 현황
-  const dramaGroups = {};
+  // 드라마 파이
+  const dramaGroups={};
   dramas.forEach(d=>{ dramaGroups[d.status]=(dramaGroups[d.status]||0)+1; });
-  const dramaOrder = ['완료','진행 중','시작 전','드롭','중단'];
-  const dramaSegs = dramaOrder.filter(s=>dramaGroups[s]).map(s=>({label:DRAMA_STATUS_LABELS[s],value:dramaGroups[s],color:DRAMA_STATUS_COLORS[s]}));
-  const dramaTotal = dramas.length;
-  if(!dramaTotal){
-    document.getElementById('dramaPieChart').innerHTML='<div class="dash-empty">등록된 드라마가 없습니다</div>';
-    document.getElementById('dramaLegend').innerHTML='';
-    document.getElementById('dramaGenrePanel').innerHTML='';
-  } else {
-    document.getElementById('dramaPieChart').innerHTML=buildPieSVG(dramaSegs);
-    document.getElementById('dramaLegend').innerHTML=buildLegendHTML(dramaSegs,dramaTotal);
-    document.getElementById('dramaGenrePanel').innerHTML=buildGenreHTML(calcGenres(dramas,'genre'),'#1a56db');
-  }
+  const dramaSegs=['완료','진행 중','시작 전','드롭','중단'].filter(s=>dramaGroups[s]).map(s=>({label:DRAMA_STATUS_LABELS[s],value:dramaGroups[s],color:DRAMA_STATUS_COLORS[s]}));
+  const dramaPieEl=document.getElementById('dramaPieChart');
+  dramaPieEl.style.cssText=''; dramaPieEl.innerHTML='';
+  if(!dramas.length) dramaPieEl.style.background='#ddd5c5';
+  else { const style=buildPieConic(dramaSegs); dramaPieEl.setAttribute('style',style); }
+  document.getElementById('dramaLegend').innerHTML=dramas.length?buildLegendHTML(dramaSegs):'';
+
+  // 장르 통합
+  document.getElementById('genreBarPanel').innerHTML=buildGenreBarsHTML(calcGenresCombined(allBooks,dramas));
+
+  // 코르크보드
+  document.getElementById('corkBoard').innerHTML=buildCorkBoardHTML(allBooks,dramas);
 }
 
 function switchTab(name){
