@@ -16,13 +16,12 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-s
 .app{max-width:480px;margin:0 auto;background:#f5f4f0;height:100vh;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
 .header{background:#f5f0e8;border-bottom:0.5px solid #e5dece;padding:13px 16px;position:sticky;top:0;z-index:100}
 .header-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.header-title{font-family:'Gaegu',cursive;font-size:20px;font-weight:700;color:#1f1c18;letter-spacing:-0.3px;flex:1}
+/* .header-title — HTML에서 미사용, 필요 시 복구 */
 .header-actions{display:flex;gap:6px;align-items:center}
 .icon-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#666;font-size:18px;transition:background .15s}
 .icon-btn:hover{background:#f5f4f0}
 .icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.register-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;height:34px;font-size:13px;font-weight:500;cursor:pointer;color:#1a1a1a;white-space:nowrap;transition:background .15s}
-.register-btn:hover{background:#f5f4f0}
+/* .register-btn — HTML에서 미사용, 필요 시 복구 */
 .search-bar{margin-top:10px;display:none;align-items:center;gap:8px}
 .search-bar.open{display:flex}
 .search-bar input{flex:1;height:36px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 12px;font-size:16px;background:#f5f4f0;color:#1a1a1a;outline:none}
@@ -99,24 +98,13 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-s
 .tab-item .tab-label{font-size:11px;font-weight:700;letter-spacing:.1px}
 .tab-page{display:none;flex:1;overflow:hidden;min-height:0}
 .tab-page.active{display:flex;flex-direction:column;overflow:hidden;min-height:0}
-.coming-soon{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#bbb;font-size:14px;padding-bottom:60px}
-.coming-soon svg{width:36px;height:36px;stroke:#ddd;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+/* .coming-soon — 미사용, 필요 시 복구 */
 .home-tab-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-top:12px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
-.home-banner{margin:12px 12px 0;border-radius:20px;overflow:hidden;height:150px;position:relative;background:linear-gradient(180deg,#ece7dc 0%,#ddd6c8 55%,#cfc7b6 100%);box-shadow:0 8px 24px -12px rgba(26,26,26,.28)}
-.home-section{padding:20px 12px 0}
-.home-section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
-.home-section-title{font-size:15px;font-weight:600;color:#1a1a1a}
-.home-more-btn{background:none;border:none;font-size:12px;color:#8a867d;cursor:pointer;padding:2px 0;font-family:inherit}
-.home-more-btn:hover{color:#555}
-.home-book-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.home-drama-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.home-mini-card{display:flex;flex-direction:column;gap:6px;cursor:pointer}
-.home-mini-cover{width:100%;aspect-ratio:3/4;border-radius:12px;background:linear-gradient(155deg,#efece5 0%,#e2ddd2 100%);box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:22px}
-.home-mini-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.home-mini-drama-cover{width:100%;aspect-ratio:16/10;border-radius:12px;background:#222;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:22px}
-.home-mini-drama-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.home-mini-title{font-size:12px;font-weight:500;color:#1a1a1a;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.home-mini-sub{font-size:11px;color:#9a958a}
+/* 아래 .home-banner ~ .home-mini-sub 는 Home Redesign v2로 교체됨, 실제 정의는 하단 v2 블록 참고 */
+/* .home-banner{...} */
+/* .home-section / .home-section-header / .home-section-title / .home-more-btn → v2 블록에서 재정의 */
+/* .home-book-grid / .home-drama-grid → v2 블록에서 재정의 */
+/* .home-mini-card / .home-mini-cover / .home-mini-drama-cover / .home-mini-title / .home-mini-sub → v1 홈 카드, 미사용 */
 .admin-entry-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 14px;height:34px;font-size:13px;font-weight:500;cursor:pointer;color:#666;font-family:inherit;transition:background .15s}
 .admin-entry-btn:hover{background:#f5f4f0}
 .admin-mode-header{background:#1a1a1a;padding:14px 16px;display:flex;align-items:center;gap:8px}
@@ -213,11 +201,8 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-s
 .dt-delete-btn{position:absolute;top:6px;right:6px;z-index:5;width:22px;height:22px;border-radius:50%;background:rgba(200,60,40,.85);color:#fff;border:none;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
 .ott-badges{position:absolute;top:5px;left:5px;display:flex;gap:3px;flex-wrap:wrap;z-index:2}
 .ott-badge{font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;color:#fff;letter-spacing:.3px;white-space:nowrap}
-.drama-status-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);padding:3px 6px;z-index:2;text-align:center}
-.drama-status-text{font-size:10px;color:#fff;white-space:nowrap}
-.drama-info{padding:7px 8px 9px}
-.drama-title{font-size:12px;font-weight:500;color:#1a1a1a;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.drama-delete-btn{position:absolute;top:5px;right:5px;width:22px;height:22px;background:rgba(220,50,50,.85);border:none;border-radius:50%;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;padding:0}
+/* 아래는 구 드라마 카드(그리드형) 스타일 — 티켓 카드(.dt-*)로 교체됨 */
+/* .drama-status-bar / .drama-status-text / .drama-info / .drama-title / .drama-delete-btn */
 .drama-detail-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:flex-end;justify-content:center}
 .drama-detail-overlay.open{display:flex}
 .drama-detail-sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;overflow-x:hidden;padding:0 0 env(safe-area-inset-bottom,20px);-webkit-overflow-scrolling:touch}
@@ -243,8 +228,7 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-s
 .dash-stat-card{background:#ddd5c5;border:1px solid #ccc4b5;border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:4px;height:78px;justify-content:center}
 .dash-stat-num{font-family:'Pretendard',sans-serif;font-size:30px;font-weight:700;color:#1f1c18;line-height:1;font-variant-numeric:tabular-nums}
 .dash-stat-label{font-size:12.5px;color:#7a746e;font-weight:400;margin-top:4px}
-.dash-section{margin-bottom:28px}
-.dash-section-title{font-size:14px;font-weight:700;color:#1f1c18;margin-bottom:12px}
+/* .dash-section / .dash-section-title — HTML에서 미사용, 필요 시 복구 */
 /* Charts side by side */
 .dash-charts-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px}
 .dash-chart-block{flex:1;min-width:140px}
@@ -285,12 +269,8 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-s
 .home-hero{margin:0 12px;background:#faf7f1;border-radius:18px;padding:20px;box-shadow:0 2px 12px -4px rgba(50,40,20,.14),0 1px 3px rgba(50,40,20,.06);min-height:90px;display:flex;flex-direction:column;justify-content:center}
 .home-hero-title{font-family:'Gaegu',cursive;font-size:20px;font-weight:700;color:#1f1c18;letter-spacing:-0.3px;margin-bottom:4px}
 .home-hero-sub{font-size:12px;color:#a89e92;line-height:1.55;margin-bottom:0}
-.home-hero-stats{display:flex}
-.home-hero-stat{display:flex;flex-direction:column;gap:3px;padding:0 20px;border-right:1px solid #e5dece;align-items:center}
-.home-hero-stat:first-child{padding-left:0}
-.home-hero-stat:last-child{border-right:none;padding-right:0}
-.home-hero-stat-num{font-family:'Pretendard',sans-serif;font-size:22px;font-weight:700;color:#1f1c18;line-height:1}
-.home-hero-stat-label{font-size:10px;color:#a89e92;font-weight:500;margin-top:2px}
+/* .home-hero-stats 계열 — 히어로 카드에서 통계 제거됨, 필요 시 복구 */
+/* .home-hero-stats / .home-hero-stat / .home-hero-stat-num / .home-hero-stat-label */
 /* Sections */
 .home-section{padding:20px 12px 0}
 .home-section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
@@ -340,7 +320,6 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-s
     <div class="home-header">
       <div class="home-title-wrap">
         <span class="home-title-main">네이나의 연화당</span>
-        <span class="home-title-sub"></span>
       </div>
       <button class="admin-entry-btn" id="adminEntryBtn">🔐 관리자</button>
     </div>
@@ -1566,7 +1545,7 @@ document.getElementById('dramaSubmitBtn').addEventListener('click', async functi
     document.getElementById('dramaFormOverlay').classList.remove('open');
     // 폼 초기화
     document.getElementById('dramaTitle').value='';
-    document.getElementById('dramaThumbnail').value='';
+    /* dramaThumbnail — 폼에 없는 필드, 미사용 */
     document.getElementById('dramaCast').value='';
     document.getElementById('dramaSynopsis').value='';
     document.querySelectorAll('.ott-cb,.drama-genre-cb').forEach(c=>c.checked=false);
@@ -1643,6 +1622,7 @@ function renderHomeLatestDrama(){
   }).join('');
 }
 
+/* renderHomeStats — 히어로 카드 통계 제거 후 미사용 (homeStatBooks/Dramas/Favs 엘리먼트 없음)
 function renderHomeStats(){
   const allBooks = books.filter(b=>b.title!=='ADMIN');
   const favCount = allBooks.filter(b=>b.favorite).length + dramas.filter(d=>d.favorite).length;
@@ -1652,7 +1632,7 @@ function renderHomeStats(){
   if(bEl) bEl.textContent = allBooks.length;
   if(dEl) dEl.textContent = dramas.length;
   if(fEl) fEl.textContent = favCount;
-}
+} */
 
 async function toggleBookFavorite(notionId, bookId){
   const book = books.find(b=>b.id===bookId);
@@ -1661,10 +1641,9 @@ async function toggleBookFavorite(notionId, bookId){
   book.favorite = newVal;
   renderGrid(filteredBooks, currentPage);
   renderHomeLatestBook();
-  renderHomeStats();
   try {
     await fetch('/api/notion',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({notionId,favorite:newVal})});
-  } catch(e){ book.favorite=!newVal; renderGrid(filteredBooks,currentPage); renderHomeLatestBook(); renderHomeStats(); }
+  } catch(e){ book.favorite=!newVal; renderGrid(filteredBooks,currentPage); renderHomeLatestBook(); }
 }
 
 async function toggleDramaFavorite(notionId, dramaId){
@@ -1674,16 +1653,14 @@ async function toggleDramaFavorite(notionId, dramaId){
   drama.favorite = newVal;
   renderDramaGrid(filteredDramas);
   renderHomeLatestDrama();
-  renderHomeStats();
   try {
     await fetch('/api/drama',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({notionId,favorite:newVal})});
-  } catch(e){ drama.favorite=!newVal; renderDramaGrid(filteredDramas); renderHomeLatestDrama(); renderHomeStats(); }
+  } catch(e){ drama.favorite=!newVal; renderDramaGrid(filteredDramas); renderHomeLatestDrama(); }
 }
 
 Promise.all([loadBooks(), loadDramas()]).then(() => {
   renderHomeLatestBook();
   renderHomeLatestDrama();
-  renderHomeStats();
   renderDashboard();
 });
 addCard();
