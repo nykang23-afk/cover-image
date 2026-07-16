@@ -1172,7 +1172,7 @@ function calcGenresCombined(bookList, dramaList){
 function buildGenreBarsHTML(items){
   if(!items.length) return '<div class="dash-empty">장르 데이터 없음</div>';
   const max=items[0].count;
-  return items.slice(0,6).map(g=>`
+  return items.slice(0,4).map(g=>`
     <div class="dash-genre-row">
       <span class="dash-genre-name">${g.label}</span>
       <div class="dash-genre-bar-wrap"><div class="dash-genre-bar" style="width:${Math.round(g.count/max*100)}%"></div></div>
