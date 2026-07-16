@@ -458,6 +458,7 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-s
     <div class="loading" id="dramaLoadingState">드라마 목록을 불러오는 중...</div>
     <div class="drama-grid" id="dramaGrid" style="display:none"></div>
     <div class="empty" id="dramaEmptyState" style="display:none">등록된 드라마가 없습니다</div>
+    <div class="pagination" id="dramaPagination"></div>
   </div>
 </div>
 
@@ -1100,7 +1101,7 @@ function enterAdminMode(){
   document.getElementById('adminModeBar').classList.add('show');
   document.getElementById('dramaAdminModeBar').classList.add('show');
   renderGrid(filteredBooks, currentPage);
-  renderDramaGrid(filteredDramas);
+  renderDramaGrid(filteredDramas, currentDramaPage);
 }
 function exitAdminMode(){
   isAdmin = false;
@@ -1109,7 +1110,7 @@ function exitAdminMode(){
   document.getElementById('adminModeBar').classList.remove('show');
   document.getElementById('dramaAdminModeBar').classList.remove('show');
   renderGrid(filteredBooks, currentPage);
-  renderDramaGrid(filteredDramas);
+  renderDramaGrid(filteredDramas, currentDramaPage);
 }
 document.getElementById('logoutAdminBtn').addEventListener('click', exitAdminMode);
 
@@ -1267,7 +1268,7 @@ function switchTab(name){
   document.querySelectorAll('.tab-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   document.getElementById('tabBtn-'+name).classList.add('active');
-  if(name==='drama' && !dramaLoaded) { dramaLoaded=true; renderDramaGrid(filteredDramas); }
+  if(name==='drama' && !dramaLoaded) { dramaLoaded=true; currentDramaPage=1; renderDramaGrid(filteredDramas,1); }
   if(name==='dashboard') renderDashboard();
 }
 
@@ -1304,7 +1305,8 @@ const OTT_COLORS = {
 const DRAMA_STATUS_LABEL = {'시작 전':'보고싶은','진행 중':'시청 중','완료':'시청 완료','드롭':'드롭','중단':'중단'};
 const DRAMA_STATUS_BADGE = {'시작 전':'badge-want','진행 중':'badge-watching','완료':'badge-watched','드롭':'badge-drop','중단':'badge-drop'};
 
-let dramas = [], filteredDramas = [], dramaLoaded = false;
+const DRAMA_PAGE_SIZE = 4;
+let dramas = [], filteredDramas = [], dramaLoaded = false, currentDramaPage = 1;
 
 function parseDrama(page, idx){
   const p = page.properties;
@@ -1345,7 +1347,8 @@ async function loadDramas(){
   document.getElementById('dramaLoadingState').style.display='none';
   document.getElementById('dramaGrid').style.display='flex';
   filteredDramas = dramas.slice();
-  renderDramaGrid(filteredDramas);
+  currentDramaPage=1;
+  renderDramaGrid(filteredDramas,1);
   renderHomeLatestDrama();
 }
 
@@ -1355,12 +1358,38 @@ const DRAMA_STATUS_TICKET = {
   '시작 전':{bg:'rgba(156,149,137,.15)',color:'#7a746e'},
   '중단':  {bg:'rgba(184,74,42,.15)',  color:'#b84a2a'},
 };
-function renderDramaGrid(list){
+function renderDramaPagination(list, page){
+  const pg = document.getElementById('dramaPagination');
+  if(!pg) return;
+  const total = Math.max(1, Math.ceil(list.length / DRAMA_PAGE_SIZE));
+  if(total <= 1){ pg.innerHTML=''; return; }
+  const MAX=5;
+  let s=Math.max(1,page-Math.floor(MAX/2));
+  let e=Math.min(total,s+MAX-1);
+  if(e-s<MAX-1) s=Math.max(1,e-MAX+1);
+  let html=`<button class="page-btn" id="dpg-prev" ${page===1?'disabled':''}><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>`;
+  if(s>1){ html+=`<button class="page-btn" data-pg="1">1</button>`; if(s>2) html+=`<span class="page-info">…</span>`; }
+  for(let i=s;i<=e;i++) html+=`<button class="page-btn${i===page?' active':''}" data-pg="${i}">${i}</button>`;
+  if(e<total){ if(e<total-1) html+=`<span class="page-info">…</span>`; html+=`<button class="page-btn" data-pg="${total}">${total}</button>`; }
+  html+=`<button class="page-btn" id="dpg-next" ${page===total?'disabled':''}><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>`;
+  pg.innerHTML = html;
+  pg.querySelectorAll('.page-btn[data-pg]').forEach(btn=>{
+    btn.addEventListener('click',()=>{ currentDramaPage=+btn.dataset.pg; renderDramaGrid(filteredDramas,currentDramaPage); });
+  });
+  const prev=pg.querySelector('#dpg-prev'), next=pg.querySelector('#dpg-next');
+  if(prev) prev.addEventListener('click',()=>{ if(currentDramaPage>1){ currentDramaPage--; renderDramaGrid(filteredDramas,currentDramaPage); } });
+  if(next) next.addEventListener('click',()=>{ if(currentDramaPage<total){ currentDramaPage++; renderDramaGrid(filteredDramas,currentDramaPage); } });
+}
+
+function renderDramaGrid(list, page){
+  page = page || 1;
   const grid = document.getElementById('dramaGrid');
   const empty = document.getElementById('dramaEmptyState');
-  if(!list.length){ grid.innerHTML=''; empty.style.display='block'; return; }
+  if(!list.length){ grid.innerHTML=''; empty.style.display='block'; document.getElementById('dramaPagination').innerHTML=''; return; }
   empty.style.display='none';
-  grid.innerHTML = list.map(d=>{
+  const start=(page-1)*DRAMA_PAGE_SIZE;
+  const pageItems=list.slice(start, start+DRAMA_PAGE_SIZE);
+  grid.innerHTML = pageItems.map(d=>{
     const st = DRAMA_STATUS_TICKET[d.status]||DRAMA_STATUS_TICKET['시작 전'];
     const ottBadges = d.ott.map(o=>`<span class="dt-ott-badge">${o}</span>`).join('');
     const statusBadge = `<span class="dt-status-badge" style="background:${st.bg};color:${st.color}">${DRAMA_STATUS_LABEL[d.status]||d.status}</span>`;
@@ -1395,6 +1424,7 @@ function renderDramaGrid(list){
       if(dr) openDramaDetail(dr);
     });
   });
+  renderDramaPagination(list, page);
 }
 
 function openDramaDetail(d){
@@ -1473,7 +1503,7 @@ function openDramaDetail(d){
           Object.assign(d, updated);
           const dr=dramas.find(x=>x.notionId===d.notionId);
           if(dr) Object.assign(dr,updated);
-          renderDramaGrid(filteredDramas);
+          renderDramaGrid(filteredDramas, currentDramaPage);
           showToast('✓ 수정 완료');
           ov.classList.remove('open');
         } catch(e){ showToast('저장 중 오류가 발생했습니다'); this.disabled=false; this.textContent='저장'; }
@@ -1498,7 +1528,8 @@ async function deleteDrama(btn){
     if(!res.ok) throw new Error();
     dramas=dramas.filter(d=>d.notionId!==notionId);
     filteredDramas=filteredDramas.filter(d=>d.notionId!==notionId);
-    renderDramaGrid(filteredDramas);
+    currentDramaPage=1;
+    renderDramaGrid(filteredDramas,1);
     showToast(`"${title}" 삭제 완료`);
   } catch(e){ btn.disabled=false; btn.textContent='✕'; showToast('삭제 중 오류가 발생했습니다'); }
 }
@@ -1514,7 +1545,8 @@ function applyDramaFilters(){
     const mO=!ott||d.ott.includes(ott);
     return mS&&mO;
   });
-  renderDramaGrid(filteredDramas);
+  currentDramaPage=1;
+  renderDramaGrid(filteredDramas,1);
 }
 
 // Drama 등록 폼
@@ -1541,7 +1573,8 @@ document.getElementById('dramaSubmitBtn').addEventListener('click', async functi
     const page=await res.json();
     dramas.unshift(parseDrama(page,dramas.length+1));
     filteredDramas=dramas.slice();
-    renderDramaGrid(filteredDramas);
+    currentDramaPage=1;
+    renderDramaGrid(filteredDramas,1);
     document.getElementById('dramaFormOverlay').classList.remove('open');
     // 폼 초기화
     document.getElementById('dramaTitle').value='';
@@ -1651,11 +1684,11 @@ async function toggleDramaFavorite(notionId, dramaId){
   if(!drama) return;
   const newVal = !drama.favorite;
   drama.favorite = newVal;
-  renderDramaGrid(filteredDramas);
+  renderDramaGrid(filteredDramas, currentDramaPage);
   renderHomeLatestDrama();
   try {
     await fetch('/api/drama',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({notionId,favorite:newVal})});
-  } catch(e){ drama.favorite=!newVal; renderDramaGrid(filteredDramas); renderHomeLatestDrama(); }
+  } catch(e){ drama.favorite=!newVal; renderDramaGrid(filteredDramas, currentDramaPage); renderHomeLatestDrama(); }
 }
 
 Promise.all([loadBooks(), loadDramas()]).then(() => {
