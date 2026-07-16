@@ -6,16 +6,17 @@
 <title>네이나의 연화당</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600&family=Gaegu:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{touch-action:manipulation;-ms-touch-action:manipulation;height:100%}
 body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:none;height:100%}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:#ebe8e1;height:100%;color:#1a1a1a}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#ebe8e1;height:100%;color:#1a1a1a}
 .app{max-width:480px;margin:0 auto;background:#f5f4f0;height:100vh;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
 .header{background:#f5f0e8;border-bottom:0.5px solid #e5dece;padding:16px 16px 10px;position:sticky;top:0;z-index:100}
 .header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.header-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:#1f1c18;letter-spacing:-0.3px;flex:1}
+.header-title{font-family:'Gaegu',cursive;font-size:20px;font-weight:700;color:#1f1c18;letter-spacing:-0.3px;flex:1}
 .header-actions{display:flex;gap:6px;align-items:center}
 .icon-btn{background:none;border:0.5px solid #d0cdc6;border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#666;font-size:18px;transition:background .15s}
 .icon-btn:hover{background:#f5f4f0}
@@ -42,10 +43,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .book-cover-status.s-not{background:rgba(240,235,224,.92);color:#7a746e}
 .book-cover-status.s-stop{background:#f5dece;color:#8a4a2a}
 .book-cover-stamp{position:absolute;bottom:34px;right:7px;width:38px;height:38px;border-radius:50%;border:2px solid #a0603a;color:#a0603a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;transform:rotate(-9deg);background:rgba(250,247,241,.88);z-index:3}
-.book-stamp-btn{width:100%;background:none;border:1px solid #ddd5c8;border-radius:999px;padding:5px 0;font-size:10px;color:#a89e92;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s;text-align:center;margin-top:6px}
+.book-stamp-btn{width:100%;background:none;border:1px solid #ddd5c8;border-radius:999px;padding:5px 0;font-size:10px;color:#a89e92;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s;text-align:center;margin-top:6px}
 .book-stamp-btn:hover,.book-stamp-btn.stamped{border-color:#c8a085;color:#a0603a;background:#fdf6f0}
 .book-info{padding:9px 10px 10px;display:flex;flex-direction:column;gap:2px}
-.book-title{font-family:'Noto Serif KR',serif;font-size:11px;font-weight:600;color:#1f1c18;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.book-title{font-family:'Pretendard',sans-serif;font-size:11px;font-weight:600;color:#1f1c18;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .book-author-row{font-size:10.5px;color:#a89e92;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
 .book-platform-row{font-size:10px;color:#b8b0a4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pagination{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 0 20px}
@@ -196,7 +197,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .dt-img-ph svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;opacity:.6}
 .dt-img-ph span{font-size:9.5px;color:#b0a99e}
 .dt-main{flex:1;padding:12px 12px 11px;display:flex;flex-direction:column;gap:4px;min-width:0;overflow:hidden}
-.dt-title{font-family:'Noto Serif KR',serif;font-weight:700;font-size:14px;line-height:1.3;color:#1f1c18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dt-title{font-family:'Pretendard',sans-serif;font-weight:700;font-size:14px;line-height:1.3;color:#1f1c18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dt-cast{font-size:11px;color:#a89e92;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dt-badges{display:flex;gap:5px;flex-wrap:nowrap;margin-top:4px;overflow:hidden}
 .dt-ott-badge{font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(78,122,48,.15);color:#4e7a30;font-weight:500;white-space:nowrap;flex-shrink:0}
@@ -207,7 +208,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .dt-divider::before{content:'';position:absolute;top:-8px;left:-7px;width:16px;height:16px;border-radius:50%;background:#f5f0e8}
 .dt-divider::after{content:'';position:absolute;bottom:-8px;left:-7px;width:16px;height:16px;border-radius:50%;background:#f5f0e8}
 .dt-stub{width:32px;display:flex;align-items:center;justify-content:center;background:#ede8de;border-radius:0 11px 11px 0;flex-shrink:0}
-.dt-stub span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;color:#a89e92;letter-spacing:.1em;font-family:'Noto Sans KR',sans-serif}
+.dt-stub span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;color:#a89e92;letter-spacing:.1em;font-family:'Pretendard',sans-serif}
 .dt-fav-stamp{position:absolute;top:6px;right:38px;width:36px;height:36px;border-radius:50%;border:2px solid #a0603a;color:#a0603a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;transform:rotate(-9deg);background:rgba(250,247,241,.9);z-index:3;pointer-events:none}
 .dt-delete-btn{position:absolute;top:6px;right:6px;z-index:5;width:22px;height:22px;border-radius:50%;background:rgba(200,60,40,.85);color:#fff;border:none;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
 .ott-badges{position:absolute;top:5px;left:5px;display:flex;gap:3px;flex-wrap:wrap;z-index:2}
@@ -240,7 +241,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 /* Dashboard */
 .dash-total-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
 .dash-stat-card{background:#ddd5c5;border:1px solid #ccc4b5;border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:4px;height:78px;justify-content:center}
-.dash-stat-num{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:700;color:#1f1c18;line-height:1;font-variant-numeric:tabular-nums}
+.dash-stat-num{font-family:'Pretendard',sans-serif;font-size:30px;font-weight:700;color:#1f1c18;line-height:1;font-variant-numeric:tabular-nums}
 .dash-stat-label{font-size:12.5px;color:#7a746e;font-weight:400;margin-top:4px}
 .dash-section{margin-bottom:28px}
 .dash-section-title{font-size:14px;font-weight:700;color:#1f1c18;margin-bottom:12px}
@@ -269,8 +270,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .dash-cork-board{background:#cfc0a8;border:1px solid #bfb09a;border-radius:16px;padding:20px;display:flex;flex-wrap:wrap;gap:16px}
 .dash-cork-card{background:#faf7f1;border:1px solid #ccc4b5;box-shadow:0 6px 14px rgba(60,40,20,.16);border-radius:8px;padding:10px 14px;font-family:'Gaegu',cursive;font-size:16px;min-width:120px;position:relative;flex:1}
 .dash-cork-card::before{content:'';position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:#a0603a;box-shadow:0 2px 3px rgba(0,0,0,.25)}
-.dash-cork-type{font-size:11px;color:#7a746e;font-family:'Noto Sans KR',sans-serif;margin-bottom:2px}
-.dash-cork-empty{font-size:13px;color:#a89e92;text-align:center;padding:16px 0;width:100%;font-family:'Noto Sans KR',sans-serif}
+.dash-cork-type{font-size:11px;color:#7a746e;font-family:'Pretendard',sans-serif;margin-bottom:2px}
+.dash-cork-empty{font-size:13px;color:#a89e92;text-align:center;padding:16px 0;width:100%;font-family:'Pretendard',sans-serif}
 .badge-watched{background:#eaf3de;color:#3b6d11}
 .badge-want{background:#f1efe8;color:#5f5e5a}
 .badge-drop{background:#fcebeb;color:#a32d2d}
@@ -278,23 +279,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 /* ── Home Redesign v2 (Claude Design) ── */
 .home-header{background:#f5f0e8;border-bottom:0.5px solid #e5dece;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;z-index:100}
 .home-title-wrap{display:flex;flex-direction:column;gap:2px}
-.home-title-main{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700;color:#1f1c18;letter-spacing:-0.3px;line-height:1.2}
-.home-title-sub{font-size:10.5px;color:#b0a99e;letter-spacing:2px;font-weight:400;font-family:'Noto Sans KR',sans-serif;display:block}
+.home-title-main{font-family:'Gaegu',cursive;font-size:19px;font-weight:700;color:#1f1c18;letter-spacing:-0.3px;line-height:1.2}
+.home-title-sub{font-size:10.5px;color:#b0a99e;letter-spacing:2px;font-weight:400;font-family:'Pretendard',sans-serif;display:block}
 /* Hero card (replaces banner) */
 .home-hero{margin:0 12px;background:#faf7f1;border-radius:18px;padding:20px;box-shadow:0 2px 12px -4px rgba(50,40,20,.14),0 1px 3px rgba(50,40,20,.06);min-height:90px;display:flex;flex-direction:column;justify-content:center}
-.home-hero-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:#1f1c18;letter-spacing:-0.4px;margin-bottom:4px}
+.home-hero-title{font-family:'Pretendard',sans-serif;font-size:18px;font-weight:700;color:#1f1c18;letter-spacing:-0.4px;margin-bottom:4px}
 .home-hero-sub{font-size:12px;color:#a89e92;line-height:1.55;margin-bottom:0}
 .home-hero-stats{display:flex}
 .home-hero-stat{display:flex;flex-direction:column;gap:3px;padding:0 20px;border-right:1px solid #e5dece;align-items:center}
 .home-hero-stat:first-child{padding-left:0}
 .home-hero-stat:last-child{border-right:none;padding-right:0}
-.home-hero-stat-num{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:#1f1c18;line-height:1}
+.home-hero-stat-num{font-family:'Pretendard',sans-serif;font-size:22px;font-weight:700;color:#1f1c18;line-height:1}
 .home-hero-stat-label{font-size:10px;color:#a89e92;font-weight:500;margin-top:2px}
 /* Sections */
 .home-section{padding:20px 12px 0}
 .home-section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
-.home-section-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:600;color:#1f1c18;letter-spacing:-0.2px}
-.home-more-btn{background:none;border:none;font-size:11.5px;color:#b0a99e;cursor:pointer;padding:2px 0;font-family:'Noto Sans KR',sans-serif}
+.home-section-title{font-family:'Pretendard',sans-serif;font-size:15px;font-weight:600;color:#1f1c18;letter-spacing:-0.2px}
+.home-more-btn{background:none;border:none;font-size:11.5px;color:#b0a99e;cursor:pointer;padding:2px 0;font-family:'Pretendard',sans-serif}
 .home-more-btn:hover{color:#6b6258}
 .home-section-divider{height:1px;background:linear-gradient(90deg,transparent,#e0d9cf 20%,#e0d9cf 80%,transparent);margin:20px 12px 0}
 /* Book cards (Claude Design style) */
@@ -305,20 +306,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .home-book-cover-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:9px;letter-spacing:.12em;color:rgba(255,255,255,.45);z-index:0}
 .home-book-ribbon{position:absolute;top:7px;left:9px;width:12px;height:20px;background:#8b4c2a;clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);z-index:2}
 .home-book-stamp{position:absolute;bottom:7px;right:7px;width:38px;height:38px;border-radius:50%;border:2px solid #a0603a;color:#a0603a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;transform:rotate(-9deg);background:rgba(250,247,241,.88);z-index:3}
-.home-book-title{font-size:12px;font-weight:500;color:#1f1c18;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Noto Sans KR',sans-serif}
+.home-book-title{font-size:12px;font-weight:500;color:#1f1c18;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Pretendard',sans-serif}
 .home-book-author{font-size:10.5px;color:#a89e92;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.home-book-stamp-btn{background:none;border:1px solid #ddd5c8;border-radius:7px;padding:3px 0;font-size:10px;color:#a89e92;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s;width:100%;text-align:center}
+.home-book-stamp-btn{background:none;border:1px solid #ddd5c8;border-radius:7px;padding:3px 0;font-size:10px;color:#a89e92;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s;width:100%;text-align:center}
 .home-book-stamp-btn:hover,.home-book-stamp-btn.stamped{border-color:#c8a085;color:#a0603a;background:#fdf6f0}
 /* Drama ticket cards */
 .home-drama-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .home-drama-ticket{display:flex;background:#faf7f1;border:1px solid #ddd5c8;border-radius:12px;overflow:visible;box-shadow:0 2px 6px -2px rgba(50,40,20,.1);position:relative;cursor:pointer}
 .hdt-main{flex:1;padding:11px 12px 10px;display:flex;flex-direction:column;gap:3px;min-width:0}
-.hdt-title{font-family:'Noto Serif KR',serif;font-weight:700;font-size:13px;line-height:1.3;color:#1f1c18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hdt-title{font-family:'Pretendard',sans-serif;font-weight:700;font-size:13px;line-height:1.3;color:#1f1c18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hdt-cast{font-size:10px;color:#a89e92;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:13px}
 .hdt-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
 .hdt-ott{font-size:10px;padding:2px 6px;border-radius:999px;background:rgba(75,105,58,.12);color:#4a6937;font-weight:500;white-space:nowrap}
 .hdt-status{font-size:10px;padding:2px 6px;border-radius:999px;white-space:nowrap}
-.hdt-stamp-btn{margin-top:7px;align-self:flex-start;background:none;border:1px solid #ddd5c8;border-radius:7px;padding:3px 8px;font-size:9.5px;color:#a89e92;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s;white-space:nowrap}
+.hdt-stamp-btn{margin-top:7px;align-self:flex-start;background:none;border:1px solid #ddd5c8;border-radius:7px;padding:3px 8px;font-size:9.5px;color:#a89e92;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s;white-space:nowrap}
 .hdt-stamp-btn:hover,.hdt-stamp-btn.stamped{border-color:#c8a085;color:#a0603a;background:#fdf6f0}
 .hdt-divider{width:1px;background:repeating-linear-gradient(to bottom,#ddd5c8 0 4px,transparent 4px 8px);position:relative;flex-shrink:0;margin:8px 0}
 .hdt-hole{position:absolute;left:-6px;width:12px;height:12px;border-radius:50%;background:#f0ebe0;z-index:1}
@@ -876,7 +877,7 @@ function openDetail(b){
       if(isAdmin) db.querySelector('#bEditBtn').onclick = (e)=>{ e.stopPropagation(); editMode=true; selGenres=[...(b.genres||[])]; render(); };
     } else {
       db.innerHTML = `
-        <div style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:#1f1c18;margin-bottom:14px">도서 수정</div>
+        <div style="font-family:'Pretendard',sans-serif;font-size:16px;font-weight:700;color:#1f1c18;margin-bottom:14px">도서 수정</div>
         <label class="edit-field-label">도서명</label>
         <input class="edit-field-input" id="eTitle" value="${b.title}">
         <label class="edit-field-label">저자</label>
@@ -1451,7 +1452,7 @@ function openDramaDetail(d){
       if(isAdmin) body.querySelector('#dEditBtn').onclick = (e)=>{ e.stopPropagation(); editMode=true; selOtt=[...(d.ott||[])]; selGenre=[...(d.genre||[])]; render(); };
     } else {
       body.innerHTML = `
-        <div style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:#1f1c18;margin-bottom:14px">드라마 수정</div>
+        <div style="font-family:'Pretendard',sans-serif;font-size:16px;font-weight:700;color:#1f1c18;margin-bottom:14px">드라마 수정</div>
         <label class="edit-field-label">제목</label>
         <input class="edit-field-input" id="eTitle" value="${d.title}">
         <label class="edit-field-label">출연진</label>
