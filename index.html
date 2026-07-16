@@ -873,7 +873,7 @@ function openDetail(b){
           <button class="detail-close" id="bCloseBtn">닫기</button>
         </div>`;
       db.querySelector('#bCloseBtn').onclick = ()=>ov.classList.remove('open');
-      if(isAdmin) db.querySelector('#bEditBtn').onclick = ()=>{ editMode=true; selGenres=[...(b.genres||[])]; render(); };
+      if(isAdmin) db.querySelector('#bEditBtn').onclick = (e)=>{ e.stopPropagation(); editMode=true; selGenres=[...(b.genres||[])]; render(); };
     } else {
       db.innerHTML = `
         <div style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:#1f1c18;margin-bottom:14px">도서 수정</div>
@@ -1448,7 +1448,7 @@ function openDramaDetail(d){
           <button class="detail-close" id="dCloseBtn">닫기</button>
         </div>`;
       body.querySelector('#dCloseBtn').onclick = ()=>ov.classList.remove('open');
-      if(isAdmin) body.querySelector('#dEditBtn').onclick = ()=>{ editMode=true; selOtt=[...(d.ott||[])]; selGenre=[...(d.genre||[])]; render(); };
+      if(isAdmin) body.querySelector('#dEditBtn').onclick = (e)=>{ e.stopPropagation(); editMode=true; selOtt=[...(d.ott||[])]; selGenre=[...(d.genre||[])]; render(); };
     } else {
       body.innerHTML = `
         <div style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:#1f1c18;margin-bottom:14px">드라마 수정</div>
