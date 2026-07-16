@@ -207,30 +207,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 
 /* Dashboard */
 .dash-total-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.dash-stat-card{background:#fff;border-radius:14px;padding:18px 16px;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);display:flex;flex-direction:column;gap:4px}
-.dash-stat-num{font-size:28px;font-weight:700;color:#1a1a1a;line-height:1;font-variant-numeric:tabular-nums}
-.dash-stat-label{font-size:11px;color:#9a958a;font-weight:500}
-.dash-section{margin-bottom:24px}
-.dash-section-title{font-size:15px;font-weight:600;color:#1a1a1a;margin-bottom:14px}
-.dash-chart-row{background:#fff;border-radius:14px;padding:14px 12px;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);display:flex;align-items:center;gap:12px}
-.dash-pie-wrap{flex-shrink:0;width:90px;height:90px}
-.dash-pie-wrap svg{width:90px;height:90px}
-.dash-legend{flex:1;display:flex;flex-direction:column;gap:8px}
-.dash-legend-item{display:flex;align-items:center;gap:8px}
-.dash-legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.dash-legend-label{font-size:12px;color:#555;flex:1}
-.dash-legend-val{font-size:12px;font-weight:600;color:#1a1a1a;font-variant-numeric:tabular-nums}
+.dash-stat-card{background:#faf7f1;border:1px solid #ddd5c8;border-radius:14px;padding:18px 16px;box-shadow:0 2px 8px -3px rgba(50,40,20,.10),0 1px 2px rgba(50,40,20,.05);display:flex;flex-direction:column;gap:4px}
+.dash-stat-num{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:700;color:#1f1c18;line-height:1;font-variant-numeric:tabular-nums}
+.dash-stat-label{font-size:11px;color:#a89e92;font-weight:500}
+.dash-section{margin-bottom:20px}
+.dash-section-title{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700;color:#1f1c18;margin-bottom:10px;letter-spacing:-0.2px}
+.dash-chart-row{background:#faf7f1;border:1px solid #ddd5c8;border-radius:14px;padding:16px 14px;box-shadow:0 2px 8px -3px rgba(50,40,20,.10),0 1px 2px rgba(50,40,20,.05);display:flex;align-items:center;gap:14px}
+.dash-pie-wrap{flex-shrink:0;width:100px;height:100px}
+.dash-pie-wrap svg{width:100px;height:100px}
+.dash-legend{flex:1;display:flex;flex-direction:column;gap:7px}
+.dash-legend-item{display:flex;align-items:center;gap:7px}
+.dash-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dash-legend-label{font-size:11.5px;color:#5a5450;flex:1}
+.dash-legend-val{font-size:12px;font-weight:700;color:#1f1c18;font-variant-numeric:tabular-nums}
 .dash-empty{font-size:13px;color:#aaa;text-align:center;padding:20px 0}
-.dash-split-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}
-.dash-half{flex-direction:column;align-items:center;gap:12px}
-.dash-half .dash-legend{width:100%}
-.dash-genre-panel{background:#fff;border-radius:14px;padding:14px 12px;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18);display:flex;flex-direction:column;gap:7px}
-.dash-genre-title{font-size:11px;font-weight:600;color:#9a958a;letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px}
+.dash-genre-panel{background:#faf7f1;border:1px solid #ddd5c8;border-radius:14px;padding:14px 14px;box-shadow:0 2px 8px -3px rgba(50,40,20,.10),0 1px 2px rgba(50,40,20,.05);display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.dash-genre-title{font-size:10.5px;font-weight:600;color:#a89e92;letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px}
 .dash-genre-item{display:flex;flex-direction:column;gap:3px}
-.dash-genre-name{font-size:11px;color:#333;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dash-genre-bar-wrap{height:5px;background:#ede8df;border-radius:3px;overflow:hidden}
-.dash-genre-bar{height:100%;border-radius:3px;background:#7c6a52;transition:width .4s ease}
-.dash-genre-count{font-size:10px;color:#aaa;text-align:right;font-variant-numeric:tabular-nums}
+.dash-genre-name{font-size:11px;color:#3a3530;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dash-genre-bar-wrap{height:4px;background:#e8e0d4;border-radius:3px;overflow:hidden}
+.dash-genre-bar{height:100%;border-radius:3px;transition:width .4s ease}
+.dash-genre-count{font-size:10px;color:#b0a99e;text-align:right;font-variant-numeric:tabular-nums}
 .badge-watched{background:#eaf3de;color:#3b6d11}
 .badge-want{background:#f1efe8;color:#5f5e5a}
 .badge-drop{background:#fcebeb;color:#a32d2d}
@@ -482,24 +479,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
     <!-- 도서 -->
     <div class="dash-section">
       <div class="dash-section-title">도서 완독 현황</div>
-      <div class="dash-split-row">
-        <div class="dash-chart-row dash-half">
-          <div id="bookPieChart" class="dash-pie-wrap"></div>
-          <div id="bookLegend" class="dash-legend"></div>
-        </div>
-        <div class="dash-genre-panel" id="bookGenrePanel"></div>
+      <div class="dash-chart-row">
+        <div id="bookPieChart" class="dash-pie-wrap"></div>
+        <div id="bookLegend" class="dash-legend"></div>
       </div>
+      <div class="dash-genre-panel" id="bookGenrePanel"></div>
     </div>
     <!-- 드라마 -->
     <div class="dash-section">
       <div class="dash-section-title">드라마 시청 현황</div>
-      <div class="dash-split-row">
-        <div class="dash-chart-row dash-half">
-          <div id="dramaPieChart" class="dash-pie-wrap"></div>
-          <div id="dramaLegend" class="dash-legend"></div>
-        </div>
-        <div class="dash-genre-panel" id="dramaGenrePanel"></div>
+      <div class="dash-chart-row">
+        <div id="dramaPieChart" class="dash-pie-wrap"></div>
+        <div id="dramaLegend" class="dash-legend"></div>
       </div>
+      <div class="dash-genre-panel" id="dramaGenrePanel"></div>
     </div>
   </div>
 </div>
@@ -1124,18 +1117,17 @@ async function deleteBook(btn) {
 }
 
 // ─── Dashboard ───────────────────────────────────────
-const BOOK_STATUS_COLORS  = {'완료':'#4a8c2a','진행 중':'#c07a1a','시작 전':'#a0998e','중단':'#c43a3a'};
-const DRAMA_STATUS_COLORS = {'완료':'#4a8c2a','진행 중':'#1a56db','시작 전':'#a0998e','드롭':'#c43a3a','중단':'#c43a3a'};
+const BOOK_STATUS_COLORS  = {'완료':'#4e7a30','진행 중':'#c49a18','시작 전':'#9c9589','중단':'#b84a2a'};
+const DRAMA_STATUS_COLORS = {'완료':'#4e7a30','진행 중':'#5a7ec4','시작 전':'#9c9589','드롭':'#b84a2a','중단':'#b84a2a'};
 const BOOK_STATUS_LABELS  = {'완료':'완독','진행 중':'읽는 중','시작 전':'시작 전','중단':'중단'};
 const DRAMA_STATUS_LABELS = {'완료':'시청 완료','진행 중':'시청 중','시작 전':'보고싶은','드롭':'드롭','중단':'중단'};
 
 function buildPieSVG(segments) {
   const total = segments.reduce((s,d)=>s+d.value,0);
-  if(!total) return '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="#e8e5de"/><circle cx="60" cy="60" r="28" fill="#fff"/></svg>';
-  const cx=60, cy=60, R=52, r=28;
-  // 단일 항목이면 완전한 도넛 원으로 표현
+  if(!total) return '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="56" fill="#e8e0d4"/></svg>';
+  const cx=60, cy=60, R=56;
   if(segments.length===1){
-    return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><circle cx="${cx}" cy="${cy}" r="${R}" fill="${segments[0].color}"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff"/></svg>`;
+    return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><circle cx="${cx}" cy="${cy}" r="${R}" fill="${segments[0].color}"/></svg>`;
   }
   let angle = -Math.PI/2, paths='';
   segments.forEach(seg=>{
@@ -1143,13 +1135,11 @@ function buildPieSVG(segments) {
     const sweep = (seg.value/total)*Math.PI*2;
     const x1=cx+R*Math.cos(angle), y1=cy+R*Math.sin(angle);
     const x2=cx+R*Math.cos(angle+sweep), y2=cy+R*Math.sin(angle+sweep);
-    const xi1=cx+r*Math.cos(angle), yi1=cy+r*Math.sin(angle);
-    const xi2=cx+r*Math.cos(angle+sweep), yi2=cy+r*Math.sin(angle+sweep);
     const large=sweep>Math.PI?1:0;
-    paths+=`<path d="M${xi1},${yi1} L${x1},${y1} A${R},${R},0,${large},1,${x2},${y2} L${xi2},${yi2} A${r},${r},0,${large},0,${xi1},${yi1} Z" fill="${seg.color}"/>`;
+    paths+=`<path d="M${cx},${cy} L${x1},${y1} A${R},${R},0,${large},1,${x2},${y2} Z" fill="${seg.color}"/>`;
     angle+=sweep;
   });
-  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${paths}<circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff"/></svg>`;
+  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
 }
 
 function buildLegendHTML(segments, total) {
@@ -1157,7 +1147,7 @@ function buildLegendHTML(segments, total) {
     <div class="dash-legend-item">
       <div class="dash-legend-dot" style="background:${s.color}"></div>
       <span class="dash-legend-label">${s.label}</span>
-      <span class="dash-legend-val">${s.value}<span style="font-size:10px;font-weight:400;color:#aaa;margin-left:2px">(${total?Math.round(s.value/total*100):0}%)</span></span>
+      <span class="dash-legend-val">${s.value}</span>
     </div>`).join('');
 }
 
