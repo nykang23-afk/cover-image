@@ -169,8 +169,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .detail-row-label{min-width:48px;flex-shrink:0}
 .detail-row-val{color:#1a1a1a}
 .detail-memo{font-size:13px;color:#555;line-height:1.7;margin-top:8px}
-.detail-close{width:100%;height:42px;border:0.5px solid #d0cdc6;border-radius:8px;background:none;font-size:14px;color:#1a1a1a;cursor:pointer;margin-top:16px;font-family:inherit;transition:background .15s}
+.detail-close{flex:1;height:42px;border:0.5px solid #d0cdc6;border-radius:8px;background:none;font-size:14px;color:#1a1a1a;cursor:pointer;font-family:inherit;transition:background .15s}
 .detail-close:hover{background:#f5f4f0}
+.detail-btn-row{display:flex;gap:8px;margin-top:16px}
+.detail-edit-btn{flex:1;height:42px;border:0.5px solid #a0603a;border-radius:8px;background:none;font-size:14px;color:#a0603a;cursor:pointer;font-family:inherit;font-weight:600;transition:background .15s}
+.detail-edit-btn:hover{background:#fdf6f0}
+.detail-save-btn{flex:1;height:42px;border:none;border-radius:8px;background:#a0603a;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.detail-save-btn:hover{opacity:.88}
+.edit-field-label{font-size:11px;color:#aaa;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:block;margin-top:12px}
+.edit-field-input{width:100%;height:38px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 10px;font-size:14px;background:#f5f4f0;color:#1a1a1a;outline:none;font-family:inherit;box-sizing:border-box}
+.edit-field-input:focus{border-color:#999}
+.edit-field-textarea{width:100%;min-height:70px;border:0.5px solid #d0cdc6;border-radius:8px;padding:8px 10px;font-size:13px;background:#f5f4f0;color:#1a1a1a;outline:none;font-family:inherit;resize:vertical;box-sizing:border-box}
+.edit-field-select{width:100%;height:38px;border:0.5px solid #d0cdc6;border-radius:8px;padding:0 10px;font-size:14px;background:#f5f4f0;color:#1a1a1a;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;font-family:inherit;box-sizing:border-box}
+.edit-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.edit-chip{font-size:11.5px;padding:4px 10px;border-radius:999px;border:0.5px solid #d0cdc6;background:#f5f4f0;color:#666;cursor:pointer;transition:all .15s}
+.edit-chip.on{background:#a0603a;color:#fff;border-color:#a0603a}
 
 /* Drama */
 .drama-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;margin-top:10px}
@@ -829,9 +842,7 @@ function renderPagination(list, page){
   if(next) next.addEventListener('click',()=>{ if(currentPage<total){currentPage++;renderGrid(filteredBooks,currentPage);} });
 }
 
-function openDetail(b){
-  const ov = document.getElementById('detailOverlay');
-  const db = document.getElementById('detailBody');
+function renderBookDetailView(db, b, ov){
   const statusOptions = [
     {v:'시작 전',l:'시작 전'},{v:'진행 중',l:'진행 중'},{v:'완료',l:'완료'},{v:'중단',l:'중단'}
   ];
@@ -855,26 +866,92 @@ function openDetail(b){
     <div class="drama-status-btns">
       ${statusOptions.map(s=>`<button class="drama-status-btn${b.status===s.v?' active':''}" data-status="${s.v}" data-notion-id="${b.notionId}">${s.l}</button>`).join('')}
     </div>
-    <button class="detail-close" id="dCloseBtn">닫기</button>`;
-  ov.classList.add('open');
+    <div class="detail-btn-row">
+      ${isAdmin?`<button class="detail-edit-btn" id="dEditBtn">수정</button>`:''}
+      <button class="detail-close" id="dCloseBtn">닫기</button>
+    </div>`;
   db.querySelector('#dCloseBtn').addEventListener('click', ()=>ov.classList.remove('open'));
+  if(isAdmin) db.querySelector('#dEditBtn').addEventListener('click', ()=>renderBookEditView(db, b, ov));
   db.querySelectorAll('.drama-status-btn').forEach(btn=>{
     btn.addEventListener('click', async function(){
-      const status = this.dataset.status;
-      const notionId = this.dataset.notionId;
+      const status = this.dataset.status, notionId = this.dataset.notionId;
       db.querySelectorAll('.drama-status-btn').forEach(x=>x.classList.remove('active'));
       this.classList.add('active');
       const badge = db.querySelector('#detailStatusBadge');
-      badge.textContent = status;
-      badge.className = `badge ${badgeClass(status)}`;
+      badge.textContent = status; badge.className = `badge ${badgeClass(status)}`;
       try {
         await fetch('/api/notion',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({notionId,status})});
-        const bk = books.find(x=>x.notionId===notionId);
+        const bk=books.find(x=>x.notionId===notionId);
         if(bk){ bk.status=status; filteredBooks=filteredBooks.map(x=>x.notionId===notionId?{...x,status}:x); renderGrid(filteredBooks,currentPage); }
         showToast('✓ 완독 여부 업데이트 완료');
       } catch(e){ showToast('업데이트 중 오류가 발생했습니다'); }
     });
   });
+}
+
+function renderBookEditView(db, b, ov){
+  const allGenres = ['소설','에세이','자기계발','판타지','SF','역사','경제경영','로맨스','환생/빙의','농가물'];
+  const allPlatforms = ['시리즈','카카오페이지','리디북스','알라딘','교보문고','밀리의서재','직접구매'];
+  const allStatus = ['시작 전','진행 중','완료','중단'];
+  let selGenres = [...(b.genres||[])];
+  db.innerHTML = `
+    <div style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:#1f1c18;margin-bottom:4px">도서 수정</div>
+    <div style="font-size:12px;color:#a89e92;margin-bottom:14px">${b.title}</div>
+    <label class="edit-field-label">도서명</label>
+    <input class="edit-field-input" id="eTitle" value="${b.title}">
+    <label class="edit-field-label">저자</label>
+    <input class="edit-field-input" id="eAuthor" value="${b.author||''}">
+    <label class="edit-field-label">플랫폼</label>
+    <select class="edit-field-select" id="ePlatform">
+      ${allPlatforms.map(p=>`<option value="${p}"${b.platform===p?' selected':''}>${p}</option>`).join('')}
+    </select>
+    <label class="edit-field-label">완독 여부</label>
+    <select class="edit-field-select" id="eStatus">
+      ${allStatus.map(s=>`<option value="${s}"${b.status===s?' selected':''}>${s}</option>`).join('')}
+    </select>
+    <label class="edit-field-label">장르</label>
+    <div class="edit-chips" id="eGenres">
+      ${allGenres.map(g=>`<span class="edit-chip${selGenres.includes(g)?' on':''}" data-g="${g}">${g}</span>`).join('')}
+    </div>
+    <label class="edit-field-label">메모</label>
+    <textarea class="edit-field-textarea" id="eMemo">${b.memo||''}</textarea>
+    <div class="detail-btn-row">
+      <button class="detail-edit-btn" id="eCancelBtn">취소</button>
+      <button class="detail-save-btn" id="eSaveBtn">저장</button>
+    </div>`;
+  db.querySelectorAll('.edit-chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{ chip.classList.toggle('on'); selGenres=[...db.querySelectorAll('.edit-chip.on')].map(c=>c.dataset.g); });
+  });
+  db.querySelector('#eCancelBtn').addEventListener('click',()=>renderBookDetailView(db,b,ov));
+  db.querySelector('#eSaveBtn').addEventListener('click', async()=>{
+    const saveBtn=db.querySelector('#eSaveBtn');
+    saveBtn.disabled=true; saveBtn.textContent='저장 중...';
+    const updated={
+      notionId:b.notionId,
+      title:db.querySelector('#eTitle').value.trim(),
+      author:db.querySelector('#eAuthor').value.trim(),
+      platform:db.querySelector('#ePlatform').value,
+      status:db.querySelector('#eStatus').value,
+      genres:selGenres,
+      memo:db.querySelector('#eMemo').value.trim(),
+    };
+    try {
+      await fetch('/api/notion',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(updated)});
+      const bk=books.find(x=>x.notionId===b.notionId);
+      if(bk){ Object.assign(bk,{title:updated.title,author:updated.author,platform:updated.platform,status:updated.status,genres:updated.genres,memo:updated.memo}); }
+      filteredBooks=filteredBooks.map(x=>x.notionId===b.notionId?{...x,...updated}:x);
+      renderGrid(filteredBooks,currentPage);
+      showToast('✓ 수정 완료');
+      ov.classList.remove('open');
+    } catch(e){ showToast('저장 중 오류가 발생했습니다'); saveBtn.disabled=false; saveBtn.textContent='저장'; }
+  });
+}
+
+function openDetail(b){
+  const ov = document.getElementById('detailOverlay');
+  const db = document.getElementById('detailBody');
+  ov.classList.add('open');
+  renderBookDetailView(db, b, ov);
 }
 document.getElementById('detailOverlay').addEventListener('click', function(e){ if(e.target===this||e.target.closest('.detail-sheet')===null) this.classList.remove('open'); });
 
@@ -1365,9 +1442,7 @@ function renderDramaGrid(list){
   });
 }
 
-function openDramaDetail(d){
-  const ov = document.getElementById('dramaDetailOverlay');
-  const body = document.getElementById('dramaDetailBody');
+function renderDramaDetailView(body, d, ov){
   const statusOptions = [
     {v:'시작 전',l:'보고싶은'},{v:'진행 중',l:'시청 중'},{v:'완료',l:'시청 완료'},{v:'중단',l:'중단'}
   ];
@@ -1386,15 +1461,15 @@ function openDramaDetail(d){
     <div class="drama-status-btns">
       ${statusOptions.map(s=>`<button class="drama-status-btn${d.status===s.v?' active':''}" data-status="${s.v}" data-notion-id="${d.notionId}">${s.l}</button>`).join('')}
     </div>
-    <button class="drama-detail-close" id="dramaDetailClose">닫기</button>`;
-
-  ov.classList.add('open');
+    <div class="detail-btn-row">
+      ${isAdmin?`<button class="detail-edit-btn" id="dEditBtn">수정</button>`:''}
+      <button class="drama-detail-close detail-close" id="dramaDetailClose">닫기</button>
+    </div>`;
   body.querySelector('#dramaDetailClose').addEventListener('click',()=>ov.classList.remove('open'));
-
+  if(isAdmin) body.querySelector('#dEditBtn').addEventListener('click',()=>renderDramaEditView(body,d,ov));
   body.querySelectorAll('.drama-status-btn').forEach(btn=>{
     btn.addEventListener('click', async function(){
-      const status = this.dataset.status;
-      const notionId = this.dataset.notionId;
+      const status=this.dataset.status, notionId=this.dataset.notionId;
       body.querySelectorAll('.drama-status-btn').forEach(b=>b.classList.remove('active'));
       this.classList.add('active');
       try {
@@ -1407,6 +1482,73 @@ function openDramaDetail(d){
       } catch(e){ showToast('업데이트 중 오류가 발생했습니다'); }
     });
   });
+}
+
+function renderDramaEditView(body, d, ov){
+  const allOtts = ['Netflix','Disney+','Tving','Wavve','Coupang Play','WeTV','iQIYI','MOA'];
+  const allGenres = ['로맨스','판타지','액션','스릴러','코미디','시대극','미스터리','사극','가족'];
+  const allStatus = [{v:'시작 전',l:'보고싶은'},{v:'진행 중',l:'시청 중'},{v:'완료',l:'시청 완료'},{v:'중단',l:'중단'}];
+  let selOtt = [...(d.ott||[])];
+  let selGenre = [...(d.genre||[])];
+  body.innerHTML = `
+    <div style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:#1f1c18;margin-bottom:4px">드라마 수정</div>
+    <div style="font-size:12px;color:#a89e92;margin-bottom:14px">${d.title}</div>
+    <label class="edit-field-label">제목</label>
+    <input class="edit-field-input" id="eTitle" value="${d.title}">
+    <label class="edit-field-label">출연진</label>
+    <input class="edit-field-input" id="eCast" value="${d.cast||''}">
+    <label class="edit-field-label">OTT 플랫폼</label>
+    <div class="edit-chips" id="eOtt">
+      ${allOtts.map(o=>`<span class="edit-chip${selOtt.includes(o)?' on':''}" data-o="${o}">${o}</span>`).join('')}
+    </div>
+    <label class="edit-field-label">장르</label>
+    <div class="edit-chips" id="eGenre">
+      ${allGenres.map(g=>`<span class="edit-chip${selGenre.includes(g)?' on':''}" data-g="${g}">${g}</span>`).join('')}
+    </div>
+    <label class="edit-field-label">시청 상태</label>
+    <select class="edit-field-select" id="eStatus">
+      ${allStatus.map(s=>`<option value="${s.v}"${d.status===s.v?' selected':''}>${s.l}</option>`).join('')}
+    </select>
+    <label class="edit-field-label">줄거리</label>
+    <textarea class="edit-field-textarea" id="eSynopsis">${d.synopsis||''}</textarea>
+    <div class="detail-btn-row">
+      <button class="detail-edit-btn" id="eCancelBtn">취소</button>
+      <button class="detail-save-btn" id="eSaveBtn">저장</button>
+    </div>`;
+  body.querySelectorAll('#eOtt .edit-chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{ chip.classList.toggle('on'); selOtt=[...body.querySelectorAll('#eOtt .edit-chip.on')].map(c=>c.dataset.o); });
+  });
+  body.querySelectorAll('#eGenre .edit-chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{ chip.classList.toggle('on'); selGenre=[...body.querySelectorAll('#eGenre .edit-chip.on')].map(c=>c.dataset.g); });
+  });
+  body.querySelector('#eCancelBtn').addEventListener('click',()=>renderDramaDetailView(body,d,ov));
+  body.querySelector('#eSaveBtn').addEventListener('click', async()=>{
+    const saveBtn=body.querySelector('#eSaveBtn');
+    saveBtn.disabled=true; saveBtn.textContent='저장 중...';
+    const updated={
+      notionId:d.notionId,
+      title:body.querySelector('#eTitle').value.trim(),
+      cast:body.querySelector('#eCast').value.trim(),
+      ott:selOtt, genre:selGenre,
+      status:body.querySelector('#eStatus').value,
+      synopsis:body.querySelector('#eSynopsis').value.trim(),
+    };
+    try {
+      await fetch('/api/drama',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(updated)});
+      const dr=dramas.find(x=>x.notionId===d.notionId);
+      if(dr){ Object.assign(dr,{title:updated.title,cast:updated.cast,ott:updated.ott,genre:updated.genre,status:updated.status,synopsis:updated.synopsis}); }
+      renderDramaGrid(filteredDramas);
+      showToast('✓ 수정 완료');
+      ov.classList.remove('open');
+    } catch(e){ showToast('저장 중 오류가 발생했습니다'); saveBtn.disabled=false; saveBtn.textContent='저장'; }
+  });
+}
+
+function openDramaDetail(d){
+  const ov = document.getElementById('dramaDetailOverlay');
+  const body = document.getElementById('dramaDetailBody');
+  ov.classList.add('open');
+  renderDramaDetailView(body, d, ov);
 }
 
 document.getElementById('dramaDetailOverlay').addEventListener('click',function(e){

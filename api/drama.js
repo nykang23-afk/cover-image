@@ -53,8 +53,13 @@ export default async function handler(req, res) {
 
     // 시청 여부 / 인생작 업데이트
     if (req.method === 'PATCH') {
-      const { notionId, status, favorite } = req.body;
+      const { notionId, status, favorite, title, cast, ott, genre, synopsis } = req.body;
       const props = {};
+      if (title !== undefined) props['제목'] = { title: [{ text: { content: title } }] };
+      if (cast !== undefined) props['출연진'] = { rich_text: [{ text: { content: cast } }] };
+      if (ott !== undefined) props['OTT'] = { multi_select: ott.map(o => ({ name: o })) };
+      if (genre !== undefined) props['장르'] = { multi_select: genre.map(g => ({ name: g })) };
+      if (synopsis !== undefined) props['줄거리'] = { rich_text: [{ text: { content: synopsis } }] };
       if (status !== undefined) props['시청 여부'] = { status: { name: status } };
       if (favorite !== undefined) props['인생작'] = { checkbox: favorite };
       const tryPatch = () => fetch(`https://api.notion.com/v1/pages/${notionId}`, {

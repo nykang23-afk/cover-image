@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'PATCH') {
-      const { notionId, status, favorite } = req.body;
+      const { notionId, status, favorite, title, author, platform, genres, memo } = req.body;
       if (!notionId) return res.status(400).json({ error: 'notionId가 필요합니다.' });
       const notionHeaders = {
         'Authorization': `Bearer ${NOTION_TOKEN}`,
@@ -68,7 +68,12 @@ export default async function handler(req, res) {
         'Notion-Version': '2022-06-28',
       };
       const props = {};
+      if (title !== undefined) props['제목'] = { title: [{ text: { content: title } }] };
+      if (author !== undefined) props['저자'] = { rich_text: [{ text: { content: author } }] };
+      if (platform !== undefined) props['플랫폼'] = { select: { name: platform } };
       if (status !== undefined) props['완독 여부'] = { status: { name: status } };
+      if (genres !== undefined) props['장르'] = { multi_select: genres.map(g => ({ name: g })) };
+      if (memo !== undefined) props['메모'] = { rich_text: [{ text: { content: memo } }] };
       if (favorite !== undefined) props['인생작'] = { checkbox: favorite };
       const tryPatch = () => fetch(`https://api.notion.com/v1/pages/${notionId}`, {
         method: 'PATCH', headers: notionHeaders,
