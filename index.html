@@ -268,9 +268,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .home-title-main{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700;color:#1f1c18;letter-spacing:-0.3px;line-height:1.2}
 .home-title-sub{font-size:10.5px;color:#b0a99e;letter-spacing:2px;font-weight:400;font-family:'Noto Sans KR',sans-serif;display:block;min-height:14px}
 /* Hero card (replaces banner) */
-.home-hero{margin:0 12px;background:#faf7f1;border-radius:18px;padding:20px;box-shadow:0 2px 12px -4px rgba(50,40,20,.14),0 1px 3px rgba(50,40,20,.06)}
+.home-hero{margin:0 12px;background:#faf7f1;border-radius:18px;padding:20px;box-shadow:0 2px 12px -4px rgba(50,40,20,.14),0 1px 3px rgba(50,40,20,.06);min-height:90px;display:flex;flex-direction:column;justify-content:center}
 .home-hero-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:#1f1c18;letter-spacing:-0.4px;margin-bottom:4px}
-.home-hero-sub{font-size:12px;color:#a89e92;line-height:1.55;margin-bottom:16px}
+.home-hero-sub{font-size:12px;color:#a89e92;line-height:1.55;margin-bottom:0}
 .home-hero-stats{display:flex}
 .home-hero-stat{display:flex;flex-direction:column;gap:3px;padding:0 20px;border-right:1px solid #e5dece;align-items:center}
 .home-hero-stat:first-child{padding-left:0}
@@ -335,20 +335,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
     <div class="home-hero">
       <div class="home-hero-title">네이나의 서재 다이어리</div>
       <div class="home-hero-sub">읽은 소설과 본 드라마를 책갈피와 티켓처럼 모아두는 공간이에요.</div>
-      <div class="home-hero-stats">
-        <div class="home-hero-stat">
-          <span class="home-hero-stat-num" id="homeStatBooks">-</span>
-          <span class="home-hero-stat-label">등록 도서</span>
-        </div>
-        <div class="home-hero-stat">
-          <span class="home-hero-stat-num" id="homeStatDramas">-</span>
-          <span class="home-hero-stat-label">등록 드라마</span>
-        </div>
-        <div class="home-hero-stat">
-          <span class="home-hero-stat-num" id="homeStatFavs">-</span>
-          <span class="home-hero-stat-label">인생작 도장</span>
-        </div>
-      </div>
     </div>
     <!-- 최근 도서 -->
     <div class="home-section">
