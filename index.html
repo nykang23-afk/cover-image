@@ -173,11 +173,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .detail-close:hover{background:#f5f4f0}
 
 /* Drama */
-.drama-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px}
-.drama-card{background:#fff;border:none;border-radius:12px;overflow:hidden;cursor:pointer;transition:box-shadow .15s;box-shadow:0 1px 2px rgba(26,26,26,.05),0 4px 10px -6px rgba(26,26,26,.18)}
-.drama-card:hover{box-shadow:0 2px 8px rgba(26,26,26,.1),0 6px 16px -6px rgba(26,26,26,.22)}
-.drama-thumb{position:relative;width:100%;aspect-ratio:16/9;background:#222;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden}
-.drama-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.drama-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+/* Drama ticket card (탭 내 리스트) */
+.drama-ticket{display:flex;background:#faf7f1;border:1px solid #ddd5c8;border-radius:12px;overflow:visible;box-shadow:0 2px 6px -2px rgba(50,40,20,.1);position:relative;cursor:pointer;min-height:110px}
+.drama-ticket:hover{box-shadow:0 4px 12px -4px rgba(50,40,20,.18)}
+.dt-img{width:90px;flex-shrink:0;background:#e4ddd0;border-radius:11px 0 0 11px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative}
+.dt-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dt-img-ph{display:flex;flex-direction:column;align-items:center;gap:4px;color:#a89e92}
+.dt-img-ph svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;opacity:.6}
+.dt-img-ph span{font-size:9.5px;color:#b0a99e}
+.dt-main{flex:1;padding:12px 14px 11px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.dt-title{font-family:'Noto Serif KR',serif;font-weight:700;font-size:14.5px;line-height:1.3;color:#1f1c18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dt-cast{font-size:11px;color:#a89e92;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dt-badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.dt-ott-badge{font-size:10.5px;padding:2px 8px;border-radius:999px;background:rgba(78,122,48,.15);color:#4e7a30;font-weight:500}
+.dt-status-badge{font-size:10.5px;padding:2px 8px;border-radius:999px}
+.dt-stamp-btn{margin-top:auto;align-self:flex-start;background:none;border:1px solid #ddd5c8;border-radius:8px;padding:4px 10px;font-size:10.5px;color:#a89e92;cursor:pointer;font-family:inherit;transition:all .15s}
+.dt-stamp-btn:hover,.dt-stamp-btn.stamped{border-color:#c8a085;color:#a0603a;background:#fdf6f0}
+.dt-divider{width:2px;background:repeating-linear-gradient(to bottom,#ddd5c8 0 6px,transparent 6px 12px);position:relative;margin:8px 0;flex-shrink:0}
+.dt-divider::before{content:'';position:absolute;top:-8px;left:-7px;width:16px;height:16px;border-radius:50%;background:#f5f0e8}
+.dt-divider::after{content:'';position:absolute;bottom:-8px;left:-7px;width:16px;height:16px;border-radius:50%;background:#f5f0e8}
+.dt-stub{width:32px;display:flex;align-items:center;justify-content:center;background:#ede8de;border-radius:0 11px 11px 0;flex-shrink:0}
+.dt-stub span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;color:#a89e92;letter-spacing:.1em;font-family:'Noto Sans KR',sans-serif}
+.dt-fav-stamp{position:absolute;top:6px;right:38px;width:36px;height:36px;border-radius:50%;border:2px solid #a0603a;color:#a0603a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;transform:rotate(-9deg);background:rgba(250,247,241,.9);z-index:3;pointer-events:none}
+.dt-delete-btn{position:absolute;top:6px;right:6px;z-index:5;width:22px;height:22px;border-radius:50%;background:rgba(200,60,40,.85);color:#fff;border:none;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
 .ott-badges{position:absolute;top:5px;left:5px;display:flex;gap:3px;flex-wrap:wrap;z-index:2}
 .ott-badge{font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;color:#fff;letter-spacing:.3px;white-space:nowrap}
 .drama-status-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);padding:3px 6px;z-index:2;text-align:center}
@@ -1306,30 +1325,54 @@ async function loadDramas(){
     }
   } catch(e){ console.error(e); }
   document.getElementById('dramaLoadingState').style.display='none';
-  document.getElementById('dramaGrid').style.display='grid';
+  document.getElementById('dramaGrid').style.display='flex';
   filteredDramas = dramas.slice();
   renderDramaGrid(filteredDramas);
   renderHomeLatestDrama();
 }
 
+const DRAMA_STATUS_TICKET = {
+  '완료':  {bg:'rgba(78,122,48,.15)',  color:'#4e7a30'},
+  '진행 중':{bg:'rgba(196,154,24,.18)', color:'#a07a10'},
+  '시작 전':{bg:'rgba(156,149,137,.15)',color:'#7a746e'},
+  '중단':  {bg:'rgba(184,74,42,.15)',  color:'#b84a2a'},
+};
 function renderDramaGrid(list){
   const grid = document.getElementById('dramaGrid');
   const empty = document.getElementById('dramaEmptyState');
   if(!list.length){ grid.innerHTML=''; empty.style.display='block'; return; }
   empty.style.display='none';
-  grid.innerHTML = list.map(d=>`
-    <div class="drama-card" data-id="${d.id}">
-      <div class="drama-thumb">
-        ${mkDramaThumb(d,'100%','100%')}
-        ${d.ott.length?`<div class="ott-badges">${mkOttBadges(d.ott)}</div>`:''}
-        <div class="drama-status-bar"><span class="drama-status-text">${DRAMA_STATUS_LABEL[d.status]||d.status}</span></div>
-        ${isAdmin?`<button class="drama-delete-btn" data-notion-id="${d.notionId}" data-title="${d.title}" onclick="deleteDrama(this)">✕</button>`:''}
+  grid.innerHTML = list.map(d=>{
+    const st = DRAMA_STATUS_TICKET[d.status]||DRAMA_STATUS_TICKET['시작 전'];
+    const ottBadges = d.ott.map(o=>`<span class="dt-ott-badge">${o}</span>`).join('');
+    const statusBadge = `<span class="dt-status-badge" style="background:${st.bg};color:${st.color}">${DRAMA_STATUS_LABEL[d.status]||d.status}</span>`;
+    const favStamp = d.favorite ? `<div class="dt-fav-stamp">인생작</div>` : '';
+    const delBtn = isAdmin ? `<button class="dt-delete-btn" data-notion-id="${d.notionId}" data-title="${d.title}" onclick="deleteDrama(this)">✕</button>` : '';
+    const thumb = mkDramaThumb(d,'100%','100%');
+    const hasImg = !!DRAMA_COVER_MAP[d.title];
+    const imgContent = hasImg ? thumb : `<div class="dt-img-ph"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>드라마 이미지</span></div>`;
+    return `
+    <div class="drama-ticket" data-id="${d.id}">
+      <div class="dt-img">${imgContent}</div>
+      <div class="dt-main">
+        <div class="dt-title">${d.title}</div>
+        ${d.cast?`<div class="dt-cast">${d.cast}</div>`:''}
+        <div class="dt-badges">${ottBadges}${statusBadge}</div>
+        <button class="dt-stamp-btn${d.favorite?' stamped':''}" data-notion-id="${d.notionId}" data-drama-id="${d.id}">${d.favorite?'★ 인생작 도장 찍음':'인생작 도장 찍기'}</button>
       </div>
-      <div class="drama-info"><div class="drama-title">${d.title}</div></div>
-    </div>`).join('');
-  grid.querySelectorAll('.drama-card').forEach(el=>{
+      <div class="dt-divider"></div>
+      <div class="dt-stub"><span>TICKET</span></div>
+      ${favStamp}${delBtn}
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.drama-ticket').forEach(el=>{
+    el.querySelector('.dt-stamp-btn')?.addEventListener('click', e=>{
+      e.stopPropagation();
+      const btn=e.currentTarget;
+      toggleDramaFavorite(btn.dataset.notionId, +btn.dataset.dramaId);
+    });
     el.addEventListener('click', e=>{
-      if(e.target.closest('.drama-delete-btn')) return;
+      if(e.target.closest('.dt-delete-btn')||e.target.closest('.dt-stamp-btn')) return;
       const dr=dramas.find(d=>d.id===+el.dataset.id);
       if(dr) openDramaDetail(dr);
     });
