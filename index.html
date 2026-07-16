@@ -11,8 +11,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{touch-action:manipulation;-ms-touch-action:manipulation;height:100%}
-body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:none;height:100%}
-body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#ebe8e1;height:100%;color:#1a1a1a}
+body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:none;height:100%;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#ebe8e1;color:#1a1a1a}
 .app{max-width:480px;margin:0 auto;background:#f5f4f0;height:100vh;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
 .header{background:#f5f0e8;border-bottom:0.5px solid #e5dece;padding:13px 16px;position:sticky;top:0;z-index:100}
 .header-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:34px}
@@ -218,11 +217,13 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-s
 .drama-detail-divider{height:0.5px;background:#e8e5de;margin:12px 0}
 .drama-detail-label{font-size:11px;color:#aaa;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
 .drama-detail-text{font-size:13px;color:#333;line-height:1.7;margin-bottom:12px}
+/* .drama-status-btns / .drama-status-btn — 드라마 상세 status가 select로 교체됨, 미사용
 .drama-status-btns{display:flex;gap:6px;margin-bottom:4px}
 .drama-status-btn{flex:1;height:36px;border:0.5px solid #d0cdc6;border-radius:8px;background:none;font-size:12px;font-weight:500;color:#666;cursor:pointer;font-family:inherit;transition:all .15s}
-.drama-status-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.drama-status-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a} */
+/* .drama-detail-close — 드라마 상세 닫기버튼은 .detail-close 사용, 미사용
 .drama-detail-close{width:100%;height:42px;border:0.5px solid #d0cdc6;border-radius:8px;background:none;font-size:14px;color:#1a1a1a;cursor:pointer;margin-top:14px;font-family:inherit;transition:background .15s}
-.drama-detail-close:hover{background:#f5f4f0}
+.drama-detail-close:hover{background:#f5f4f0} */
 .badge-watching{background:#e8f0fe;color:#1a56db}
 
 /* Dashboard */
@@ -266,7 +267,8 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-s
 .home-header{background:#f5f0e8;border-bottom:0.5px solid #e5dece;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;z-index:100}
 .home-title-wrap{display:flex;flex-direction:column;gap:2px}
 .home-title-main{font-family:'Gaegu',cursive;font-size:21px;font-weight:700;color:#1f1c18;letter-spacing:-0.3px;line-height:1.2}
-.home-title-sub{font-size:10.5px;color:#b0a99e;letter-spacing:2px;font-weight:400;font-family:'Pretendard',sans-serif;display:block}
+/* .home-title-sub — HTML에 사용 엘리먼트 없음, 필요 시 복구 */
+/* .home-title-sub{font-size:10.5px;color:#b0a99e;letter-spacing:2px;font-weight:400;font-family:'Pretendard',sans-serif;display:block} */
 /* Hero card (replaces banner) */
 .home-hero{margin:0 12px;background:#faf7f1;border-radius:18px;padding:20px;box-shadow:0 2px 12px -4px rgba(50,40,20,.14),0 1px 3px rgba(50,40,20,.06);min-height:90px;display:flex;flex-direction:column;justify-content:center}
 .home-hero-title{font-family:'Gaegu',cursive;font-size:20px;font-weight:700;color:#1f1c18;letter-spacing:-0.3px;margin-bottom:4px}
@@ -823,9 +825,9 @@ function renderPagination(list, page){
 function openDetail(b){
   const ov = document.getElementById('detailOverlay');
   const db = document.getElementById('detailBody');
-  const allGenres = ['소설','에세이','자기계발','판타지','SF','역사','경제경영','로맨스','환생/빙의','농가물'];
-  const allPlatforms = ['시리즈','카카오페이지','리디북스','알라딘','교보문고','밀리의서재','직접구매'];
-  const allStatus = ['시작 전','진행 중','완료','중단'];
+  const allGenres = GENRES;
+  const allPlatforms = PLATFORMS;
+  const allStatus = STATUS_LIST.map(s=>s.value);
   let selGenres = [...(b.genres||[])];
   let editMode = false;
 
@@ -1186,7 +1188,7 @@ async function deleteBook(btn) {
 const BOOK_STATUS_COLORS  = {'완료':'#4e7a30','진행 중':'#c49a18','시작 전':'#9c9589','중단':'#b84a2a'};
 const DRAMA_STATUS_COLORS = {'완료':'#4e7a30','진행 중':'#c49a18','시작 전':'#9c9589','드롭':'#b84a2a','중단':'#b84a2a'};
 const BOOK_STATUS_LABELS  = {'완료':'완독','진행 중':'읽는 중','시작 전':'시작 전','중단':'중단'};
-const DRAMA_STATUS_LABELS = {'완료':'시청 완료','진행 중':'시청 중','시작 전':'보고싶은','드롭':'드롭','중단':'중단'};
+// DRAMA_STATUS_LABELS 제거 — 하단 DRAMA_STATUS_LABEL(단수)와 동일 내용, 해당 상수 사용으로 통합
 
 function buildPieConic(segments) {
   const total = segments.reduce((s,d)=>s+d.value,0);
@@ -1257,7 +1259,7 @@ function renderDashboard(){
   // 드라마 파이
   const dramaGroups={};
   dramas.forEach(d=>{ dramaGroups[d.status]=(dramaGroups[d.status]||0)+1; });
-  const dramaSegs=['완료','진행 중','시작 전','드롭','중단'].filter(s=>dramaGroups[s]).map(s=>({label:DRAMA_STATUS_LABELS[s],value:dramaGroups[s],color:DRAMA_STATUS_COLORS[s]}));
+  const dramaSegs=['완료','진행 중','시작 전','드롭','중단'].filter(s=>dramaGroups[s]).map(s=>({label:DRAMA_STATUS_LABEL[s],value:dramaGroups[s],color:DRAMA_STATUS_COLORS[s]}));
   const dramaPieEl=document.getElementById('dramaPieChart');
   dramaPieEl.style.cssText=''; dramaPieEl.innerHTML='';
   if(!dramas.length) dramaPieEl.style.background='#ddd5c5';
@@ -1638,7 +1640,7 @@ function renderHomeLatestDrama(){
   if(!list.length){ el.innerHTML='<div style="font-size:13px;color:#aaa;grid-column:1/-1">등록된 드라마가 없습니다</div>'; return; }
   el.innerHTML = list.map(d => {
     const ottLabel = d.ott&&d.ott.length ? d.ott[0] : '';
-    const statusLabel = DRAMA_STATUS_LABELS[d.status] || d.status;
+    const statusLabel = DRAMA_STATUS_LABEL[d.status] || d.status;
     const statusStyle = (() => {
       const map = {
         '완료':'background:#daebc8;color:#3d6b25',
